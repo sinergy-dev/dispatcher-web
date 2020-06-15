@@ -93,27 +93,14 @@
                                 <a class="nav-link" href="messages"><i class="fa fa-bell"></i> <span class="sr-only">(current)</span></a>
                             </li> -->
                             <li class="nav-item dropdown">
-                                <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;">1</span> <!-- your badge -->
+                                <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;"></span> <!-- your badge -->
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-bell"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" style="min-width: 15rem" aria-labelledby="navbarDropdown">
-                                    <span class="dropdown-item dropdown-header" id="notificationCount">15 Notifications</span>
+                                    <span class="dropdown-item dropdown-header" id="notificationCount"></span>
                                     <div class="dropdown-divider"></div>
-                                    <div id="notificationContent">
-                                        <a href="#" class="dropdown-item">
-                                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                            <span class="float-right text-muted text-sm">3 mins</span>
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                            <span class="float-right text-muted text-sm">3 mins</span>
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                            <span class="float-right text-muted text-sm">3 mins</span>
-                                        </a>
-                                    </div>
+                                    <div id="notificationContent"></div>
                                 </div>
                             </li>
 
@@ -156,10 +143,21 @@
 
         firebase.database().ref('notification/web-notification').on('value', function(snapshot) {
             snapshot_dump = snapshot.val()
+            var notificationCount = 0;
+            $("#notificationContent").empty()
             snapshot_dump.forEach(function(data,index){
-                if(data.showed == false && data.to == "{{Auth::user()->email}}"){
-                    sendNotification(data.title,data.message)
-                    // setNotification(index,data)
+                if(data.to == "{{Auth::user()->email}}"){
+                    if(data.showed == false){
+                        sendNotification(data.title,data.message)
+                        // setNotification(index,data)
+                    }
+                    if(data.status == "unread"){
+                        notificationCount = notificationCount + 1
+                        addNotification(data,notificationCount,index)
+                    } else if(data.status == "read"){
+                        // notificationCount = notificationCount + 1
+                        addNotificationRead(data,index)
+                    }
                 }
             })
         });
@@ -178,12 +176,47 @@
             }
         }
 
-        function addNotification(){
+        function addNotification(data,notificationCount,index){
+            $("#notificationCount").text(notificationCount + ' Notifications')
+            $(".badge.badge-pill.badge-primary").text(notificationCount)
+
+            var append = ""
+            append = append + '<a href="#" class="dropdown-item" onclick="readNotification(' + index + ')">'
+            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
+            // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
+            append = append + '</a>'
+            $("#notificationContent").append(append)
 
         }
 
-        function initNotification(){
+        function addNotificationRead(data,index){
+            // $("#notificationCount").text(notificationCount + ' Notifications')
+            // $(".badge.badge-pill.badge-primary").text(notificationCount)
 
+            var append = ""
+            append = append + '<a href="#" class="dropdown-item text-muted" onclick="readNotification(' + index + ')">'
+            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
+            // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
+            append = append + '</a>'
+            $("#notificationContent").append(append)
+
+        }
+
+        function readNotification(index){
+            console.log(index)
+            firebase.database().ref('notification/web-notification/' + index).once('value').then(function(snapshot) {
+                // console.log(snapshot.val())
+                var data = snapshot.val()
+                firebase.database().ref('notification/web-notification/' + index).set({
+                    to: data.to,
+                    from: data.from,
+                    title: data.title,
+                    message: data.message,
+                    status: "read",
+                    date_time : data.date_time,
+                    showed : true
+                });
+            })
         }
 
         // function setNotification(key,data){
