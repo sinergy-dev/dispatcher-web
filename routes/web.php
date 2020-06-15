@@ -26,3 +26,5 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/job/index', 'JobController@index')->name('job.index');
 Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
 
+Route::get('/engineer/index','EngineerController@index')->name('engineer.index');
+
