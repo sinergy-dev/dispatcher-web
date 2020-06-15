@@ -15,6 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('testLiveNotification', 'JobController@testLiveNotification')->name('testLiveNotification');
+Route::get('testLiveNotificationView', 'JobController@testLiveNotificationView')->name('testLiveNotification');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+
+Route::get('/job/index', 'JobController@index')->name('job.index');
+Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
+
