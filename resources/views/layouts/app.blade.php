@@ -31,6 +31,9 @@
             border-bottom: 3px solid #dee2e6 !important;
             font-weight: 600 !important;
         }
+        .text-muted2 {
+            color:#b2b7bb;
+        }
     </style>
 </head>
 <body>
@@ -141,28 +144,38 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        firebase.database().ref('notification/web-notification').on('value', function(snapshot) {
-            snapshot_dump = snapshot.val()
+        firebase.database().ref('notification/web-notif').orderByChild('timestamp').on('value', function(snapshot) {
+        // firebase.database().ref('notification/web-notif').limitToLast(10).on('child_added', function(snapshot) {
+            snapshot_dump = snapshot.val().reverse()
+            // snapshot_dump = snapshot.val()
             var notificationCount = 0;
+            var notificationCountAll = 0;
+            var notificationCountReal = [];
             $("#notificationContent").empty()
+            for (i = snapshot_dump.length - 1; i > -1; i--) {
+                notificationCountReal.push(i)
+            }
             snapshot_dump.forEach(function(data,index){
-                if(data.to == "{{Auth::user()->email}}"){
-                    if(data.showed == false){
-                        sendNotification(data.title,data.message)
-                        // setNotification(index,data)
-                    }
-                    if(data.status == "unread"){
-                        notificationCount = notificationCount + 1
-                        addNotification(data,notificationCount,index)
-                    } else if(data.status == "read"){
-                        // notificationCount = notificationCount + 1
-                        addNotificationRead(data,index)
+                if(notificationCountAll < 10){
+                    if(data.to == "{{Auth::user()->email}}"){
+                        if(data.showed == false){
+                            sendNotification(data.title,data.message,data,index)
+                        }
+                        if(data.status == "unread"){
+                            notificationCount = notificationCount + 1
+                            addNotification(data,notificationCount,notificationCountReal[index])
+                        } else if(data.status == "read"){
+                            // notificationCount = notificationCount - 1
+                            addNotificationRead(data,notificationCount,notificationCountReal[index])
+                        }
                     }
                 }
+                notificationCountAll = notificationCountAll + 1
             })
         });
 
-        function sendNotification(title,message) {
+        function sendNotification(title,message,data,index) {
+
             if (Notification.permission !== 'granted')
                 Notification.requestPermission();
             else {
@@ -174,6 +187,7 @@
                     window.open('http://stackoverflow.com/a/13328397/1269037');
                 };
             }
+            setNotification(index,data)
         }
 
         function addNotification(data,notificationCount,index){
@@ -181,20 +195,24 @@
             $(".badge.badge-pill.badge-primary").text(notificationCount)
 
             var append = ""
-            append = append + '<a href="#" class="dropdown-item" onclick="readNotification(' + index + ')">'
-            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
+            // console.log(data.job)
+            append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
+            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary"><i class="fas fa-circle"></i></span>'
             // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
             append = append + '</a>'
             $("#notificationContent").append(append)
 
         }
 
-        function addNotificationRead(data,index){
-            // $("#notificationCount").text(notificationCount + ' Notifications')
-            // $(".badge.badge-pill.badge-primary").text(notificationCount)
+        function addNotificationRead(data,notificationCount,index){
+            // console.log(notificationCount)
+            if(notificationCount == 0){
+                $("#notificationCount").text('Noting Notifications')
+                $(".badge.badge-pill.badge-primary").text("")
+            }
 
             var append = ""
-            append = append + '<a href="#" class="dropdown-item text-muted" onclick="readNotification(' + index + ')">'
+            append = append + '<a href="#" class="dropdown-item text-muted2" onclick="readNotification(' + index + ')">'
             append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
             // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
             append = append + '</a>'
@@ -203,11 +221,15 @@
         }
 
         function readNotification(index){
-            console.log(index)
-            firebase.database().ref('notification/web-notification/' + index).once('value').then(function(snapshot) {
+            if($(".badge.badge-pill.badge-primary").text() === "1"){
+                $("#notificationCount").text('Noting Notifications')
+                $(".badge.badge-pill.badge-primary").text("")
+            }
+            // console.log(index)
+            firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
                 // console.log(snapshot.val())
                 var data = snapshot.val()
-                firebase.database().ref('notification/web-notification/' + index).set({
+                firebase.database().ref('notification/web-notif/' + index).set({
                     to: data.to,
                     from: data.from,
                     title: data.title,
@@ -219,20 +241,22 @@
             })
         }
 
-        // function setNotification(key,data){
-        //     console.log('updated')
-        // // function setNotification(){
-        //     firebase.database().ref('notification/web-notification/' + 2).set({
-        //         to: data.to,
-        //         from: data.from,
-        //         title: data.title,
-        //         message: data.message,
-        //         status: data.status,
-        //         date_time : data.date_time,
-        //         showed : true
-        //     });
+        function setNotification(key,data){
+            // console.log('updated')
+        // function setNotification(){
+            firebase.database().ref('notification/web-notif/' + key).set({
+                to: data.to,
+                from: data.from,
+                title: data.title,
+                message: data.message,
+                status: data.status,
+                date_time : data.date_time,
+                showed : true,
+                history : data.history,
+                job : data.job
+            });
 
-        // }
+        }
 
     </script>
     @endauth
