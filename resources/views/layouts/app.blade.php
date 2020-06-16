@@ -59,6 +59,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('client/index')}}">Client</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('region/index')}}">Region</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
