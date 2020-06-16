@@ -127,7 +127,8 @@
 	<tr>
 		<td style="width: 50%">
 			<div style="text-align: center">
-				<img style="width: 100px" src="https://raw.githubusercontent.com/SimpleSoftwareIO/simple-qrcode/master/docs/imgs/example-1.png?raw=true">
+				<!-- <img style="width: 100px" src="https://raw.githubusercontent.com/SimpleSoftwareIO/simple-qrcode/master/docs/imgs/example-1.png?raw=true"> -->
+				{!! QrCode::size(100)->generate('https://sinergy-dev.xyz'); !!}
 				<br><i>for detail information</i>
 			</div>
 		</td>
