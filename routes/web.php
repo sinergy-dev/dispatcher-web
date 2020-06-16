@@ -16,7 +16,10 @@ Route::get('/', function () {
 });
 
 Route::get('testLiveNotification', 'JobController@testLiveNotification')->name('testLiveNotification');
-Route::get('testLiveNotificationView', 'JobController@testLiveNotificationView')->name('testLiveNotification');
+Route::get('testLiveNotificationView', 'JobController@testLiveNotificationView')->name('testLiveNotification2');
+Route::get('testLatterAssignment', function(){
+	return view('pdf.letter_of_assignment');
+})->name('testLatterAssignment');
 
 Auth::routes();
 
