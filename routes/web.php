@@ -28,3 +28,4 @@ Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
 
 Route::get('/engineer/index','EngineerController@index')->name('engineer.index');
 
+Route::get('/client/index','ClientController@index')->name('client.index');
