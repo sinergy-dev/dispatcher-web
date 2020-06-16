@@ -13,6 +13,7 @@ use Carbon\Carbon;
 
 use Kreait\Firebase\Firestore;
 use Kreait\Firebase\Database;
+use QrCode;
 
 class JobController extends Controller
 {
@@ -85,6 +86,11 @@ class JobController extends Controller
     }
 
     public function testLiveNotificationView(){
+    	QrCode::size(100)->generate('https://sinergy-dev.xyz');
     	return view('job.test');
+    }
+
+    public function testQR(){
+    	QrCode::generate('Make me into a QrCode!');
     }
 }
