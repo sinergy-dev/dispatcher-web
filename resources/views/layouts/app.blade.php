@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -58,6 +58,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('engineer/index')}}">Engineer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('client/index')}}">Client</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('region/index')}}">Region</a>
                         </li>
                     </ul>
 
