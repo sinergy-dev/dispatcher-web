@@ -107,6 +107,7 @@
 					      <th scope="col">Address</th>
 					      <th scope="col">Coverage Area</th>
 					      <th scope="col">Account Name - Number</th>
+					      <th scope="col">Action</th>
 					    </tr>
 					  </thead>
 					  <tbody id="tbody-engineer">
@@ -290,6 +291,7 @@
 	          }
 
 	          table = table + '<td>' + value.payment_acc_engineer.account_name + ' - ' + value.payment_acc_engineer.account_number + '</td>';
+	          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
               table = table + '</tr>';
             });
 
@@ -494,7 +496,7 @@
 						Swal.showLoading()
 						Swal.fire(
 							'Published!',
-							'Job has been Published.',
+							'Engineer has been Added.',
 							'success'
 						).then((result) => {
 							if (result.value) {

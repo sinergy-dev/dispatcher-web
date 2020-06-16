@@ -104,9 +104,7 @@
 					      <th scope="col">Client</th>
 					      <th scope="col">Headquarter</th>
 					      <th scope="col">Address</th>
-					      <th scope="col">PIC</th>
-					      <th scope="col">PIC Contact</th>
-					      <th scope="col">PIC Email</th>
+					      <th scope="col">Action</th>
 					    </tr>
 					  </thead>
 					  <tbody id="tbody-engineer">
@@ -170,18 +168,31 @@
 					<div>
 						<input type="" name="id_type" id="id_type" value="1" hidden>
 						<div class="mb-3">
-							<label for="client">Name</label>
+							<label for="client">Client Legal Name</label>
 							<input type="text" class="form-control" name="name_client" id="name_client" required>
 							<div class="invalid-feedback">
 								Please Fill a Name Client.
 							</div>
 						</div>
 
-						<div class="mb-3">
-							<label for="client">Headquarter</label>
-							<input type="text" class="form-control" name="headque_client" id="headque_client" required>
-							<div class="invalid-feedback">
-								Please Fill a Headquarter Client.
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<label for="country">Region</label>
+								<select class="custom-select d-block w-100" id="inputJobRegion" required="" style="width: 100%">
+									<option value="">Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="state">Area</label>
+								<select class="custom-select d-block w-100" id="inputJobArea" required="" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="zip">Location</label>
+								<select class="custom-select d-block w-100" id="inputJobLocation" required="" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
 							</div>
 						</div>
 
@@ -198,6 +209,14 @@
 							<input type="Number" class="form-control" name="pic_contact_client" id="pic_contact_client" required>
 							<div class="invalid-feedback">
 								Please Fill a Number PIC Client.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">PIC Email</label>
+							<input type="text" class="form-control" name="pic_email_client" id="pic_email_client" required>
+							<div class="invalid-feedback">
+								Please Fill a PIC Email Client.
 							</div>
 						</div>
 
@@ -238,7 +257,7 @@
 		$('#datatable-engineer').DataTable();
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
+			url:"{{env('API_LINK_CUSTOM')}}/client/getClientList",
 			success: function(result){
 			console.log(result)
             $('#tbody-engineer').empty();
@@ -249,13 +268,15 @@
 
             $.each(result, function(key, value){
               table = table + '<tr>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
-	          table = table + '<td>' + '' + '</td>';
+	          table = table + '<td>' + $no++ + '</td>';
+	          table = table + '<td>' + value.customer_name + '</td>';
+	          if (value.location_client ==  null) {
+	          	table = table + '<td>' + '' + '</td>';
+	          }else{
+	          	table = table + '<td>' + value.location_client.location_name + '</td>';
+	          }
+	          table = table + '<td>' + value.address + '</td>';
+	          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
               table = table + '</tr>';
             });
 
@@ -444,23 +465,22 @@
 					headers: {
 					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
-					url: "{{env('API_LINK_CUSTOM')}}/engineer/postNewEngineer",
+					url: "{{env('API_LINK_CUSTOM')}}/client/postNewClient",
 					type:"POST",
 					data:{
 						_token: "{{ csrf_token() }}",
-						id_type:$("#id_type").val(),
-						name_eng:$("#name_eng").val(),
-						email_eng:$("#email_eng").val(),
-						adress_eng:$("#adress_eng").val(),
+						customer_name:$("#name_client").val(),
 						id_location:$("#inputJobLocation").select2("data")[0].id,
-						account_name:$("#account_name").val(),
-						account_number:$("#account_number").val(),
+						pic_name:$("#pic_name_client").val(),
+						phone:$("#pic_contact_client").val(),
+						email:$("#pic_email_client").val(),
+						address:$("#adress_client").val(),
 					},
 					success: function(result){
 						Swal.showLoading()
 						Swal.fire(
 							'Published!',
-							'Job has been Published.',
+							'Client has been Added.',
 							'success'
 						).then((result) => {
 							if (result.value) {
