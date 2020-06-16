@@ -20,6 +20,18 @@
 	.text-warning2 {
 		color: #ffc94a;
 	}
+	.btn-outline-warning:hover span {display:none}
+	.btn-outline-warning:hover:before {
+		content:"Accept";
+		color:#212529;
+		background-color:#38c172;
+		border-color:#38c172;
+	}
+	.btn-outline-warning:hover {
+		color: #212529;
+		background-color: #38c172;
+		border-color: #38c172;
+	}
 </style>
 <main role="main">
 	<div class="container">
@@ -285,7 +297,7 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
-		var id_job = window.location.href.split("/")[5].replace('#','')
+		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/job/getJobProgress",
@@ -305,7 +317,7 @@
 				$("#jobSumaryDetailProgress").html("")
 				$.each(result.progress,function(index,value){
 					if(index == 0){
-						console.log(value['id_activity'])
+						// console.log(value['id_activity'])
 						if(value['id_activity'] == "6"){
 							$("#jobSumaryDetailReview").attr("disabled", false);
 						} else if(value['id_activity'] == "7"){
@@ -313,9 +325,9 @@
 						} else if(value['id_activity'] == "8"){
 							$("#jobSumaryDetailPay").attr("disabled", false);
 						}
-						append = append + '<li class="active list-group-item">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 					} else {
-						append = append + '<li class="list-group-item">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 					}
 				});
 				$("#jobSumaryDetailProgress").append(append)
@@ -344,22 +356,24 @@
 
 					$.each(result.applyer, function(index,value){
 						if(value['status'] == "Accept"){
-							var statusText = 'success'
+							var statusText = '<span>' + value['status'] + '</span>'
 							var statusButton = 'btn-outline-success'
 							var onclick = ''
 							var statusDisable = 'disabled'
 						} else if (value['status'] == "Reject"){
-							var statusText = 'danger'
+							var statusText = '<span>' + value['status'] + '</span>'
 							var statusButton = 'btn-outline-danger'
 							var onclick = ''
 							var statusDisable = 'disabled'
 						} else {
-							var statusText = 'warning2'
+							var statusText = '<span>' + value['status'] + '</span>'
 							var statusButton = 'btn-outline-warning'
-							var onclick = 'updateApplyer(' + value['user']['id'] + ')'
+							var tmp = "'" + value['user']['name'] + "'"
+							var onclick = 'updateApplyer(' + value['user']['id'] + ',' + tmp + ')'
 							var statusDisable = ''
 
 						}
+						console.log(value['user']['name'])
 
 						append = append + '<div class="col-md-6" style="margin-bottom: 10px;">'
 						append = append + 	'<div class="card">'
@@ -368,7 +382,7 @@
 						append = append + 			'<h3 class="mb-0">'
 						append = append + 				'<a class="text-dark" href="#">' + value['user']['name'] + '</a>'
 						append = append + 			'</h3>'
-						append = append + 			'<button type="button" class="btn-apply-job btn  btn-sm ' + statusButton + ' float-right" onclick="' + onclick + '" ' + statusDisable + '>' + value['status'] + '</button>' 
+						append = append + 			'<button type="button" class="btn-apply-job btn  btn-sm ' + statusButton + ' float-right" onclick="' + onclick + '" ' + statusDisable + '>' + statusText + '</button>' 
 						// append = append + 			'<span class="text-' + statusText + '">' + value['status'] + '</span> '
 						append = append + 		'</div>'
 						append = append + 	'</div>'
@@ -395,14 +409,52 @@
 
 	})
 
-	function updateApplyer(id_engineer){
-		$.ajax({
-			type:"POST",
-			url:"{{env('API_LINK_CUSTOM')}}/job/postApplyerUpdate",
-			data:{
-				id_engineer:id_engineer,
-				id_job:window.location.href.split("/")[5].replace('#',''),
-				id_moderator:"{{Auth::user()->id}}"
+	function updateApplyer(id_engineer,name_engineer){
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "to assign this job to " + name_engineer,
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No',
+		}).then((result) => {
+			if (result.value) {
+				Swal.fire({
+					title: 'Please Wait..!',
+					text: "It's sending..",
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					customClass: {
+						popup: 'border-radius-0',
+					},
+					onOpen: () => {
+						Swal.showLoading()
+					}
+				})
+				$.ajax({
+					type:"POST",
+					url:"{{env('API_LINK_CUSTOM')}}/job/postApplyerUpdate",
+					data:{
+						id_engineer:id_engineer,
+						id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
+						id_moderator:"{{Auth::user()->id}}"
+					},
+					success: function (result){
+						Swal.showLoading()
+						Swal.fire(
+							'Assigned!',
+							'Job has been Assigned to ' + name_engineer,
+							'success'
+						).then((result) => {
+							if (result.value) {
+								location.reload()
+							}
+						})
+					}
+				})
 			}
 		})
 	}
@@ -412,7 +464,7 @@
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/job/getJobOpen",
 			data:{
-				id_job:window.location.href.split("/")[5].replace('#','')
+				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0]
 			},
 			success: function(result){
 				$("#payJobPrice").val(result.job.job_price)
@@ -431,9 +483,9 @@
 			type:"POST",
 			url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorFirst",
 			data:{
-				id_job:window.location.href.split("/")[5].replace('#',''),
+				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 				id_moderator:"{{Auth::user()->id}}",
-				nominal:$("#payJobPrice").val()
+				nominal:$("#payJobPrice").val().replace("$","").replace(",","").replace(".","")
 			},
 			success: function(result){
 				$("#payJobInfoName").val(result.account[0].user.name)
@@ -450,9 +502,9 @@
 			type:"POST",
 			url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorSecond",
 			data:{
-				id_job:window.location.href.split("/")[5].replace('#',''),
+				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 				id_moderator:"{{Auth::user()->id}}",
-				nominal:$("#payJobPrice").val()
+				nominal:$("#payJobPrice").val().replace("$","").replace(",","").replace(".","")
 			},
 			success: function(result){
 			// 	$("#payJobInfoName").val(result.account[0].user.name)
@@ -485,11 +537,22 @@
 				type:"POST",
 				url:"{{env('API_LINK_CUSTOM')}}/job/postFinishedByModerator",
 				data:{
-					id_job:window.location.href.split("/")[5].replace('#',''),
+					id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 					id_moderator:"{{Auth::user()->id}}",
 				}, 
 				success: function(result){
-					$("#finishJobModal").modal('toggle')
+					// Swal.showLoading()
+					Swal.fire(
+						'Complete!',
+						'Job has been Full Complete',
+						'success'
+					).then((result) => {
+						if (result.value) {
+							location.reload(); 
+
+							// $("#payJobModal").modal('toggle')
+						}
+					})
 				}
 			})
 		} else {
@@ -503,11 +566,22 @@
 				type:"POST",
 				url:"{{env('API_LINK_CUSTOM')}}/job/postReviewedByModerator",
 				data:{
-					id_job:window.location.href.split("/")[5].replace('#',''),
+					id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 					id_moderator:"{{Auth::user()->id}}"
 				}, 
 				success: function(result){
-					$("#reviewJobModal").modal('toggle')
+					Swal.fire(
+						'Reviewed!',
+						'Job has been Reviewd.',
+						'success'
+					).then((result) => {
+						if (result.value) {
+							$("#reviewJobModal").modal('toggle')
+							location.reload(); 
+							
+							// $("#payJobModal").modal('toggle')
+						}
+					})
 				}
 			})
 		} else {
@@ -602,7 +676,7 @@
 				var files = $('#payJobInfoInvoice')[0].files[0];
 				fd.append('invoice',files);
 				fd.append('id_payment',$("#payJobInfoID").val());
-				fd.append('id_job',window.location.href.split("/")[5].replace('#',''));
+				fd.append('id_job',window.location.href.split("/")[5].replace('#','').split("h")[0]);
 				fd.append('id_moderator',"{{Auth::user()->id}}");
 				
 
@@ -615,11 +689,12 @@
 					success: function (result){
 						Swal.showLoading()
 						Swal.fire(
-							'Published!',
-							'Job has been Published.',
+							'Paid!',
+							'Job has been Paid.',
 							'success'
 						).then((result) => {
 							if (result.value) {
+								location.reload()
 								$("#payJobModal").modal('toggle')
 							}
 						})
