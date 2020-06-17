@@ -1,13 +1,21 @@
+<style type="text/css">
+	table > tbody > tr > td {
+		/*font-size: 15px*/
+	}
+	body {
+		line-height: 1.2;
+	}
+</style>
 <h1 style="text-align: center;">Letter of Assignment</h1>
 <h3 style="text-align: center;"><u>No : LoA/001/VI/2020</u></h3>
 
 <p>This letter we issue addressed to the customer to allow work to be carried out properly by personnel who have met the requirements and we appoint below</p>
 <hr>
 <p>Person = an engineer who is dispatched to the location and assigned to do the work</p>
-<table style="width: 100%">
+<table style="width: 100%;">
 	<tr>
 		<td style="width: 20%;text-align: center;">
-			<img style="width: 150px;height: 200px;" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+			<img style="width: 100px;height: 150px;" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
 		</td>
 		<td style="width: 40%">
 			<table>
@@ -73,10 +81,10 @@
 		<td>Jl. Raya Klp. Dua No.9, RT.1/RW.5, Klp. Dua, Kec. Kb. Jeruk</td>
 	</tr>
 </table>
-<table>
+<table style="width: 100%">
 	<tr>
-		<td><b>Job Desciption</b></td>
-		<td><b>Job Requirment</b></td>
+		<td style="width: 50%"><b>Job Desciption</b></td>
+		<td style="width: 50%"><b>Job Requirment</b></td>
 	</tr>
 	<tr>
 		<td style="vertical-align: top;">
@@ -122,13 +130,13 @@
 </table>
 <hr>
 <p>Furthermore, by signing this letter, we hope that the work can start immediately so that it can produce satisfying results.</p>
-<br>
 <table style="width: 100%" >
 	<tr>
 		<td style="width: 50%">
 			<div style="text-align: center">
+				<img style="width: 50" src="{{$data['qr_file']}}">
 				<!-- <img style="width: 100px" src="https://raw.githubusercontent.com/SimpleSoftwareIO/simple-qrcode/master/docs/imgs/example-1.png?raw=true"> -->
-				{!! QrCode::size(100)->generate('https://sinergy-dev.xyz'); !!}
+				<!-- {!! QrCode::size(100)->generate('https://sinergy-dev.xyz'); !!} -->
 				<br><i>for detail information</i>
 			</div>
 		</td>
