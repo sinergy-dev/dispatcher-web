@@ -598,7 +598,7 @@
 						}else{
 							$("#area_eng_detail").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li>" + value.location_engineer.long_location +"</li></ul>");
 
-							$("#current_area_eng_update").html("<ul><li>" + value.location_engineer.long_location +" <i class='fa fa-times btn-delete-area' style='color:red'></i></li><li></ul>")
+							$("#current_area_eng_update").html("<ul><li>" + value.location_engineer.long_location +" <i class='fa fa-check btn-delete-area' style='color:green'></i></li><li></ul>")
 						}
 						
 						$("#photo_eng_detail").attr("src", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZDxOhYF6AqlmOslcgPXVO_81D4Cxou6d7lCyjwKsfcPSDJ7Ff&usqp=CAU");
