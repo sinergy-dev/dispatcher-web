@@ -175,7 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Kreait\Laravel\Firebase\ServiceProvider::class,
-        SimpleSoftwareIO\QrCode\ServiceProvider::class
+        SimpleSoftwareIO\QrCode\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class
 
 
     ],
@@ -228,7 +229,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 
