@@ -446,7 +446,7 @@
 						Swal.showLoading()
 						Swal.fire(
 							'Assigned!',
-							'Job has been Assigned to ' + name_engineer,
+							'Job has been Assigned to ' + name_engineer + ' and letter assignment can be access by engineer',
 							'success'
 						).then((result) => {
 							if (result.value) {
@@ -454,6 +454,10 @@
 							}
 						})
 					}
+				})
+				$.ajax({
+					type:"GET",
+					url:"{{url('/job/detail/createLetterAndQR')}}"
 				})
 			}
 		})
