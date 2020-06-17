@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Kreait\Firebase\Firestore;
 use Kreait\Firebase\Database;
 use QrCode;
+use PDF;
+use Storage;
 
 class JobController extends Controller
 {
@@ -30,6 +32,41 @@ class JobController extends Controller
 
     public function detail(){
     	return view('job.detail');
+    }
+
+    public function createLetterAndQR(){
+    	$name_qr = 'job_qr_' . Carbon::now()->timestamp . '.svg';
+    	$name_pdf = "job_pdf_" . Carbon::now()->timestamp . ".pdf";
+    	$data = ["qr_file" => $name_qr];
+    	QrCode::size(50)->generate('https://sinergy-dev.xyz',$name_qr);
+
+    	$pdf = PDF::loadView('pdf.letter_of_assignment',compact('data'));
+    	Storage::put("public/" . $name_pdf, $pdf->output());
+
+    	$client = new \GuzzleHttp\Client([
+			'verify' => false
+		]);
+
+		$url_qr = env('API_LINK_CUSTOM') . '/job/createJob/postQRRecive';
+		$send_qr_image = $client->request('POST', $url_qr, [
+		'multipart' => [
+			[
+				'name'     => 'qr_image',
+				'contents' => fopen(base_path() . '/public/' . $name_qr, 'r'),
+			]]
+		]);
+
+		$url_pdf = env('API_LINK_CUSTOM') . '/job/createJob/postPDFRecive';
+		$send_pdf_file = $client->request('POST', $url_pdf, [
+		'multipart' => [
+			[
+				'name'     => 'pdf_file',
+				'contents' => fopen(base_path() . '/storage/app/public/' . $name_pdf, 'r'),
+				
+			]]
+		]);
+
+		return $pdf->stream($name_pdf);
     }
 
     public function testLiveNotification(){
@@ -86,11 +123,13 @@ class JobController extends Controller
     }
 
     public function testLiveNotificationView(){
-    	QrCode::size(100)->generate('https://sinergy-dev.xyz');
+    	// QrCode::size(100)->generate('https://sinergy-dev.xyz');
     	return view('job.test');
     }
 
     public function testQR(){
     	QrCode::generate('Make me into a QrCode!');
     }
+
+    
 }
