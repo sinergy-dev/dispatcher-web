@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('testPDF', 'JobController@testPDF')->name('testPDF');
+Route::get('testPDF', 'JobController@createLetterAndQR')->name('testPDF');
 Route::get('testQR', 'JobController@testQR')->name('testQR');
 Route::get('testLiveNotification', 'JobController@testLiveNotification')->name('testLiveNotification');
 Route::get('testLiveNotificationView', 'JobController@testLiveNotificationView')->name('testLiveNotification2');
