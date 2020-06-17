@@ -341,7 +341,7 @@
 							</div>	
 						</div>
 
-						<u style="color: blue">Add Coverage Area</u>
+						<u style="color: blue">Update Coverage Area</u>
 
 						<div class="row">
 							<div class="col-md-4 mb-3">
@@ -494,8 +494,8 @@
 
 		$("#inputJobRegion_update").on('select2:select', function (e) {
 			var id_region = e.params.data.id;
-			$("#inputJobArea").prop("disabled", false)
-			$("#inputJobArea").select2({
+			$("#inputJobArea_update").prop("disabled", false)
+			$("#inputJobArea_update").select2({
 				theme: 'bootstrap4',
 				ajax: {
 					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
@@ -506,8 +506,8 @@
 
 		$("#inputJobArea_update").on('select2:select', function (e) {
 			var id_area = e.params.data.id;
-			$("#inputJobLocation").prop("disabled", false)
-			$("#inputJobLocation").select2({
+			$("#inputJobLocation_update").prop("disabled", false)
+			$("#inputJobLocation_update").select2({
 				theme: 'bootstrap4',
 				ajax: {
 					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
