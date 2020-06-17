@@ -7,7 +7,7 @@
 	}
 </style>
 <h1 style="text-align: center;">Letter of Assignment</h1>
-<h3 style="text-align: center;"><u>No : LoA/001/VI/2020</u></h3>
+<h3 style="text-align: center;"><u>No : {{$data['no_letter']}}</u></h3>
 
 <p>This letter we issue addressed to the customer to allow work to be carried out properly by personnel who have met the requirements and we appoint below</p>
 <hr>
@@ -15,38 +15,38 @@
 <table style="width: 100%;">
 	<tr>
 		<td style="width: 20%;text-align: center;">
-			<img style="width: 100px;height: 150px;" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+			<img style="width: 100px;height: 150px;" src="{{$data['engineer_photo']}}">
 		</td>
 		<td style="width: 40%">
 			<table>
 				<tr>
-					<td><b>Surname</b></td>
+					<td><b>Full Name</b></td>
 					<td> : </td>
-					<td>Rama</td>
+					<td>{{$data['engineer_name']}}</td>
 				</tr>
 				<tr>
 					<td><b>NIK</b></td>
 					<td> : </td>
-					<td>876123875419812</td>
+					<td>{{$data['engineer_nik']}}</td>
 				</tr>
 				<tr>
 					<td><b>Address</b></td>
 					<td> : </td>
-					<td>60 S. Acacia St. Aberdeen, SD 57401</td>
+					<td>{{$data['engineer_addres']}}</td>
 				</tr>
 			</table>
 		</td>
 		<td style="width: 40%">
 			<table>
 				<tr>
-					<td><b>Given Name</b></td>
-					<td> : </td>
-					<td>Agastya</td>
+					<td style="color: #fff">.</td>
+					<td style="color: #fff">.</td>
+					<td style="color: #fff">.</td>
 				</tr>
 				<tr>
 					<td><b>Place, Date of Birth</b></td>
 					<td> : </td>
-					<td>Malang, 3 October 1999</td>
+					<td>{{$data['engineer_place_of_birth']}}, {{$data['engineer_date_of_birth']}}</td>
 				</tr>
 				<tr>
 					<td><b>Phone Number</b></td>
@@ -63,22 +63,22 @@
 	<tr>
 		<td><b>Job Title</b></td>
 		<td>:</td>
-		<td>Upgrade PC KC Madura</td>
+		<td>{{$data['job_title']}}</td>
 	</tr>
 	<tr>
 		<td><b>Job Category</b></td>
 		<td>:</td>
-		<td>Hardware Engineer</td>
+		<td>{{$data['job_category']}}</td>
 	</tr>
 	<tr>
 		<td><b>Job Location</b></td>
 		<td>:</td>
-		<td>Madura - Jawa Timur - Jawa</td>
+		<td>{{$data['job_location']}}</td>
 	</tr>
 	<tr>
 		<td><b>Job Address</b></td>
 		<td>:</td>
-		<td>Jl. Raya Klp. Dua No.9, RT.1/RW.5, Klp. Dua, Kec. Kb. Jeruk</td>
+		<td>{{$data['job_address']}}</td>
 	</tr>
 </table>
 <table style="width: 100%">
@@ -89,24 +89,16 @@
 	<tr>
 		<td style="vertical-align: top;">
 			<ul>
-				<li>Developing a highly concurent and distrubed system</li>
-				<li>Performance Optimazitation and problem diagnosis</li>
-				<li>Designing/Developint for high-availability</li>
-				<li>Designing/Developing and testing new features</li>
-				<li>Estimating the effort requeired to develop and implement</li>
-				<li>Help define coding standrads and develpo process</li>
-				<li>Willing to learn & adapt different technologies</li>
-				<li>Create internal software</li>
+				@foreach($data['job_description'] as $description)
+				<li>{{$description}}</li>
+				@endforeach
 			</ul>
 		</td>
 		<td style="vertical-align: top;">
 			<ul>
-				<li>Experience with HTTP and RPC base service</li>
-				<li>Avibility to carefully breakdown the problem</li>
-				<li>Be abel to debug non-trivial application code</li>
-				<li>Experience with SQL and NoSQL database</li>
-				<li>Proficient with Git, and Github</li>
-				<li>Strong Data Structures & Algorithms concepts</li>
+				@foreach($data['job_requirment'] as $requirment)
+				<li>{{$requirment}}</li>
+				@endforeach
 			</ul>
 		</td>
 	</tr>
@@ -118,13 +110,13 @@
 	</tr>
 	<tr>
 		<td style="padding-left: 10px">
-			<b>BPJS Kesehatan</b>
-			<br>Jl. Raya Klp. Dua No.9, RT.1/RW.5, Klp. Dua, Kec. Kb. Jeruk, Kota Jakarta Barat,
+			<b>{{$data['job_customer']}}</b>
+			<br>{{$data['job_customer_address']}}
 		</td>
 		<td style="padding-left: 10px">
-			<b>Briliyan Aditya</b>
-			<br>082346123874
-			<br>briliyan@bpjskesehatan.go.id
+			<b>{{$data['job_pic']}}</b>
+			<br>{{$data['job_pic_phone']}}
+			<br>{{$data['job_pic_email']}}
 		</td>
 	</tr>
 </table>
@@ -145,8 +137,7 @@
 			<br>
 			<br>
 			<br>
-			<br>
-			<b><u>Budi Karuniawan</u></b><br>
+			<b><u>{{$data['moderator']}}</u></b><br>
 			<b>PT. Sinergy Informasi Pratama</b>
 		</td>
 	</tr>
