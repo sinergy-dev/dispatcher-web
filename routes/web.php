@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('testPDF', 'JobController@testPDF')->name('testPDF');
 Route::get('testQR', 'JobController@testQR')->name('testQR');
 Route::get('testLiveNotification', 'JobController@testLiveNotification')->name('testLiveNotification');
 Route::get('testLiveNotificationView', 'JobController@testLiveNotificationView')->name('testLiveNotification2');
@@ -29,6 +30,7 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
 Route::get('/job/index', 'JobController@index')->name('job.index');
 Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
+Route::get('/job/detail/createLetterAndQR', 'JobController@createLetterAndQR')->name('job.createLetterAndQR');
 
 Route::get('/engineer/index','EngineerController@index')->name('engineer.index');
 
