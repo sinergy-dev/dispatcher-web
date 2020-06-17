@@ -16,6 +16,7 @@ use Kreait\Firebase\Database;
 use QrCode;
 use PDF;
 use Storage;
+use Auth;
 
 class JobController extends Controller
 {
@@ -34,18 +35,62 @@ class JobController extends Controller
     	return view('job.detail');
     }
 
-    public function createLetterAndQR(){
+    public function createLetterAndQR(Request $req){
     	$name_qr = 'job_qr_' . Carbon::now()->timestamp . '.svg';
     	$name_pdf = "job_pdf_" . Carbon::now()->timestamp . ".pdf";
-    	$data = ["qr_file" => $name_qr];
-    	QrCode::size(50)->generate('https://sinergy-dev.xyz',$name_qr);
-
-    	$pdf = PDF::loadView('pdf.letter_of_assignment',compact('data'));
-    	Storage::put("public/" . $name_pdf, $pdf->output());
 
     	$client = new \GuzzleHttp\Client([
 			'verify' => false
 		]);
+
+    	$url_pdf_data = env('API_LINK_CUSTOM') . '/job/getJobForPDF';
+    	$pdf_data = $client->request('GET', $url_pdf_data,[
+	    	'query' => ['id_job' => $req->id_job]
+	    ]);
+
+		$number = json_decode($pdf_data->getBody(),true)["last_job_letter"] + 1;
+		$number = strlen((string)$number) < 2 ? "00" . $number : (strlen((string)$number) < 3 ? "0" . $number : (string)$number);
+		$romawi = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+		$no_letter = "LoA/" . $number . "/" . $romawi[Carbon::now()->month - 1] . "/" . Carbon::now()->year;
+
+		$source = json_decode($pdf_data->getBody(),true);
+
+    	$data = [
+    		"no_letter" => $no_letter,
+    		"qr_file" => $name_qr,
+    		"engineer_name" => $source['engineer']['name'],
+    		"engineer_nik" => $source['engineer']['nik'],
+    		"engineer_addres" => $source['engineer']['address'],
+    		"engineer_place_of_birth" => $source['engineer']['pleace_of_birth'],
+    		"engineer_date_of_birth" => Carbon::parse($source['engineer']['date_of_birth'])->format("j F Y"),
+    		"engineer_photo" => $source['engineer']['photo_image_url'],
+    		
+    		"job_title" => $source['job']['job_name'],
+    		"job_category" => $source['job']['category']['category_name'],
+    		"job_location" => $source['job']['location']['long_location'],
+    		"job_address" => $source['job']['job_location'],
+
+    		"job_description" => explode("\n",$source['job']['job_description']),
+    		"job_requirment" => explode("\n",$source['job']['job_requrment']),
+    	
+    		"job_customer" => $source['job']['customer']['customer_name'],
+    		"job_customer_address" => $source['job']['customer']['address'],
+    		"job_pic" => $source['job']['pic']['pic_name'],
+    		"job_pic_phone" => $source['job']['pic']['pic_phone'],
+    		"job_pic_email" => $source['job']['pic']['pic_mail'],
+
+    		"moderator" => Auth::user()->name
+    	];
+
+
+
+    	// return json_decode($pdf_data->getBody(),true);
+    	// return json_decode($pdf_data->getBody(),true)['job'];
+
+    	QrCode::size(50)->generate('https://sinergy-dev.xyz',$name_qr);
+
+    	$pdf = PDF::loadView('pdf.letter_of_assignment',compact('data'));
+    	Storage::put("public/" . $name_pdf, $pdf->output());
 
 		$url_qr = env('API_LINK_CUSTOM') . '/job/createJob/postQRRecive';
 		$send_qr_image = $client->request('POST', $url_qr, [
@@ -65,6 +110,17 @@ class JobController extends Controller
 				
 			]]
 		]);
+		$options = [
+			'form_params' => [
+				"no_letter"     => $no_letter,
+				"qr_file"     => $name_qr,
+				"pdf_file"     => $name_pdf,
+				"created_by"     => "6"
+			]
+		]; 
+		
+		$url_letter = env('API_LINK_CUSTOM') . '/job/createJob/postLetter';
+		$send_letter = $client->request('POST', $url_letter, $options);
 
 		return $pdf->stream($name_pdf);
     }
