@@ -249,6 +249,151 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="DetailModal" tabindex="-1" role="dialog" aria-labelledby="DetailModalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Detail Engineer</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="needs-validation" novalidate="">
+					<div class="tab">
+						<div>
+							<img id="photo_eng_detail" style="width: 100px;height: 100px;align-content: center;">
+							<input type="" name="id_user_detail" id="id_user_detail" hidden>
+							<hr>
+							<label><h4><u>Profile</u></h4></label><br>
+
+							<div class="form-group" id="name_eng_detail">
+							</div>
+
+							<div class="form-group" id="nik_eng_detail">
+							</div>
+
+							<div class="form-group" id="place_of_birth_eng_detail">
+							</div>
+
+							<div class="form-group" id="date_of_birth_eng_detail">
+							</div>	
+
+							<div class="form-group" id="phone_eng_detail">
+							</div>
+
+							<div class="form-group" id="email_eng_detail">
+							</div>
+
+							<div class="form-group" id="address_eng_detail">
+							</div>
+
+							<label><h5><u>About Jobs</u></h5></label>
+							<div class="form-group" id="area_eng_detail">
+							</div>
+
+							<div class="form-group" id="acc_eng_detail">
+							</div>
+						</div>				
+
+					</div>
+					<div class="tab" style="display: none;">
+						<div>
+						<input type="" name="id_type" id="id_type" value="1" hidden>
+						<div class="mb-3">
+							<label for="client">Name</label>
+							<input type="text" class="form-control" name="name_eng_update" id="name_eng_update" required>
+							<div class="invalid-feedback">
+								Please Fill a Name Engineer.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Phone</label>
+							<input type="Number" class="form-control" name="number_eng_update" id="number_eng_update" required>
+							<div class="invalid-feedback">
+								Please Fill a Number Phone Engineer.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Email</label>
+							<input type="Email" class="form-control" name="email_eng_update" id="email_eng_update" required>
+							<div class="invalid-feedback">
+								Please Fill an Email Engineer.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Address</label>
+							<textarea class="form-control" id="adress_eng_update" name="adress_eng_update">
+								
+							</textarea>
+							<div class="invalid-feedback">
+								Please Fill an Address Engineer.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Current Coverage Area</label>
+							<div id="current_area_eng_update" name="current_area_eng_update">
+							</div>	
+						</div>
+
+						<u style="color: blue">Update Coverage Area</u>
+
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<label for="country">Region</label>
+								<select class="custom-select d-block w-100" id="inputJobRegion_update" style="width: 100%">
+									<option value="">Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="state">Area</label>
+								<select class="custom-select d-block w-100" id="inputJobArea_update" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="zip">Location</label>
+								<select class="custom-select d-block w-100" id="inputJobLocation_update" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Account Name</label>
+							<input type="text" class="form-control" name="account_name_update" id="account_name_update" required>
+							<div class="invalid-feedback">
+								Please Fill an Account Name.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Account Number</label>
+							<input type="number" class="form-control" name="account_number_update" id="account_number_update" required>
+							<div class="invalid-feedback">
+								Please Fill an Account Number.
+							</div>
+						</div>
+					</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="mr-auto">
+					<span class="step" style="display: none;">1. Preview Engineer Data</span>
+					<span class="step" style="display: none;">2. Update Engineer Data</span>
+				</div>
+				<button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Back</button>
+				<button type="button" class="btn btn-primary btn-next" id="nextBtn" onclick="nextPrev(1)">Update</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!--datatable-->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -270,7 +415,6 @@
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
 			success: function(result){
-			console.log(result)
             $('#tbody-engineer').empty();
 
             var table = "";
@@ -281,17 +425,17 @@
               table = table + '<tr>';
 	          table = table + '<td>' + $no++ + '</td>';
 	          table = table + '<td>' + value.name + '</td>';
-	          table = table + '<td>' + '' + '</td>';
+	          table = table + '<td>' + value.phone + '</td>';
 	          table = table + '<td>' + value.email + '</td>';
-	          table = table + '<td>' + value.address + '</td>';
+	          table = table + '<td>' + value.address.substring(0,20) + "..." + '</td>';
 	          if (value.location_engineer == null) {
+	          	table = table + '<td>' + '' + '</td>';
 	          	table = table + '<td>' + '' + '</td>';
 	          }else{
 	          	table = table + '<td>' + value.location_engineer.long_location + '</td>';
+	          	table = table + '<td>' + value.payment_acc_engineer.account_name + ' - ' + value.payment_acc_engineer.account_number + '</td>';
 	          }
-
-	          table = table + '<td>' + value.payment_acc_engineer.account_name + ' - ' + value.payment_acc_engineer.account_number + '</td>';
-	          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
+	          table = table + '<td>' + '<button value="'+value.id+'" class="btn btn-sm btn-primary btn-detail">Detail</button>' + '</td>';
               table = table + '</tr>';
             });
 
@@ -332,6 +476,38 @@
 			var id_area = e.params.data.id;
 			$("#inputJobLocation").prop("disabled", false)
 			$("#inputJobLocation").select2({
+				theme: 'bootstrap4',
+				ajax: {
+					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+					dataType: 'json',
+				}
+			});
+		})
+
+		$("#inputJobRegion_update").select2({
+			theme: 'bootstrap4',
+			ajax: {
+				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll",
+				dataType: 'json',
+			}
+		});
+
+		$("#inputJobRegion_update").on('select2:select', function (e) {
+			var id_region = e.params.data.id;
+			$("#inputJobArea_update").prop("disabled", false)
+			$("#inputJobArea_update").select2({
+				theme: 'bootstrap4',
+				ajax: {
+					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+					dataType: 'json',
+				}
+			});
+		})
+
+		$("#inputJobArea_update").on('select2:select', function (e) {
+			var id_area = e.params.data.id;
+			$("#inputJobLocation_update").prop("disabled", false)
+			$("#inputJobLocation_update").select2({
 				theme: 'bootstrap4',
 				ajax: {
 					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
@@ -393,63 +569,59 @@
 
 	})
 
-	function showSumary(id){
+	$('#datatable-engineer').on('click', '.btn-detail', function(n){
+		console.log(n);
+		var btn_detail = this.value;
+		$('.btn-next').click(function() {
+	        this.value = btn_detail;
+	        console.log($('.btn-next').val())
+	    });
+
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobOpen",
-			data:{
-				id_job:id
-			},
+			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
 			success: function(result){
-				console.log(result.job.customer.customer_name)
+				$.each(result, function(key, value){
+					if (value.id == btn_detail) {
+						$("#id_user_detail").val(btn_detail);
+						$("#name_eng_detail").html("<li class='fa fa-user fa-large'></li>&nbsp&nbsp" + value.name);
+						$("#nik_eng_detail").html("<li class='fa fa-id-card fa-large'></li>&nbsp&nbsp" + value.nik);
+						$("#place_of_birth_eng_detail").html("<li class='fa fa-bed fa-large'></li>&nbsp&nbsp" + value.pleace_of_birth);
+						$("#date_of_birth_eng_detail").html("<li class='fa fa-calendar fa-large'></li>&nbsp&nbsp" + moment(value.date_of_birth).format("DD MMMM YYYY") );
+						$("#phone_eng_detail").html("<li class='fa fa-phone fa-large'></li> &nbsp&nbsp" + value.phone);
+						$("#email_eng_detail").html("<li class='fa fa-envelope fa-large'></li> &nbsp&nbsp" + value.email);
+						$("#address_eng_detail").html("<li class='fa fa-home fa-large'></li> &nbsp&nbsp" + value.address);
+						if (value.location_engineer == null) {
+							$("#area_eng_detail").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li> - </li></ul>")
 
-				$("#jobSumaryHolderCustomer").html(result.job.customer.customer_name)
-				$("#jobSumaryHolderTitle").html(result.job.job_name)
-				$("#jobSumaryHolderDescription").html(result.job.job_description.replace(/(?:\r\n|\r|\n)/g, '<br>'))
-				$("#jobSumaryHolderRequirement").html(result.job.job_requrment.replace(/(?:\r\n|\r|\n)/g, '<br>'))
-				$("#jobSumaryHolderAddress").html('<i class="fas fa-building"></i> ' + result.job.job_location)
-				$("#jobSumaryHolderLocation").html('<i class="fas fa-map-marker"></i> ' + result.job.location.long_location)
-				$("#jobSumaryHolderLevel").html('<i class="fas fa-signal"></i> ' + result.job.level.level_name + " - " + result.job.level.level_description)
-				$("#jobSumaryHolderDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end))
-				
-				$("#jobSumaryHolderButton").attr('href','{{url("job/detail/")}}/' + result.job.id)
+							$("#current_area_eng_update").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li> - </li></ul>")
+						}else{
+							$("#area_eng_detail").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li>" + value.location_engineer.long_location +"</li></ul>");
 
-				$("#jobSumaryHolder").show()
-			}
+							$("#current_area_eng_update").html("<ul><li>" + value.location_engineer.long_location +" <i class='fa fa-check btn-delete-area' style='color:green'></i></li><li></ul>")
+						}
+						
+						$("#photo_eng_detail").attr("src", "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTZDxOhYF6AqlmOslcgPXVO_81D4Cxou6d7lCyjwKsfcPSDJ7Ff&usqp=CAU");
+						$("#acc_eng_detail").html("<li class='fa fa-university fa-large'></li> &nbsp&nbsp" + value.payment_acc_engineer.account_name + " - " + value.payment_acc_engineer.account_number);
+
+						$("#name_eng_update").val(value.name)
+						$("#number_eng_update").val(value.phone)
+						$("#email_eng_update").val(value.email)
+						$("#adress_eng_update").val(value.address)
+						
+						$("#account_name_update").val(value.payment_acc_engineer.account_name)
+						$("#account_number_update").val(value.payment_acc_engineer.account_number)
+					}
+					
+				})
+
+			},
 		});
-	}
 
-	function showAddPIC(){
-		$("#pic").attr("disabled","true")
-		$("#addPICField").show()
+       $("#DetailModal").modal("show");
+       $("#prevBtn").prop('disabled', true);
 
-	}
-
-	function finalize(){
-		var splited = $("#inputJobRangeDate").val().split(' - ');
-		$.ajax({
-			url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterFinalize",
-			data: {
-				id_location:$("#inputJobLocation").select2("data")[0].id,
-				id_pic:$("#inputJobPic").select2("data")[0].id,
-				id_category:$("#inputJobCategory").select2("data")[0].id
-			},
-			success: function(result){
-				$("#finaliseClient").html($("#inputJobClient").select2("data")[0].text)
-				$("#finaliseLocation").html(result.location)
-				$("#finalisePic").html(result.pic)
-				$("#finalisePicEmail").html(result.pic_email)
-				$("#finaliseJobTitle").html($("#inputJobTitle").val())
-				$("#finaliseJobCategory").html('<i class="fas fa-hard-hat"></i> ' + result.category)
-				$("#finaliseJobLevel").html('<i class="fas fa-signal"></i> ' + $("#inputJobLevel").select2('data')[0].text)
-				$("#finaliseJobDuration").html(moment(splited[0],"DD/MM/YYYY").format("DD MMMM") + " - " + moment(splited[1],"DD/MM/YYYY").format("DD MMMM YYYY"))
-				$("#finaliseJobDescription").html("<h4>Job Description</h4>" + $("#inputJobDescription").val())
-				$("#finaliseJobRequirement").html("<h4>Job Requirement</h4>" + $("#inputJobRequirement").val())
-				$("#finaliseJobAddress").html('<h4>Job Address</h4>' + $("#inputJobAddress").val())
-				$("#finaliseJobPrice").html($("#inputJobPriceBase").val())
-			}
-		})
-	}
+    })
 
 	function saveBtn(){
 		Swal.fire({
@@ -487,6 +659,7 @@
 						id_type:$("#id_type").val(),
 						name_eng:$("#name_eng").val(),
 						email_eng:$("#email_eng").val(),
+						phone_eng:$("#number_eng").val(),
 						adress_eng:$("#adress_eng").val(),
 						id_location:$("#inputJobLocation").select2("data")[0].id,
 						account_name:$("#account_name").val(),
@@ -507,6 +680,110 @@
 				})
 			}
 		});
+	}
+
+	$('#datatable-engineer').on('click', '.btn-delete-area', function(){
+		alert("Are You Sure to delete area!");
+	})
+
+	var currentTab = 0;
+
+	function showTab(n) {
+		var x = document.getElementsByClassName("tab");
+		var y = document.getElementsByClassName("step");
+		console.log(n);
+		x[n].style.display = "inline";
+		y[n].style.display = "inline";
+		if (n == (x.length - 1)) {
+			$("#prevBtn").prop('disabled', false);
+
+			document.getElementById("nextBtn").innerHTML = "Save";
+			$(".modal-dialog").addClass("modal-md");
+			$("#nextBtn").attr('onclick','UpadateEngineer()');
+		} else {
+			$("#nextBtn").attr('onclick','nextPrev(1)');
+			$("#prevBtn").prop('disabled', true);
+			$(".modal-dialog").removeClass("modal-md");
+			document.getElementById("nextBtn").innerHTML = "Update";
+		}
+	}
+
+	function UpadateEngineer(){
+		console.log("lohhh");
+		console.log($("#inputJobLocation_update").select2().val());
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "to Update Data",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No',
+		}).then((result) => {
+			if (result.value) {
+				Swal.fire({
+					title: 'Please Wait..!',
+					text: "It's sending..",
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					customClass: {
+						popup: 'border-radius-0',
+					},
+					onOpen: () => {
+						Swal.showLoading()
+					}
+				})
+				$.ajax({
+					headers: {
+					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					url: "{{env('API_LINK_CUSTOM')}}/engineer/updateEngineerData",
+					type:"POST",
+					data:{
+						_token: "{{ csrf_token() }}",
+						id:$("#id_user_detail").val(),
+						name_eng:$("#name_eng_update").val(),
+						email_eng:$("#email_eng_update").val(),
+						phone_eng:$("#number_eng_update").val(),
+						adress_eng:$("#adress_eng_update").val(),
+						id_location:$("#inputJobLocation_update").select2("data")[0].id,
+						account_name:$("#account_name_update").val(),
+						account_number:$("#account_number_update").val(),
+					},
+					success: function(result){
+						Swal.showLoading()
+						Swal.fire(
+							'Published!',
+							'Data has been Updated.',
+							'success'
+						).then((result) => {
+							if (result.value) {
+								$("#DetailModal").modal('toggle')
+							}
+						})
+					}
+				})
+			}
+		});
+	}
+
+	function nextPrev(n) {
+		var x = document.getElementsByClassName("tab");
+		var y = document.getElementsByClassName("step");
+		// if (n == 1 && !validateForm()) return false;
+		x[currentTab].style.display = "none";
+		y[currentTab].style.display = "none";
+		currentTab = currentTab + n;
+		if (currentTab >= x.length) {
+			$("#DetailModal").modal('hide');
+			x[n].style.display = "none";
+			currentTab = 0;
+			// document.getElementById("regForm").submit();
+			// return false;
+		}
+		showTab(currentTab);
 	}
 
 
