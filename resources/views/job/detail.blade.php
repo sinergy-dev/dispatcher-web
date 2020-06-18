@@ -443,22 +443,31 @@
 						id_moderator:"{{Auth::user()->id}}"
 					},
 					success: function (result){
-						Swal.showLoading()
-						Swal.fire(
-							'Assigned!',
-							'Job has been Assigned to ' + name_engineer + ' and letter assignment can be access by engineer',
-							'success'
-						).then((result) => {
-							if (result.value) {
-								location.reload()
+						$.ajax({
+							type:"GET",
+							url:"{{url('/job/detail/createLetterAndQR')}}",
+							data:{
+								id_job:window.location.href.split("/")[5].replace('#','').split("h")[0]
+							},
+							success:function(){
+								Swal.showLoading()
+								Swal.fire(
+									'Assigned!',
+									'Job has been Assigned to ' + name_engineer + ' and letter assignment can be access by engineer',
+									'success'
+								).then((result) => {
+									if (result.value) {
+										location.reload()
+									}
+								})
 							}
 						})
 					}
 				})
-				$.ajax({
-					type:"GET",
-					url:"{{url('/job/detail/createLetterAndQR')}}"
-				})
+				// $.ajax({
+				// 	type:"GET",
+				// 	url:"{{url('/job/detail/createLetterAndQR')}}"
+				// })
 			}
 		})
 	}
