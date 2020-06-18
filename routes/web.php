@@ -24,6 +24,8 @@ Route::get('testLatterAssignment', function(){
 	return view('pdf.letter_of_assignment');
 })->name('testLatterAssignment');
 
+Route::get('loa/{parameter}','GuestController@showLeaterOfAssignment')->name('loa.show');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
