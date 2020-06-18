@@ -164,8 +164,9 @@
             snapshot_dump.forEach(function(data,index){
                 if(notificationCountAll < 10){
                     if(data.to == "{{Auth::user()->email}}"){
-                        if(data.showed == false){
-                            sendNotification(data.title,data.message,data,index)
+                        if(data.showed == "false"){
+                            sendNotification(data.title,data.message)
+                            setNotificationShowed(notificationCountReal[index],data)
                         }
                         if(data.status == "unread"){
                             notificationCount = notificationCount + 1
@@ -193,7 +194,6 @@
                     window.open('http://stackoverflow.com/a/13328397/1269037');
                 };
             }
-            setNotification(index,data)
         }
 
         function addNotification(data,notificationCount,index){
@@ -242,12 +242,14 @@
                     message: data.message,
                     status: "read",
                     date_time : data.date_time,
-                    showed : true
+                    job : data.job,
+                    history : data.history,
+                    showed : "true"
                 });
             })
         }
 
-        function setNotification(key,data){
+        function setNotificationShowed(key,data){
             // console.log('updated')
         // function setNotification(){
             firebase.database().ref('notification/web-notif/' + key).set({
@@ -257,7 +259,7 @@
                 message: data.message,
                 status: data.status,
                 date_time : data.date_time,
-                showed : true,
+                showed : "true",
                 history : data.history,
                 job : data.job
             });
