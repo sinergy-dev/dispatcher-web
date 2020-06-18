@@ -364,7 +364,7 @@
 						<!-- <div id="basePaymentInput" style="display: none"> -->
 							<div class="mb-3">
 								<label for="jobRequirement">Base Payment</label>
-								<input type="text" class="form-control" id="inputJobPriceBase" data-type="currency" placeholder="$100.00" required="">	
+								<input type="text" class="form-control" id="inputJobPriceBase" data-type="currency" placeholder="IDR 100.000" required="">	
 								<div class="invalid-feedback">
 									Please enter the Job Requirement.
 								</div>
@@ -717,7 +717,7 @@
 						job_description:$("#inputJobDescription").val(),
 						job_requrement:$("#inputJobRequirement").val(),
 						job_address:$("#inputJobAddress").val(),
-						job_payment_base:$("#inputJobPriceBase").val().replace('$','').replace('.00','').replace(',',''),
+						job_payment_base:$("#inputJobPriceBase").val().replace(',00','').replace(/\D/g, ""),
 						id_user:'{{Auth::user()->id}}',
 
 					},
@@ -781,7 +781,7 @@
 	}
 
 	function formatNumber(n) {
-		return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+		return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 	}
 
 
@@ -790,8 +790,8 @@
 		if (input_val === "") { return; }
 		var original_len = input_val.length;
 		var caret_pos = input.prop("selectionStart");
-		if (input_val.indexOf(".") >= 0) {
-			var decimal_pos = input_val.indexOf(".");
+		if (input_val.indexOf(",") >= 0) {
+			var decimal_pos = input_val.indexOf(",");
 			var left_side = input_val.substring(0, decimal_pos);
 			var right_side = input_val.substring(decimal_pos);
 			left_side = formatNumber(left_side);
@@ -800,12 +800,13 @@
 				right_side += "00";
 			}
 			right_side = right_side.substring(0, 2);
-			input_val = "$" + left_side + "." + right_side;
+			input_val =  left_side + "," + right_side;
 		} else {
 			input_val = formatNumber(input_val);
-			input_val = "$" + input_val;
+			input_val =  input_val;
 			if (blur === "blur") {
-				input_val += ".00";
+				input_val = "Rp. " + input_val;
+				input_val += ",00";
 			}
 		}
 		
