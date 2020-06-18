@@ -176,7 +176,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         Kreait\Laravel\Firebase\ServiceProvider::class,
         SimpleSoftwareIO\QrCode\ServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class
+        Barryvdh\DomPDF\ServiceProvider::class,
+        LaraCrafts\UrlShortener\UrlShortenerServiceProvider::class,
+
 
 
     ],
@@ -231,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Bitly' => Shivella\Bitly\Facade\Bitly::class,
 
     ],
 
