@@ -17,6 +17,7 @@ use QrCode;
 use PDF;
 use Storage;
 use Auth;
+use Crypt;
 
 class JobController extends Controller
 {
@@ -82,12 +83,17 @@ class JobController extends Controller
     		"moderator" => Auth::user()->name
     	];
 
-
+    	$parameter = Crypt::encrypt([
+    		'id_job' => $req->id_job
+    	]);
+    	$url_source = "https://172.16.1.200:8080/loa/" . $parameter;
+    	$url_qr = app('bitly')->getUrl($url_source);
+    	QrCode::size(50)->generate($url_qr,$name_qr);
 
     	// return json_decode($pdf_data->getBody(),true);
     	// return json_decode($pdf_data->getBody(),true)['job'];
 
-    	QrCode::size(50)->generate('https://sinergy-dev.xyz',$name_qr);
+    	// QrCode::size(50)->generate('https://sinergy-dev.xyz',$name_qr);
 
     	$pdf = PDF::loadView('pdf.letter_of_assignment',compact('data'));
     	Storage::put("public/" . $name_pdf, $pdf->output());
@@ -178,13 +184,18 @@ class JobController extends Controller
 
     }
 
-    public function testLiveNotificationView(){
+    public function testLiveNotificationView(Request $req){
     	// QrCode::size(100)->generate('https://sinergy-dev.xyz');
-    	return view('job.test');
+        return view('job.test');
+
     }
 
     public function testQR(){
     	QrCode::generate('Make me into a QrCode!');
+    }
+
+    public function showLoAfromQR($parameter){
+    	echo Crypt::encrypt($parameter);
     }
 
     
