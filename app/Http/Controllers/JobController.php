@@ -44,7 +44,7 @@ class JobController extends Controller
 			'verify' => false
 		]);
 
-    	$url_pdf_data = env('API_LINK_CUSTOM') . '/job/getJobForPDF';
+    	$url_pdf_data = env('API_LINK_CUSTOM') . '/job/getJobForLoAPDF';
     	$pdf_data = $client->request('GET', $url_pdf_data,[
 	    	'query' => ['id_job' => $req->id_job]
 	    ]);
@@ -104,7 +104,11 @@ class JobController extends Controller
 			[
 				'name'     => 'qr_image',
 				'contents' => fopen(base_path() . '/public/' . $name_qr, 'r'),
-			]]
+			],
+            [
+                'name'     => 'id_job',
+                'contents' => $req->id_job
+            ]]
 		]);
 
 		$url_pdf = env('API_LINK_CUSTOM') . '/job/createJob/postPDFRecive';
@@ -114,7 +118,11 @@ class JobController extends Controller
 				'name'     => 'pdf_file',
 				'contents' => fopen(base_path() . '/storage/app/public/' . $name_pdf, 'r'),
 				
-			]]
+			],
+            [
+                'name'     => 'id_job',
+                'contents' => $req->id_job
+            ]]
 		]);
 		$options = [
 			'form_params' => [
