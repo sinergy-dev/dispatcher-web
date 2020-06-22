@@ -14,7 +14,7 @@ class GuestController extends Controller
     	$client = new Client([
 			'verify' => false
 		]);
-    	$respond = $client->request('GET', env('API_LINK_CUSTOM') . '/job/getJobForPDF',[
+    	$respond = $client->request('GET', env('API_LINK_CUSTOM') . '/job/getJobForLoAPDF',[
 	    	// 'query' => ['id_job' => Crypt::decrypt($parameter)["id_job"]]
 	    	'query' => ['id_job' => 50]
 	    ]);
