@@ -205,6 +205,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<button class="btn btn-primary mr-auto" onclick="reviewJobReport()">Show report</button>
 				<button class="btn btn-secondary" onclick="reviewJob('done')">Mark As Review</button>
 			</div>
 		</div>
@@ -600,6 +601,11 @@
 		} else {
 			$("#reviewJobModal").modal('toggle')
 		}
+	}
+
+	function reviewJobReport(){
+		window.open("{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobReportPDF?id_job=" + window.location.href.split("/")[5].replace('#','').split("h")[0], '_blank');
+		// console.log('reviewJobReport');
 	}
 
 	function showSumary(id){
