@@ -94,7 +94,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6" id="jobHolder">
+			<div class="col-md-12" id="jobHolder">
 				<!-- <div class="col-md-12">
 					<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
 						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
@@ -147,9 +147,9 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="col-md-12">
+				<div class="col-md-12" >
 					<nav aria-label="Page navigation example" class="ml-auto">
-						<ul class="pagination justify-content-end">
+						<ul class="pagination justify-content-end" id="jobPaginateHolder">
 							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 							<li class="page-item"><a class="page-link" href="#">1</a></li>
 							<li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -172,7 +172,7 @@
 							<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.</p>
 						</div>
 					</div> -->
-					<div class="card">
+					<!-- <div class="card">
 						<div class="card-body d-flex flex-column align-items-start">
 							<h5 class="card-title border-bottom">Job Sumary</h5>
 							<div class="card-text">
@@ -195,7 +195,7 @@
 							</div>
 							<a href="#" class="btn btn-primary ml-auto" id="jobSumaryHolderButton">Show More</a>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -488,6 +488,42 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="showSummaryModal" tabindex="-1" role="dialog" aria-labelledby="showSummaryModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Job Sumary</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body card-body d-flex flex-column align-items-start">
+				<div class="ml-1">
+					<strong class="d-inline-block text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
+					<h2 class="mb-2" id="jobSumaryHolderTitle">
+						Create Internal Software
+					</h2>
+					<h5>Job Description</h5>
+					<p id="jobSumaryHolderDescription">
+					</p>
+					<h5>Job Requirement</h5>
+					<p id="jobSumaryHolderRequirement">
+					</p>
+					<p>
+						<span id="jobSumaryHolderAddress"><i class="fas fa-building"></i> Head Quarter - PT. Sinergy Informasi Pratama </span><br>
+						<span id="jobSumaryHolderLocation"><i class="fas fa-map-marker"></i> Kembangan - Jakarta Barat - Jakarta </span><br>
+						<span id="jobSumaryHolderLevel"><i class="fas fa-signal"></i> Level 3 </span><br>
+						<span id="jobSumaryHolderDuration"><i class="fas fa-calendar-alt"></i> 1 Desember - 21 Desember 2020 </span><br>
+					</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary ml-auto" id="jobSumaryHolderButton">Show More</a>
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script type="text/javascript" src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
@@ -500,30 +536,8 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
-		$.ajax({
-			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobListAndSumary",
-			success: function (result) {
-				var prepend = ""
-				$.each(result["job"], function( index, value ) {
-					prepend = prepend + '<div class="col-md-12">'
-					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">'
-					prepend = prepend + '		<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">'
-					prepend = prepend + '		<div class="card-body d-flex flex-column align-items-start">'
-					prepend = prepend + '			<strong class="d-inline-block mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
-					prepend = prepend + '			<h4 class="mb-0">'
-					prepend = prepend + '				<a class="text-dark" href="#">' + value['job_name'] + '</a>'
-					prepend = prepend + '			</h4>'
-					prepend = prepend + '			<div class="mb-1 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
-					prepend = prepend + '			<span class="ml-auto text-primary" style="cursor: pointer;" href="#" onclick="showSumary(' + value['id'] + ')">Show Summary</span>'
-					prepend = prepend + '		</div>'
-					prepend = prepend + '	</div>'
-					prepend = prepend + '</div>'
-				});
-				$("#jobHolder").prepend(prepend)
-				console.log(result["job"])
-			}
-		})
+		
+		fillDataJob("dashboard/getJobListAndSumary/paginate?page=1")
 
 		$("#inputJobClient").select2({
 			theme: 'bootstrap4',
@@ -618,6 +632,90 @@
 
 	})
 
+	function fillDataJob(url){
+		$.ajax({
+			type:"GET",
+			// url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobListAndSumary",
+			url:"{{env('API_LINK_CUSTOM')}}/" + url,
+			success: function (result) {
+				$(".jobHolderItem").remove()
+				var prepend = "<div class='row jobHolderItem'>"
+				$.each(result["data"], function( index, value ) {
+					prepend = prepend + '<div class="col-md-6">'
+					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">'
+					prepend = prepend + '		<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">'
+					prepend = prepend + '		<div class="card-body d-flex flex-column align-items-start">'
+					prepend = prepend + '			<strong class="d-inline-block mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
+					prepend = prepend + '			<h4 class="mb-0">'
+					prepend = prepend + '				<a class="text-dark" href="#">' + value['job_name'] + '</a>'
+					prepend = prepend + '			</h4>'
+					prepend = prepend + '			<div class="mb-1 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
+					prepend = prepend + '			<span class="ml-auto text-primary" style="cursor: pointer;" href="#" onclick="showSumary(' + value['id'] + ')">Show Summary</span>'
+					prepend = prepend + '		</div>'
+					prepend = prepend + '	</div>'
+					prepend = prepend + '</div>'
+				});
+				$("#jobHolder").prepend(prepend + "</div>")
+				console.log(result["job"])
+
+				$("#jobPaginateHolder").empty("")
+				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+				var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 1) + "')"
+				var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
+				var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 1) + "')"
+				
+				if(result["current_page"] == 1){
+					previous = "disabled"
+					first = result["current_page"],first_active = "active"
+					second = result["current_page"] + 1 
+					third = result["current_page"] + 2
+
+					var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
+					var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 1) + "')"
+					var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 2) + "')"
+					var previous_onclick = ""
+					var next_onclick = second_onclick
+
+				} else if (result["current_page"] == result["last_page"]){
+					previous = ""
+					next = "disabled"
+					first = result["current_page"] - 2
+					second = result["current_page"] - 1
+					third = result["current_page"],third_active = "active"
+
+					var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 2) + "')"
+					var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 1) + "')"
+					var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
+					var previous_onclick = second_onclick
+					var next_onclick = ""
+
+				} else {
+					next = ""
+					previous = ""
+					first = result["current_page"] - 1
+					second = result["current_page"],second_active = "active"
+					third = result["current_page"] + 1
+					var previous_onclick = first_onclick
+					var next_onclick = third_onclick
+
+				}
+				var append = ""
+				append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+				append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+				if(result["last_page"] > 1){
+					append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+				}
+				if(result["last_page"] > 2){
+					append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+				}
+				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+				
+				$("#jobPaginateHolder").append(append)
+
+			}
+		})
+	}
+
 	function showSumary(id){
 		$.ajax({
 			type:"GET",
@@ -640,6 +738,7 @@
 				$("#jobSumaryHolderButton").attr('href','{{url("job/detail/")}}/' + result.job.id)
 
 				$("#jobSumaryHolder").show()
+				$("#showSummaryModal").modal('toggle')
 			}
 		});
 	}
