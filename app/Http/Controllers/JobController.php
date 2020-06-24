@@ -137,6 +137,7 @@ class JobController extends Controller
 		$send_letter = $client->request('POST', $url_letter, $options);
 
 		return $pdf->stream($name_pdf);
+        // return view('pdf.letter_of_assignment',compact('data'));
     }
 
     public function testLiveNotification(){
