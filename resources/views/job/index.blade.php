@@ -21,23 +21,23 @@
 <main role="main">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col">
 				<div class="card flex-md-row mb-4 shadow-sm h-md-250">
 					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-default">Total Jobs</strong>
+						<strong class="d-inline-block mb-2 text-danger">Open Jobs</strong>
 						<h3 class="mb-0">
-							<a class="text-dark" href="#">100</a>
+							<a class="text-dark" href="#" id="openJob"></a>
 						</h3>
 						<a href="#">See All</a> 
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col">
 				<div class="card flex-md-row mb-4 shadow-sm h-md-250">
 					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-primary">Jobs picked</strong>
+						<strong class="d-inline-block mb-2 text-warning">Ready Jobs</strong>
 						<h3 class="mb-0">
-							<a class="text-dark" href="#">40</a>
+							<a class="text-dark" href="#" id="readyJob"></a>
 						</h3>
 						<!-- <div class="mb-1 text-muted">Nov 12</div>
 						<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>-->
@@ -45,23 +45,36 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col">
 				<div class="card flex-md-row mb-4 shadow-sm h-md-250">
 					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-success">Job done</strong>
+						<strong class="d-inline-block mb-2 text-primary">Progress Jobs</strong>
 						<h3 class="mb-0">
-							<a class="text-dark" href="#">40</a>
+							<a class="text-dark" href="#" id="progressJob"></a>
 						</h3>
 						<a href="#">See All</a> 
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col">
 				<div class="card flex-md-row mb-4 shadow-sm h-md-250">
 					<div class="card-body d-flex flex-column align-items-start">
-						<strong class="d-inline-block mb-2 text-danger">Job On Progress</strong>
+						<strong class="d-inline-block mb-2 text-success">Done Jobs</strong>
 						<h3 class="mb-0">
-							<a class="text-dark" href="#">20</a>
+							<a class="text-dark" href="#" id="doneJob"></a>
+						</h3>
+						<!-- <div class="mb-1 text-muted">Nov 12</div>
+						<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>-->
+						<a href="#">See All</a> 
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card flex-md-row mb-4 shadow-sm h-md-250">
+					<div class="card-body d-flex flex-column align-items-start">
+						<strong class="d-inline-block mb-2 text-default">Total Job</strong>
+						<h3 class="mb-0">
+							<a class="text-dark" href="#" id="totalJob"></a>
 						</h3>
 						<!-- <div class="mb-1 text-muted">Nov 12</div>
 						<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>-->
@@ -71,7 +84,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-9">
+			<div class="col-md-8">
 				<div class="d-inline-flex align-items-center">
 					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)">
 						<i class="fas fa-plus"></i> Add Job
@@ -79,9 +92,17 @@
 					<h3 style="margin-bottom: 0px !important" class="ml-3">Job List</h3>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="pb-3 border-bottom">
-					<div class="input-group">
+			<div class="col-md-4">
+				<div class="d-inline-flex pb-3 border-bottom">
+					<div class="btn-group" role="group">
+						<button id="jobShowCount" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show 10</button>
+						<div class="dropdown-menu" id="jobShowCountList">
+							<span class="dropdown-item active" onclick="changeJobShowCount(10)">10 List</span>
+							<span class="dropdown-item" onclick="changeJobShowCount(25)">25 List</span>
+							<span class="dropdown-item" onclick="changeJobShowCount(50)">50 List</span>
+						</div>
+					</div>
+					<div class="ml-2 input-group">
 						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
@@ -529,21 +550,29 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script type="text/javascript" src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.2/cjs/popper.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2"></script> -->
 
 <script type="text/javascript">
 	// Jquery Dependency
 
 	$(document).ready(function(){
 
+		getDashboard();
+
 		$("#jobSearch").on('change',function(){
-			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
+			if($("#jobSearch").val() != ""){
+				fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
+			} else {
+				fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
+				$(".resultSearch").hide()
+			}
 		})
 		
 		fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
@@ -641,12 +670,43 @@
 
 	})
 
+	function getDashboard(){
+		$.ajax({
+			type:"GET",
+			url:"{{env('API_LINK_CUSTOM')}}/dashboard/getDashboardModerator",
+			success: function(result){
+				$("#openJob").text(result.open)
+				$("#readyJob").text(result.ready)
+				$("#progressJob").text(result.progress)
+				$("#doneJob").text(result.done)
+				$("#totalJob").text(result.total)
+			}
+		})
+	}
+
+	function changeJobShowCount(n){
+		$("#jobShowCount").text("Show " + n)
+		var active_10 = (n == 10) ? 'active' : ''
+		var active_25 = (n == 25) ? 'active' : ''
+		var active_50 = (n == 50) ? 'active' : ''
+		var append = ""
+		append = append + '<span class="dropdown-item ' + active_10 + '" onclick="changeJobShowCount(10)">10 List</span>'
+		append = append + '<span class="dropdown-item ' + active_25 + '" onclick="changeJobShowCount(25)">25 List</span>'
+		append = append + '<span class="dropdown-item ' + active_50 + '" onclick="changeJobShowCount(50)">50 List</span>'
+		$("#jobShowCountList").empty()
+		$("#jobShowCountList").append(append)
+		if($("#jobSearch").val() != ""){
+			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
+		} else {
+			fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
+		}
+
+	}
+
 	function fillDataJob(url,method){
-		// if(method == "POST")
 		$.ajax({
 			type:method,
-			// url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobListAndSumary",
-			url:"{{env('API_LINK_CUSTOM')}}/" + url,
+			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
 			success: function (result) {
 				$(".jobHolderItem").remove()
 				var prepend = "<div class='row jobHolderItem'>"
@@ -663,9 +723,10 @@
 					}
 					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
-					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">'
-					prepend = prepend + '		<div style="width:160px;height: 148px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-position: center;">'
-					prepend = prepend + '			<div style="position: absolute;bottom: 2px;left: 2px;font-size: medium;">'
+					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style="height: 148px; border-radius:.25rem;">'
+					// prepend = prepend + '		<div style="width:160px;height: 148px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-position: center;">'
+					prepend = prepend + '		<div class="" style="width:160px;height: 147px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;">'
+					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
 					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
 					prepend = prepend + '			</div>'
 					prepend = prepend + '		</div>'
