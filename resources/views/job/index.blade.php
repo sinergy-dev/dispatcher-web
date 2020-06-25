@@ -85,7 +85,7 @@
 			<div class="col-md-3">
 				<div class="pb-3 mb-4 border-bottom">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
 						</div>
@@ -536,8 +536,12 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
+
+		$("#jobSearch").on('change',function(){
+			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
+		})
 		
-		fillDataJob("dashboard/getJobListAndSumary/paginate?page=1")
+		fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
 
 		$("#inputJobClient").select2({
 			theme: 'bootstrap4',
@@ -632,9 +636,10 @@
 
 	})
 
-	function fillDataJob(url){
+	function fillDataJob(url,method){
+		// if(method == "POST")
 		$.ajax({
-			type:"GET",
+			type:method,
 			// url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobListAndSumary",
 			url:"{{env('API_LINK_CUSTOM')}}/" + url,
 			success: function (result) {
@@ -660,9 +665,9 @@
 
 				$("#jobPaginateHolder").empty("")
 				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
-				var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 1) + "')"
-				var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
-				var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 1) + "')"
+				var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+				var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+				var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
 				
 				if(result["current_page"] == 1){
 					previous = "disabled"
@@ -670,22 +675,33 @@
 					second = result["current_page"] + 1 
 					third = result["current_page"] + 2
 
-					var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
-					var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 1) + "')"
-					var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] + 2) + "')"
+					var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
 					var previous_onclick = ""
-					var next_onclick = second_onclick
 
+					if(result["last_page"] == 1){
+						next = "disabled"
+						var next_onclick = ""
+					} else {
+						var next_onclick = second_onclick
+					}
 				} else if (result["current_page"] == result["last_page"]){
 					previous = ""
 					next = "disabled"
-					first = result["current_page"] - 2
-					second = result["current_page"] - 1
-					third = result["current_page"],third_active = "active"
+					if(result["last_page"] == 2){
+						first = result["current_page"] - 1
+						second = result["current_page"], second_active = "active"
+						third = result["current_page"]
+					} else {
+						first = result["current_page"] - 2
+						second = result["current_page"] - 1
+						third = result["current_page"],third_active = "active"
+					}
 
-					var first_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 2) + "')"
-					var second_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"] - 1) + "')"
-					var third_onclick = "onclick=fillDataJob('" + "dashboard/getJobListAndSumary/paginate?page=" + (result["current_page"]) + "')"
+					var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
 					var previous_onclick = second_onclick
 					var next_onclick = ""
 
