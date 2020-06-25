@@ -73,17 +73,17 @@
 		<div class="row">
 			<div class="col-md-7">
 
-				<div class="pb-3 mb-4 border-bottom">
+				<div class="pb-3 border-bottom">
 					<h3>Job List</h3>
 				</div>
 			</div>
 			<div class="col-md-2">
-				<div class="pb-3 mb-4 border-bottom">
+				<div class="pb-3 border-bottom">
 					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)"><i class="fas fa-plus"></i> Create Jobs</button>
 				</div>
 			</div>
 			<div class="col-md-3">
-				<div class="pb-3 mb-4 border-bottom">
+				<div class="pb-3 border-bottom">
 					<div class="input-group">
 						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
@@ -91,6 +91,14 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row resultSearch" style="display: none;">
+			<div class="col-md-6 mb-2 mt-1">
+				<p class="mb-0 resultSearchCount">12 result</p>
+			</div>
+			<div class="col-md-6 text-right mb-2 mt-1">
+				<p class="mb-0 resultSearchKeyword">Search for : BPJS Kesehatan</p>
 			</div>
 		</div>
 		<div class="row">
@@ -727,6 +735,13 @@
 				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
 				
 				$("#jobPaginateHolder").append(append)
+				if(method == "POST"){
+					$(".resultSearchCount").empty("").text(result["total"] + " results")
+					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
+					$(".resultSearch").show()
+				} else {
+					$(".resultSearch").hide()
+				}
 
 			}
 		})
