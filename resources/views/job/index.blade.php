@@ -71,15 +71,12 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-7">
-
-				<div class="pb-3 border-bottom">
-					<h3>Job List</h3>
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="pb-3 border-bottom">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)"><i class="fas fa-plus"></i> Create Jobs</button>
+			<div class="col-md-9">
+				<div class="d-inline-flex align-items-center">
+					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)">
+						<i class="fas fa-plus"></i> Add Job
+					</button>
+					<h3 style="margin-bottom: 0px !important" class="ml-3">Job List</h3>
 				</div>
 			</div>
 			<div class="col-md-3">
@@ -155,7 +152,7 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="col-md-12" >
+				<div class="col-md-12" id="paginationJob" >
 					<nav aria-label="Page navigation example" class="ml-auto">
 						<ul class="pagination justify-content-end" id="jobPaginateHolder">
 							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -653,14 +650,29 @@
 			success: function (result) {
 				$(".jobHolderItem").remove()
 				var prepend = "<div class='row jobHolderItem'>"
+				var n = 25
 				$.each(result["data"], function( index, value ) {
+					if(value['job_status'] == "Open"){
+						var badgeJob = "danger"
+					} else if(value['job_status'] == "Ready"){
+						var badgeJob = "warning"
+					} else if(value['job_status'] == "Progress"){
+						var badgeJob = "primary"
+					} else if(value['job_status'] == "Done"){
+						var badgeJob = "success"
+					}
+					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
 					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">'
-					prepend = prepend + '		<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">'
+					prepend = prepend + '		<div style="width:160px;height: 148px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-position: center;">'
+					prepend = prepend + '			<div style="position: absolute;bottom: 2px;left: 2px;font-size: medium;">'
+					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
+					prepend = prepend + '			</div>'
+					prepend = prepend + '		</div>'
 					prepend = prepend + '		<div class="card-body d-flex flex-column align-items-start">'
 					prepend = prepend + '			<strong class="d-inline-block mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
 					prepend = prepend + '			<h4 class="mb-0">'
-					prepend = prepend + '				<a class="text-dark" href="#">' + value['job_name'] + '</a>'
+					prepend = prepend + '				<a class="text-dark" href="#">' + jobName + '</a>'
 					prepend = prepend + '			</h4>'
 					prepend = prepend + '			<div class="mb-1 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
 					prepend = prepend + '			<span class="ml-auto text-primary" style="cursor: pointer;" href="#" onclick="showSumary(' + value['id'] + ')">Show Summary</span>'
@@ -736,7 +748,12 @@
 				
 				$("#jobPaginateHolder").append(append)
 				if(method == "POST"){
-					$(".resultSearchCount").empty("").text(result["total"] + " results")
+					if(result['total'] == 0){
+						$(".resultSearchCount").empty("").text("Not found")
+						$("#paginationJob").hide()
+					} else {
+						$(".resultSearchCount").empty("").text(result["total"] + " results")
+					}
 					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
 					$(".resultSearch").show()
 				} else {
