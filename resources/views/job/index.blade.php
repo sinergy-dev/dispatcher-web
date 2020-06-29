@@ -526,7 +526,10 @@
 			</div>
 			<div class="modal-body card-body d-flex flex-column align-items-start">
 				<div class="ml-1">
-					<strong class="d-inline-block text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
+					<div class="d-flex d-inline-block align-items-center">
+						<strong class="text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
+						<span class="ml-auto badge badge-success">Done</span>
+					</div>
 					<h2 class="mb-2" id="jobSumaryHolderTitle">
 						Create Internal Software
 					</h2>
@@ -542,6 +545,10 @@
 						<span id="jobSumaryHolderLevel"><i class="fas fa-signal"></i> Level 3 </span><br>
 						<span id="jobSumaryHolderDuration"><i class="fas fa-calendar-alt"></i> 1 Desember - 21 Desember 2020 </span><br>
 					</p>
+					<hr>
+					<p id="jobSumaryHolderLatest"><b>Latest Update</b><br>
+					16 June - 15:36 [Alam] <br>
+					Panding Ticket - waiting part controler, eta sedan dikordinasikan</p>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -845,6 +852,7 @@
 				$("#jobSumaryHolderDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end))
 				
 				$("#jobSumaryHolderButton").attr('href','{{url("job/detail/")}}/' + result.job.id)
+				$("#jobSumaryHolderLatest").html('<b>Latest Update</b><br>' + moment(result.job.latest_history.history.date_time).format('DD MMMM - HH:mm') + ' [' + result.job.latest_history.user_name + '] <br>' + result.job.latest_history.history_activity + ' - ' + result.job.latest_history.history.detail_activity + '</p>')
 
 				$("#jobSumaryHolder").show()
 				$("#showSummaryModal").modal('toggle')
