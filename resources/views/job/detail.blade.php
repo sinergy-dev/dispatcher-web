@@ -318,7 +318,6 @@
 				$("#jobSumaryDetailProgress").html("")
 				$.each(result.progress,function(index,value){
 					if(index == 0){
-						// console.log(value['id_activity'])
 						if(value['id_activity'] == "6"){
 							$("#jobSumaryDetailReview").attr("disabled", false);
 						} else if(value['id_activity'] == "7"){
@@ -326,7 +325,7 @@
 						} else if(value['id_activity'] == "8"){
 							$("#jobSumaryDetailPay").attr("disabled", false);
 						}
-						append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
 					} else {
 						append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 					}
