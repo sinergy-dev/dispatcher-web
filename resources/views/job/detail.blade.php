@@ -237,7 +237,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Pay Job</h5>
 			</div>
-			<form method="POST" action="{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorInvoice" enctype="multipart/form-data" id="invoiceForm">
+			<!-- <form method="POST" action="{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorInvoice" enctype="multipart/form-data" id="invoiceForm"> -->
 				<div class="modal-body">
 					<div class="tab" style="display: none">
 						<h5>Adjust Final Price</h5>
@@ -281,7 +281,7 @@
 					<button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Back</button>
 					<button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
 				</div>
-			</form>
+			<!-- </form> -->
 		</div>
 	</div>
 </div>
@@ -523,7 +523,7 @@
 			// 	$("#payJobInfoName").val(result.account[0].user.name)
 			// 	$("#payJobInfoBank").val(result.account[0].account_name)
 			// 	$("#payJobInfoAccount").val(result.account[0].account_number)
-				$("#payJobInfoID").val(result)
+				$("#payJobInfoID").val(result.id)
 			// 	$("#payJobInfoModerator").val("{{Auth::user()->id}}")
 			}
 		})
@@ -691,12 +691,13 @@
 					}
 				})
 				var fd = new FormData();
-				var files = $('#payJobInfoInvoice')[0].files[0];
-				fd.append('invoice',files);
+				// var files = $('#payJobInfoInvoice')[0].files[0];
+				fd.append('invoice',$('#payJobInfoInvoice')[0].files[0]);
 				fd.append('id_payment',$("#payJobInfoID").val());
 				fd.append('id_job',window.location.href.split("/")[5].replace('#','').split("h")[0]);
 				fd.append('id_moderator',"{{Auth::user()->id}}");
-				
+
+				console.log(fd);
 
 				$.ajax({
 					type:"POST",
