@@ -830,6 +830,7 @@
               $(".radio-group").on("click",".radio-custom[data-value='"+value.id+"']",function(){
                   $(this).toggleClass('active')
                   var val = $(this).attr('data-value')
+                  //kalau sudah di next terus prev kalau nomor awal udah di pilih brrti udah aktive mangkanya nilainya true terus jadi double
                   if ($(this).hasClass("active")) {
                     cat.push(val)
                     localStorage.setItem("category", JSON.stringify(cat));
@@ -839,7 +840,7 @@
                     // localStorage.removeItem("category");
                   }
 
-                  
+
                   // $(this).parent().find('.radio').removeClass('active');
                   // $(this).addClass('active');
                   
