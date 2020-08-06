@@ -3,7 +3,6 @@
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap4-select2-theme@1.0.3/src/css/bootstrap4-select2-theme.css" rel="stylesheet" /> -->
 <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -72,26 +71,37 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-7">
-
-				<div class="pb-3 mb-4 border-bottom">
-					<h3>Engineer List</h3>
+			<div class="col-md-8">
+				<div class="d-inline-flex align-items-center">
+					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Add Engineer</button>
+					<h3 class="ml-3" style="margin-bottom: 0px !important">Engineer List</h3>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<div class="pb-3 mb-4 border-bottom">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Create Engineer</button>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="pb-3 mb-4 border-bottom">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search">
+			<div class="col-md-4">
+				<div class="d-inline-flex pb-3 border-bottom">
+					<div class="btn-group" role="group">
+						<button id="jobShowCount" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show 10</button>
+						<div class="dropdown-menu" id="jobShowCountList">
+							<span class="dropdown-item active pointer" onclick="changeJobShowCount(10)">10 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(25)">25 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(50)">50 List</span>
+						</div>
+					</div>
+					<div class="ml-2 input-group">
+						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row resultSearch" style="display: none;">
+			<div class="col-md-6 mb-2 mt-1">
+				<p class="mb-0 resultSearchCount">12 result</p>
+			</div>
+			<div class="col-md-6 text-right mb-2 mt-1">
+				<p class="mb-0 resultSearchKeyword">Search for : BPJS Kesehatan</p>
 			</div>
 		</div>
 		<div class="row">
@@ -114,9 +124,9 @@
 					  </tbody>
 					</table>
 				</div>
-				<div class="col-md-12">
+				<div class="col-md-12" id="paginationJob">
 					<nav aria-label="Page navigation example" class="ml-auto">
-						<ul class="pagination justify-content-end">
+						<ul class="pagination justify-content-end" id="jobPaginateHolder">
 							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 							<li class="page-item"><a class="page-link" href="#">1</a></li>
 							<li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -125,34 +135,6 @@
 						</ul>
 					</nav>
 				</div>
-			<div class="col-md-6" id="jobSumaryHolder" style="display: none">
-				<div class="col-md-12">
-					<div class="card">
-						<div class="card-body d-flex flex-column align-items-start">
-							<h5 class="card-title border-bottom">Job Sumary</h5>
-							<div class="card-text">
-								<strong class="d-inline-block text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
-								<h2 class="mb-2" id="jobSumaryHolderTitle">
-									Create Internal Software
-								</h2>
-								<h5>Job Description</h5>
-								<p id="jobSumaryHolderDescription">
-								</p>
-								<h5>Job Requirement</h5>
-								<p id="jobSumaryHolderRequirement">
-								</p>
-								<p>
-									<span id="jobSumaryHolderAddress"><i class="fas fa-building"></i> Head Quarter - PT. Sinergy Informasi Pratama </span><br>
-									<span id="jobSumaryHolderLocation"><i class="fas fa-map-marker"></i> Kembangan - Jakarta Barat - Jakarta </span><br>
-									<span id="jobSumaryHolderLevel"><i class="fas fa-signal"></i> Level 3 </span><br>
-									<span id="jobSumaryHolderDuration"><i class="fas fa-calendar-alt"></i> 1 Desember - 21 Desember 2020 </span><br>
-								</p>
-							</div>
-							<a href="#" class="btn btn-primary ml-auto" id="jobSumaryHolderButton">Show More</a>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </main>
@@ -169,7 +151,11 @@
 			<div class="modal-body">
 				<form class="needs-validation" novalidate="">
 					<div>
-						<input type="" name="id_type" id="id_type" value="1" hidden>
+						<div class="mb-3">
+							<label for="client">Candidate Engineer</label>
+							<select class="custom-select d-block w-100" id="candidateEngineerList"></select>
+						</div>
+
 						<div class="mb-3">
 							<label for="client">Name</label>
 							<input type="text" class="form-control" name="name_eng" id="name_eng" required>
@@ -244,6 +230,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" id="resetBtn" onclick="resetBtn()">Reset</button>
 				<button type="button" class="btn btn-primary btn-save" id="saveBtn" onclick="saveBtn()">Save</button>
 			</div>
 		</div>
@@ -300,7 +287,6 @@
 					</div>
 					<div class="tab" style="display: none;">
 						<div>
-						<input type="" name="id_type" id="id_type" value="1" hidden>
 						<div class="mb-3">
 							<label for="client">Name</label>
 							<input type="text" class="form-control" name="name_eng_update" id="name_eng_update" required>
@@ -410,47 +396,18 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
-		$('#datatable-engineer').DataTable();
-		$.ajax({
-			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
-			success: function(result){
-            $('#tbody-engineer').empty();
 
-            var table = "";
+		fillDataEng("engineer/getEngineerList?","GET")
 
-            $no=1;
-
-            $.each(result, function(key, value){
-              table = table + '<tr>';
-	          table = table + '<td>' + $no++ + '</td>';
-	          table = table + '<td>' + value.name + '</td>';
-	          table = table + '<td>' + value.phone + '</td>';
-	          table = table + '<td>' + value.email + '</td>';
-	          table = table + '<td>' + value.address.substring(0,20) + "..." + '</td>';
-	          if (value.location_engineer == null) {
-	          	table = table + '<td>' + '' + '</td>';
-	          	table = table + '<td>' + '' + '</td>';
-	          }else{
-	          	table = table + '<td>' + value.location_engineer.long_location + '</td>';
-	          	table = table + '<td>' + value.payment_acc_engineer.account_name + ' - ' + value.payment_acc_engineer.account_number + '</td>';
-	          }
-	          table = table + '<td>' + '<button value="'+value.id+'" class="btn btn-sm btn-primary btn-detail">Detail</button>' + '</td>';
-              table = table + '</tr>';
-            });
-
-            $('#tbody-engineer').append(table);
-             
-          }
-		})
-
-		$("#inputJobClient").select2({
-			theme: 'bootstrap4',
-			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterClientAll",
-				dataType: 'json',
+		$("#jobSearch").on('change',function(){
+			if($("#jobSearch").val() != ""){
+				console.log($("#jobSearch").val());
+				fillDataEng("engineer/getEngineerList/search?search=" + $("#jobSearch").val(),"GET")
+			} else {
+				fillDataEng("engineer/getEngineerList?","GET")
+				// $(".resultSearch").hide()
 			}
-		});
+		})
 
 		$("#inputJobRegion").select2({
 			theme: 'bootstrap4',
@@ -567,21 +524,183 @@
 			}
 		});
 
+		$("#candidateEngineerList").select2({
+			theme: 'bootstrap4',
+			ajax: {
+				url: "{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerSelectedList",
+				dataType: 'json',
+			}
+		})
+
+		$("#candidateEngineerList").change(function(){
+		  $.ajax({
+            type:"GET",
+            url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+            data:{
+            	id_candidate:$("#candidateEngineerList").val(),
+            },
+            success: function (result){
+            	console.log(result)
+            	if (result.partner != null) {
+
+            		$("#name_eng").val(result.partner.name);
+	            	$("#number_eng").val(result.partner.phone);
+	            	$("#email_eng").val(result.partner.email);
+	            	$("#adress_eng").val(result.partner.address);
+	            	$("#account_name").val(result.partner.candidate_account_name);
+	            	$("#account_number").val(result.partner.candidate_account_number);
+	            	// console.log(result.partner.location[0].id_area)
+	            	$("#inputJobLocation").prop("disabled", false)
+	            	$("#inputJobArea").prop("disabled", false)
+	            	var locationSelect 	= $('#inputJobLocation');
+	            	var areaSelect 		= $('#inputJobArea');
+	            	var regionSelect	= $('#inputJobRegion');
+
+	            	var option = new Option(result.partner.location[0].location_engineer[0].location_name, result.partner.location[0].location_engineer[0].id, true, true);
+					locationSelect.append(option).trigger('change');
+
+					var option2 = new Option(result.partner.location[0].location_engineer[0].long_location_area, true, true, true);
+					areaSelect.append(option2).trigger('change');
+
+					var option3 = new Option(result.partner.location[0].location_engineer[0].long_location_region, result.partner.location[0].location_engineer[0].id, true, true);
+					regionSelect.append(option3).trigger('change');	
+
+					$("#saveBtn").attr("onclick","saveBtn("+ result.partner.id +")")
+
+            	}
+            	
+            }
+          })
+		})
+
 	})
 
-	$('#datatable-engineer').on('click', '.btn-detail', function(n){
-		console.log(n);
-		var btn_detail = this.value;
+	function fillDataEng(url,method){
+		$.ajax({
+			type:method,
+			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			success: function (result) {
+				var n = 25
+
+				$('#tbody-engineer').empty();
+
+	            var table = "";
+
+	            $no=1;
+
+	            $.each(result["data"], function(key, value){
+	              table = table + '<tr>';
+		          table = table + '<td>' + $no++ + '</td>';
+		          table = table + '<td>' + value.name + '</td>';
+		          table = table + '<td>' + value.phone + '</td>';
+		          table = table + '<td>' + value.email + '</td>';
+		          table = table + '<td>' + value.address.substring(0,20) + "..." + '</td>';
+		          if (value.location_engineer == null || value.payment_acc_engineer == null) {
+		          	table = table + '<td>' + '' + '</td>';
+		          	table = table + '<td>' + '' + '</td>';
+		          }else{
+		          	table = table + '<td>' + value.location_engineer.long_location + '</td>';
+		          	table = table + '<td>' + value.payment_acc_engineer.account_name + ' - ' + value.payment_acc_engineer.account_number + '</td>';
+		          }
+		          table = table + '<td>' + '<button class="btn btn-sm btn-primary" onclick="Detail('+ value.id +')">Detail</button>' + '</td>';
+	              table = table + '</tr>';
+	            });
+
+	            $('#tbody-engineer').append(table);
+
+				$("#jobPaginateHolder").empty("")
+				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+				var first_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+				var second_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+				var third_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+				
+				if(result["current_page"] == 1){
+					previous = "disabled"
+					first = result["current_page"],first_active = "active"
+					second = result["current_page"] + 1 
+					third = result["current_page"] + 2
+
+					var first_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
+					var previous_onclick = ""
+
+					if(result["last_page"] == 1){
+						next = "disabled"
+						var next_onclick = ""
+					} else {
+						var next_onclick = second_onclick
+					}
+				} else if (result["current_page"] == result["last_page"]){
+					previous = ""
+					next = "disabled"
+					if(result["last_page"] == 2){
+						first = result["current_page"] - 1
+						second = result["current_page"], second_active = "active"
+						third = result["current_page"]
+					} else {
+						first = result["current_page"] - 2
+						second = result["current_page"] - 1
+						third = result["current_page"],third_active = "active"
+					}
+
+					var first_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataEng('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var previous_onclick = second_onclick
+					var next_onclick = ""
+
+				} else {
+					next = ""
+					previous = ""
+					first = result["current_page"] - 1
+					second = result["current_page"],second_active = "active"
+					third = result["current_page"] + 1
+					var previous_onclick = first_onclick
+					var next_onclick = third_onclick
+
+				}
+				var append = ""
+				append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+				append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+				if(result["last_page"] > 1){
+					append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+				}
+				if(result["last_page"] > 2){
+					append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+				}
+				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+				
+				$("#jobPaginateHolder").append(append)
+				if($("#jobSearch").val() != ""){
+					if(result['total'] == 0){
+						$(".resultSearchCount").empty("").text("Not found")
+						$("#paginationJob").hide()
+					} else {
+						$(".resultSearchCount").empty("").text(result["total"] + " results")
+					}
+					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
+					$(".resultSearch").show()
+				} else {
+					$(".resultSearch").hide()
+				}
+
+			}
+		})
+	}
+
+	function Detail(id){
+		console.log(id);
+		var btn_detail = id;
 		$('.btn-next').click(function() {
 	        this.value = btn_detail;
-	        console.log($('.btn-next').val())
 	    });
 
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
 			success: function(result){
-				$.each(result, function(key, value){
+				$.each(result['data'], function(key, value){
 					if (value.id == btn_detail) {
 						$("#id_user_detail").val(btn_detail);
 						$("#name_eng_detail").html("<li class='fa fa-user fa-large'></li>&nbsp&nbsp" + value.name);
@@ -591,7 +710,7 @@
 						$("#phone_eng_detail").html("<li class='fa fa-phone fa-large'></li> &nbsp&nbsp" + value.phone);
 						$("#email_eng_detail").html("<li class='fa fa-envelope fa-large'></li> &nbsp&nbsp" + value.email);
 						$("#address_eng_detail").html("<li class='fa fa-home fa-large'></li> &nbsp&nbsp" + value.address);
-						if (value.location_engineer == null) {
+						if (value.location_engineer == null || value.account_name == null) {
 							$("#area_eng_detail").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li> - </li></ul>")
 
 							$("#current_area_eng_update").html("<li class='fa fa-map-marker fa-large'></li> &nbsp&nbsp(Coverage Area) <ul><li> - </li></ul>")
@@ -620,13 +739,12 @@
 
        $("#DetailModal").modal("show");
        $("#prevBtn").prop('disabled', true);
+	}
 
-    })
-
-	function saveBtn(){
+	function saveBtn(id){
 		Swal.fire({
 			title: 'Are you sure?',
-			text: "to publish this job",
+			text: "Please Fill the form with correctly data",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
@@ -649,21 +767,25 @@
 					}
 				})
 				$.ajax({
-					headers: {
-					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
+					// headers: {
+					//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					// },
 					url: "{{env('API_LINK_CUSTOM')}}/engineer/postNewEngineer",
 					type:"POST",
 					data:{
 						_token: "{{ csrf_token() }}",
-						id_type:$("#id_type").val(),
+						id_type:1,
 						name_eng:$("#name_eng").val(),
 						email_eng:$("#email_eng").val(),
 						phone_eng:$("#number_eng").val(),
 						adress_eng:$("#adress_eng").val(),
-						id_location:$("#inputJobLocation").select2("data")[0].id,
+						// id_location:$("#inputJobLocation").select2("data")[0].id,
+						id_location:$("#inputJobLocation").select2().val(),
 						account_name:$("#account_name").val(),
 						account_number:$("#account_number").val(),
+						id_candidate:id,
+						history_user:0,
+						history_status:9,
 					},
 					success: function(result){
 						Swal.showLoading()
@@ -674,6 +796,7 @@
 						).then((result) => {
 							if (result.value) {
 								$("#exampleModalCenter").modal('toggle')
+								location.reload();
 							}
 						})
 					}
@@ -784,6 +907,41 @@
 			// return false;
 		}
 		showTab(currentTab);
+	}
+
+	function changeJobShowCount(n){
+		$("#jobShowCount").text("Show " + n)
+		var active_10 = (n == 10) ? 'active' : ''
+		var active_25 = (n == 25) ? 'active' : ''
+		var active_50 = (n == 50) ? 'active' : ''
+		var append = ""
+		append = append + '<span class="dropdown-item ' + active_10 + '" onclick="changeJobShowCount(10)">10 List</span>'
+		append = append + '<span class="dropdown-item ' + active_25 + '" onclick="changeJobShowCount(25)">25 List</span>'
+		append = append + '<span class="dropdown-item ' + active_50 + '" onclick="changeJobShowCount(50)">50 List</span>'
+		$("#jobShowCountList").empty()
+		$("#jobShowCountList").append(append)
+		if($("#jobSearch").val() != ""){
+			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
+		}else {
+			fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
+		}
+	}
+
+	function resetBtn(){
+		$('#inputJobArea').val(null).trigger('change');
+		$('#inputJobLocation').val(null).trigger('change');
+		$('#inputJobRegion').val(null).trigger('change');
+		$('#candidateEngineerList').val(null).trigger('change');
+		$("#name_eng").val("");
+    	$("#number_eng").val("");
+    	$("#email_eng").val("");
+    	$("#adress_eng").val("");
+    	$("#account_name").val("");
+    	$("#account_number").val("");
+    	$("#inputJobLocation").prop('disabled',true);
+    	$("#inputJobArea").prop('disabled', true);
+    	$("#saveBtn").attr("onclick","saveBtn()")
+
 	}
 
 
