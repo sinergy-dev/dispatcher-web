@@ -72,6 +72,8 @@
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
+                        <a href="{{ url('/partner') }}">Join Us!</a>
+
                         @if (Route::has('register'))
                             <!-- <a href="{{ route('register') }}">Register</a> -->
                         @endif
@@ -84,7 +86,7 @@
                     {{env('APP_NAME')}}
                 </div>
 
-                <div class="links">
+                <!-- <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
@@ -92,7 +94,7 @@
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </body>
