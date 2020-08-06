@@ -72,21 +72,24 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-7">
-
-				<div class="pb-3 mb-4 border-bottom">
-					<h3>Client List</h3>
+			<div class="col-md-8">
+				<div class="d-inline-flex  align-items-center">
+					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Add Client</button>
+					<h3 class="ml-3" style="margin-bottom: 0px !important">Client List</h3>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<div class="pb-3 mb-4 border-bottom">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Create Client</button>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="pb-3 mb-4 border-bottom">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search">
+			<div class="col-md-4">
+				<div class="d-inline-flex pb-3 border-bottom">
+					<div class="btn-group" role="group">
+						<button id="jobShowCount" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show 10</button>
+						<div class="dropdown-menu" id="jobShowCountList">
+							<span class="dropdown-item active pointer" onclick="changeJobShowCount(10)">10 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(25)">25 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(50)">50 List</span>
+						</div>
+					</div>
+					<div class="ml-2 input-group">
+						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
 						</div>
@@ -94,10 +97,18 @@
 				</div>
 			</div>
 		</div>
+		<div class="row resultSearch" style="display: none;">
+			<div class="col-md-6 mb-2 mt-1">
+				<p class="mb-0 resultSearchCount">12 result</p>
+			</div>
+			<div class="col-md-6 text-right mb-2 mt-1">
+				<p class="mb-0 resultSearchKeyword">Search for : BPJS Kesehatan</p>
+			</div>
+		</div>
 		<div class="row">
 			<!-- <div class="col-md-6" id="jobHolder"> -->
 			<div class="col-md-12">
-					<table class="table table-striped" id="datatable-engineer">
+					<table class="table table-striped" id="datatable-client">
 					  <thead>
 					    <tr>
 					      <th scope="col">No</th>
@@ -107,13 +118,13 @@
 					      <th scope="col">Action</th>
 					    </tr>
 					  </thead>
-					  <tbody id="tbody-engineer">
+					  <tbody id="tbody-client">
 					  </tbody>
 					</table>
 				</div>
-				<div class="col-md-12">
+				<div class="col-md-12" id="paginationJob">
 					<nav aria-label="Page navigation example" class="ml-auto">
-						<ul class="pagination justify-content-end">
+						<ul class="pagination justify-content-end" id="jobPaginateHolder">
 							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 							<li class="page-item"><a class="page-link" href="#">1</a></li>
 							<li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -254,35 +265,17 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
-		$('#datatable-engineer').DataTable();
-		$.ajax({
-			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/client/getClientList",
-			success: function(result){
-			console.log(result)
-            $('#tbody-engineer').empty();
 
-            var table = "";
+		fillDataClient("client/getClientList?","GET")
 
-            $no=1;
-
-            $.each(result, function(key, value){
-              table = table + '<tr>';
-	          table = table + '<td>' + $no++ + '</td>';
-	          table = table + '<td>' + value.customer_name + '</td>';
-	          if (value.location_client ==  null) {
-	          	table = table + '<td>' + '' + '</td>';
-	          }else{
-	          	table = table + '<td>' + value.location_client.location_name + '</td>';
-	          }
-	          table = table + '<td>' + value.address + '</td>';
-	          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
-              table = table + '</tr>';
-            });
-
-            $('#tbody-engineer').append(table);
-             
-          }
+		$("#jobSearch").on('change',function(){
+			if($("#jobSearch").val() != ""){
+				console.log($("#jobSearch").val());
+				fillDataClient("client/getClientList/search?search=" + $("#jobSearch").val(),"GET")
+			} else {
+				fillDataClient("client/getClientList?","GET")
+				// $(".resultSearch").hide()
+			}
 		})
 
 		$("#inputJobClient").select2({
@@ -377,6 +370,121 @@
 		});
 
 	})
+
+	function fillDataClient(url,method){
+		$.ajax({
+			type:method,
+			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			success: function (result) {
+				var n = 25
+
+				$('#tbody-client').empty();
+
+	            var table = "";
+
+	            $no=1;
+
+	            $.each(result['data'], function(key, value){
+	              table = table + '<tr>';
+		          table = table + '<td>' + $no++ + '</td>';
+		          if ( value.customer_name == null) {
+		          	table = table + '<td>' + ' -' + '</td>';
+		          }else{
+		          	table = table + '<td>' + value.customer_name + '</td>';
+		          }
+		          table = table + '<td>' + value.customer_name + '</td>';
+		          if (value.location_client ==  null) {
+		          	table = table + '<td>' + '' + '</td>';
+		          }else{
+		          	table = table + '<td>' + value.location_client.location_name + '</td>';
+		          }
+		          table = table + '<td>' + value.address + '</td>';
+		          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
+	              table = table + '</tr>';
+	            });
+
+	            $('#tbody-client').append(table);
+
+				$("#jobPaginateHolder").empty("")
+				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+				var first_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+				var second_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+				var third_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+				
+				if(result["current_page"] == 1){
+					previous = "disabled"
+					first = result["current_page"],first_active = "active"
+					second = result["current_page"] + 1 
+					third = result["current_page"] + 2
+
+					var first_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
+					var previous_onclick = ""
+
+					if(result["last_page"] == 1){
+						next = "disabled"
+						var next_onclick = ""
+					} else {
+						var next_onclick = second_onclick
+					}
+				} else if (result["current_page"] == result["last_page"]){
+					previous = ""
+					next = "disabled"
+					if(result["last_page"] == 2){
+						first = result["current_page"] - 1
+						second = result["current_page"], second_active = "active"
+						third = result["current_page"]
+					} else {
+						first = result["current_page"] - 2
+						second = result["current_page"] - 1
+						third = result["current_page"],third_active = "active"
+					}
+
+					var first_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataClient('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var previous_onclick = second_onclick
+					var next_onclick = ""
+
+				} else {
+					next = ""
+					previous = ""
+					first = result["current_page"] - 1
+					second = result["current_page"],second_active = "active"
+					third = result["current_page"] + 1
+					var previous_onclick = first_onclick
+					var next_onclick = third_onclick
+
+				}
+				var append = ""
+				append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+				append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+				if(result["last_page"] > 1){
+					append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+				}
+				if(result["last_page"] > 2){
+					append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+				}
+				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+				
+				$("#jobPaginateHolder").append(append)
+				if($("#jobSearch").val() != ""){
+					if(result['total'] == 0){
+						$(".resultSearchCount").empty("").text("Not found")
+						$("#paginationJob").hide()
+					} else {
+						$(".resultSearchCount").empty("").text(result["total"] + " results")
+					}
+					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
+					$(".resultSearch").show()
+				} else {
+					$(".resultSearch").hide()
+				}
+
+			}
+		})
+	}
 
 	function showSumary(id){
 		$.ajax({
