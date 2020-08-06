@@ -75,8 +75,19 @@
     background: transparent;
     border-bottom: 1px solid black;
   }
+
   input:focus {
     border-color: green
+  }
+
+  .textArea-pAdress{
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+    resize: none;
+    overflow: hidden;
+    /*height: 60px;*/
   }
 
   .btnCenter{
@@ -236,53 +247,53 @@
   transition: opacity 500ms;
   visibility: hidden;
   opacity: 0;
-}
-.overlay:target {
-  visibility: visible;
-  opacity: 1;
-}
-
-.popup {
-  margin: 70px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 30%;
-  position: relative;
-  transition: all 5s ease-in-out;
-}
-
-.popup h2 {
-  margin-top: 0;
-  color: #333;
-  font-family: Tahoma, Arial, sans-serif;
-}
-.popup .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  transition: all 200ms;
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-.popup .close:hover {
-  color: #06D85F;
-}
-.popup .content {
-  max-height: 30%;
-  overflow: auto;
-}
-
-@media screen and (max-width: 700px){
-  .box{
-    width: 70%;
   }
-  .popup{
-    width: 70%;
+  .overlay:target {
+    visibility: visible;
+    opacity: 1;
   }
-}
+
+  .popup {
+    margin: 70px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
+  }
+
+  .popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+  }
+  .popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+  }
+  .popup .close:hover {
+    color: #06D85F;
+  }
+  .popup .content {
+    max-height: 30%;
+    overflow: auto;
+  }
+
+  @media screen and (max-width: 700px){
+    .box{
+      width: 70%;
+    }
+    .popup{
+      width: 70%;
+    }
+  }
 </style>
 @endsection
 @section('content')
@@ -312,7 +323,7 @@
 
         <input id="input-pPhone" type="number" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
-        <input id="input-pAddress" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
+        <textarea id="input-pAddress" class="center-in textArea-pAdress" style="display: none;width: 400px;"></textarea>
 
         <input id="input-pNik" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px;margin-top: 10px">
 
@@ -457,6 +468,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript">
+
   var currentTab = 0;
   $("#tabB").show();
   // $.ajax({
@@ -486,7 +498,7 @@
       $("#input-pNik").css("display","none")
       $("#input-pFilesKtp").css("display","none");
       $("#hasJoined").css("display","none")
-      document.getElementById("input-pName").placeholder = "Type name here..";
+      document.getElementById("input-pName").placeholder = "Your First Name Last Name ex: Amanda Rawless";
       if ($("#input-pName").val().length > 0) {
         $("#nextBtnBasic").prop("disabled",false)
       }else{
@@ -522,6 +534,7 @@
       }else{
         $("#nextBtnBasic").prop("disabled",true)
       }
+
       $("#input-pEmail").keyup(function(){
         var textLength = $(this).val();
         if (textLength.length > 0) {
@@ -530,38 +543,53 @@
           $("#nextBtnBasic").prop("disabled",true)
         }
       });
-      document.getElementById("input-pEmail").placeholder = "Type your email here..";
+      document.getElementById("input-pEmail").placeholder = "Your email ex: email@adress.com";
     }else if (currentTab == 3) {
       localStorage.setItem("email", $("#input-pEmail").val())
-      $("#input-pPhone").val(localStorage.getItem("phone"));
-      $(".text-p").html("<h3 class='center-in' style=''> 3. And, your phone number please </h3>")
-      $(".img-p").css("display","none")
-      $(".div-p").css("display","none")
-      $("#prevBtnBasic").css("display","block");
-      $("#nextBtnBasic").html("Next")
-      $("#input-pPhone").css("display","block")
-      $("#input-pEmail").css("display","none")
-      $("#input-pName").css("display","none")
-      $("#input-pAddress").css("display","none")
-      $("#input-pNik").css("display","none")
-      $("#input-pFilesKtp").css("display","none");
-      $("#hasJoined").css("display","none")
-      if ($("#input-pPhone").val().length > 0) {
-        $("#nextBtnBasic").prop("disabled",false)
-      }else{
-        $("#nextBtnBasic").prop("disabled",true)
+      const email = localStorage.getItem("email");
+      function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        return re.test(email);
       }
-      $("#input-pPhone").keyup(function(){
-        var textLength = $(this).val();
-        if (textLength.length > 0) {
+
+      if (validateEmail(email)) {
+        $("#input-pPhone").val(localStorage.getItem("phone"));
+        $(".text-p").html("<h3 class='center-in' style=''> 3. And, your phone number please </h3>")
+        $(".img-p").css("display","none")
+        $(".div-p").css("display","none")
+        $("#prevBtnBasic").css("display","block");
+        $("#nextBtnBasic").html("Next")
+        $("#input-pPhone").css("display","block")
+        $("#input-pEmail").css("display","none")
+        $("#input-pName").css("display","none")
+        $("#input-pAddress").css("display","none")
+        $("#input-pNik").css("display","none")
+        $("#input-pFilesKtp").css("display","none");
+        $("#hasJoined").css("display","none")
+        if ($("#input-pPhone").val().length > 0) {
           $("#nextBtnBasic").prop("disabled",false)
         }else{
           $("#nextBtnBasic").prop("disabled",true)
         }
-      });
-      document.getElementById("input-pPhone").placeholder = "Type your phone number here..";
+        $("#input-pPhone").keyup(function(){
+          var textLength = $(this).val();
+          if (textLength.length > 0) {
+            $("#nextBtnBasic").prop("disabled",false)
+          }else{
+            $("#nextBtnBasic").prop("disabled",true)
+          }
+        });
+        document.getElementById("input-pPhone").placeholder = "Your phone ex: 0817865741XX";
+      }else{
+        currentTab = currentTab -1;
+        alert('Your email address not valid!')
+        $("#nextBtnBasic").prop("disabled",true)
+      }
+      
+      
     }else if (currentTab == 4) {
-       localStorage.setItem("phone", $("#input-pPhone").val())
+      localStorage.setItem("phone", $("#input-pPhone").val())
       $("#input-pAddress").val(localStorage.getItem("address"));
       $(".text-p").html("<h3 class='center-in' style=''> 4. Now, can you tell us where do you live? </h3>")
       $(".img-p").css("display","none")
@@ -590,7 +618,7 @@
         }
       });
 
-      document.getElementById("input-pAddress").placeholder = "Type your address here..";
+      document.getElementById("input-pAddress").placeholder = "Your address ex: Jl. Kembangan, Jakarta Barat , RT.05 / RW.10,11610";
     }else if (currentTab == 5) {
       // $.ajax({
       //   type:method,
@@ -614,7 +642,7 @@
       $("#nextBtnBasic").html("Submit")
       $("#nextBtnBasic").attr("onclick","submitBasic()");
       $("#hasJoined").css("display","none")
-      document.getElementById("input-pNik").placeholder = "Type your KTP id(NIK)..";
+      document.getElementById("input-pNik").placeholder = "Your NIK ex: 1605037654999992";
       $("#file-inputKtp").change(function() {
         var file = this.files[0];
         var fileName = file.name;
@@ -771,6 +799,8 @@
       
       document.getElementById("input-pEducation").placeholder = "Type your lastest Education here..";
     }else if (currentTab == 2) {
+      var cat = [];
+      // var cat = JSON.parse(localStorage.getItem("category"))
       $(".progressbar li#validation").addClass("active");
       $(".progressbar li#advanced").addClass("active");
       initialJobCategory();
@@ -782,22 +812,39 @@
             $("#jobCategoryList").empty("")
             $.each(result.job_category, function( index, value ) {
               var append = "";
-              append = append + '<div class="img__wrap radio" data-value="'+ value.id +'">'
+              append = append + '<div class="img__wrap radio-custom" data-value="'+ value.id +'">'
               append = append +   '<img class="img__img" src="'+ value.category_image_url +'"/>'
               append = append +   '<div class="img__description_layer">'
               append = append +     '<p class="img__description">'+ value.category_name +'</p>'
               append = append +   '</div>'
               append = append + '</div>'
 
-              $(".img__wrap[data-value='"+localStorage.getItem("category")+"']").attr("data-value",value.id).addClass('active')
+
+
+              // $(".img__wrap[data-value='"+JSON.parse(localStorage.getItem("category"))+"']").attr("data-value",value.id).addClass('active')
 
               $("#jobCategoryList").append(append)
 
-              $(".radio-group").on("click",".radio[data-value='"+value.id+"']",function(){
-                  $(this).parent().find('.radio').removeClass('active');
-                  $(this).addClass('active');
+              
+
+              $(".radio-group").on("click",".radio-custom[data-value='"+value.id+"']",function(){
+                  $(this).toggleClass('active')
                   var val = $(this).attr('data-value')
-                  localStorage.setItem("category", val)
+                  if ($(this).hasClass("active")) {
+                    cat.push(val)
+                    localStorage.setItem("category", JSON.stringify(cat));
+                  }else{
+                    cat.splice(cat.indexOf(val),1)
+                    localStorage.setItem("category", JSON.stringify(cat));
+                    // localStorage.removeItem("category");
+                  }
+
+                  
+                  // $(this).parent().find('.radio').removeClass('active');
+                  // $(this).addClass('active');
+                  
+                  // localStorage.setItem("category", cat)
+                  
                   $("#nextBtnAdvanced").prop("disabled",false)
                   Swal.fire({
                     title: value.category_name,
@@ -808,13 +855,21 @@
                     imageAlt: 'Custom image',
                   })
                   // $(this).attr("href", "#popup1");
-                  console.log(localStorage.getItem('category'))         
+                  console.log(JSON.parse(localStorage.getItem('category')))         
               })
+            })
+
+            $.each(JSON.parse(localStorage.getItem('category')),function(index,value){
+              // console.log(value)
+              $(".radio-custom[data-value='"+ value +"']").addClass('active')
+
+            // $(".radio-custom[data-value='"+value+"']").addClass('active')
+
             })
           }
         })
 
-        if (localStorage.getItem('category') !== null) {
+        if (JSON.parse(localStorage.getItem('category')) !== null) {
           // $(".radio[data-value='"+localStorage.getItem("category")+"']").attr("data-value",value.id).addClass('active')
           $("#nextBtnAdvanced").prop("disabled",false)
         }else{
@@ -822,7 +877,8 @@
         }
       }
 
-      $(".radio[data-value='"+localStorage.getItem("category")+"']").attr("data-value",localStorage.getItem("category")).addClass('active')
+
+      // $(".radio-custom[data-value='"+localStorage.getItem("category")+"']").attr("data-value",JSON.parse(localStorage.getItem("category"))).addClass('active')
           
       localStorage.setItem("education", $("#input-pEducation").val())
       $(".text-p").html("<h2 class='center-in' style=''>2.Now, select your job category?</h2>")
@@ -926,8 +982,8 @@
           var fileName = file.name;
           var match = ['application/pdf'];
           if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
-              alert('Sorry, only PDF, DOC, JPG, JPEG, & PNG files are allowed to upload.');
-              $("#file").val('');
+              alert('Sorry, only PDF files is allowed to upload.');
+              $("#file-input").val('');
               return false;
           }
           // var fd = new FormData();
@@ -942,88 +998,88 @@
       $("#input-pLocation").css("display","none")
       $("#nextBtnAdvanced").html("Submit")
       $("#prevBtnAdvanced").css("display","block")
-      $("#nextBtnAdvanced").attr("onclick","submitAdvanced("+ localStorage.getItem("category") +")");
+      $("#nextBtnAdvanced").attr("onclick","submitAdvanced()");
 
     }
   }
 
-  function submitAdvanced(id_category){
+  function submitAdvanced(){
     if ($("#file-input").val() !== "") {
         // console.log($("#input-pFiles").val())
       console.log($("#input-pEducation").val())
-      console.log(localStorage.getItem("category"));
+      console.log(JSON.parse(localStorage.getItem("category")));
       console.log($("#inputJobLocation").val())
 
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "to submit your form",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-      }).then((result) => {
-        if (result.value) {
-          Swal.fire({
-            title: 'Please Wait..!',
-            text: "It's sending..",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            customClass: {
-              popup: 'border-radius-0',
-            },
-            onOpen: () => {
-              Swal.showLoading()
-            }
-          })
+      // Swal.fire({
+      //   title: 'Are you sure?',
+      //   text: "to submit your form",
+      //   icon: 'warning',
+      //   showCancelButton: true,
+      //   confirmButtonColor: '#3085d6',
+      //   cancelButtonColor: '#d33',
+      //   confirmButtonText: 'Yes',
+      //   cancelButtonText: 'No',
+      // }).then((result) => {
+      //   if (result.value) {
+      //     Swal.fire({
+      //       title: 'Please Wait..!',
+      //       text: "It's sending..",
+      //       allowOutsideClick: false,
+      //       allowEscapeKey: false,
+      //       allowEnterKey: false,
+      //       customClass: {
+      //         popup: 'border-radius-0',
+      //       },
+      //       onOpen: () => {
+      //         Swal.showLoading()
+      //       }
+      //     })
 
-          var fd = new FormData();
-          var files = $('#file-input')[0].files[0];
-          // fd.append('file',files);
-          fd.append('latest_education',$("#input-pEducation").val());
-          fd.append('portofolio_file',files);
-          fd.append('id_area',$("#inputJobLocation").val());
-          fd.append('id_category',id_category);
-          fd.append('history_status',3);
-          fd.append('history_user',1);
-          fd.append('identifier',$("#input-pIdentifier").val());
+      //     var fd = new FormData();
+      //     var files = $('#file-input')[0].files[0];
+      //     // fd.append('file',files);
+      //     fd.append('latest_education',$("#input-pEducation").val());
+      //     fd.append('portofolio_file',files);
+      //     fd.append('id_area',$("#inputJobLocation").val());
+      //     fd.append('id_category',id_category);
+      //     fd.append('history_status',3);
+      //     fd.append('history_user',1);
+      //     fd.append('identifier',$("#input-pIdentifier").val());
 
-          $.ajax({
-            type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postAdvancedJoin",
-            data:fd,
-            contentType: false,
-            processData: false,
-            success: function (result){
-              Swal.showLoading()
-              localStorage.clear();
-              Swal.fire(
-                'Congrats!',
-                'You`re Registered for Advanced Join Stage.',
-                'success'
-              ).then((result) => {
-                if (result.value) {
-                  $(".progressbar li#validation").addClass("active");
-                  $(".progressbar li#advanced").addClass("active");
-                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank You for joining partner with us. </h2>")
-                  $(".img-p").css("display","none")
-                  $(".div-p").css("display","none")
-                  $("#input-pEducation").css("display","none")
-                  $("#input-pjobCategory").css("display","none")
-                  $("#input-pLocation").css("display","none")
-                  $("#input-pFiles").css("display","none");
-                  $("#prevBtnAdvanced").css("display","none")
-                  $("#nextBtnAdvanced").css("display","none")
+      //     $.ajax({
+      //       type:"POST",
+      //       url:"{{env('API_LINK_CUSTOM')}}/join/postAdvancedJoin",
+      //       data:fd,
+      //       contentType: false,
+      //       processData: false,
+      //       success: function (result){
+      //         Swal.showLoading()
+      //         localStorage.clear();
+      //         Swal.fire(
+      //           'Congrats!',
+      //           'You`re Registered for Advanced Join Stage.',
+      //           'success'
+      //         ).then((result) => {
+      //           if (result.value) {
+      //             $(".progressbar li#validation").addClass("active");
+      //             $(".progressbar li#advanced").addClass("active");
+      //             $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank You for joining partner with us. </h2>")
+      //             $(".img-p").css("display","none")
+      //             $(".div-p").css("display","none")
+      //             $("#input-pEducation").css("display","none")
+      //             $("#input-pjobCategory").css("display","none")
+      //             $("#input-pLocation").css("display","none")
+      //             $("#input-pFiles").css("display","none");
+      //             $("#prevBtnAdvanced").css("display","none")
+      //             $("#nextBtnAdvanced").css("display","none")
                   
-                  localStorage.clear();
-                }
-              })
-            }
-          })
-        }
-      }); 
+      //             localStorage.clear();
+      //           }
+      //         })
+      //       }
+      //     })
+      //   }
+      // }); 
       
       
     }else{
