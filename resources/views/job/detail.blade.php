@@ -32,6 +32,127 @@
 		background-color: #38c172;
 		border-color: #38c172;
 	}
+
+	.img_req{
+		cursor: zoom-in;
+	}
+
+	.modal{
+		overflow: auto !important;
+	}
+
+	.scrolly{
+	  /*background-color: #eaeaea;*/
+	  /*display: block;*/
+	  height: 300px;
+	  overflow-y: scroll;
+	  scroll-behavior: smooth;
+	  /*text-align: center;*/
+	  margin-bottom: 10px;
+	}
+
+	.textChat::-webkit-scrollbar {
+	  width:1px;
+	}
+
+	.textChat::-webkit-scrollbar * {
+	  background:transparent;
+	}
+
+	.scrolly::-webkit-scrollbar {
+	  width:1px;
+	}
+	.scrolly::-webkit-scrollbar * {
+	  background:transparent;
+	}
+
+	.float-right{
+		float: right!important;
+		padding: 5px;
+		max-width: 300px;
+		text-align: left;
+	}
+
+	.float-left{
+		float: left!important;
+		padding: 5px;
+		max-width: 300px;
+		text-align: left;
+	}
+
+	.pull-left{
+		float: left!important;
+	}
+
+	.bubleChat {
+		padding: 5px;
+		/*max-width: 300px;*/
+		max-width: 100%;
+		/*border:solid 1px black;*/
+		margin: 5px;
+		/*padding: 5px;*/
+	}
+
+	.bubleChatItem {
+		max-width: 300px;
+		border:solid 1px black;
+		padding: 5px;
+	}
+
+	.bubleChatModerator{
+		background-color: yellow!important;
+		/*margin-right: 0px;
+	    margin-left: auto;*/
+		/*border:solid 1px black;
+		margin: 5px;
+		padding: 5px;*/
+	}
+
+	.bubleChatEngineer{
+		background-color: lightblue!important;
+		/*margin-left: 0px;
+	    margin-right: auto;
+		*//*border:solid 1px black;
+		margin: 5px;
+		padding: 5px;*/
+	}
+
+	.bubleSub{
+		margin-top:auto;
+		margin-bottom:10px;
+		padding-left:5px
+	}
+
+	.mycustom{
+		border:solid 2px black;
+		/*border-radius: 1px;*/
+	}
+
+	/*    .mycustom input[type=text] {
+	border: none;
+	width: 100%;
+	padding-right: 123px;
+
+	}*/
+
+	.mycustom textarea {
+	border: none;
+	width: 100%;
+	padding-right: 90px;
+
+	}
+
+	.mycustom .input-group-prepend {
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	bottom: 4px;z-index:9;
+	}
+
+	input{
+		font-family: 'FontAwesome';
+	}
+	
 </style>
 <main role="main">
 	<div class="container">
@@ -286,6 +407,62 @@
 	</div>
 </div>
 
+<div class="modal fade" id="reviewRequestModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalRequestTitle">Review Request Item Engineer</h5>
+			</div>
+			<div class="modal-body">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-12" id="headerTitle">
+								
+							</div>
+
+							<div class="col-md-12" id="itemRequestTitle">
+							</div>
+
+							<div class="col-md-12" id="documentationTitle">
+							</div>
+
+							<div class="col-md-12" id="InvoiceTitle">
+							</div>
+
+							<div class="col-md-12" id="priceTitle">
+							</div>
+
+							<div class="col-md-12" id="dateTitle">
+							</div>
+
+							<div class="col-md-12" id="historyTitle"></div>
+							<div class="col-md-12" id="historyChat">
+							</div>
+
+							<div class="col-md-12" class="mycustom" id="updateChat" style="display: none">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" id="modal-footer-request">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">              
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script type="text/javascript" src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
@@ -293,12 +470,14 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.15/autosize.min.js'></script>
 
 <script type="text/javascript">
 	// Jquery Dependency
 
 	$(document).ready(function(){
 		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
+		console.log(id_job)
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/job/getJobProgress",
@@ -325,11 +504,71 @@
 						} else if(value['id_activity'] == "8"){
 							$("#jobSumaryDetailPay").attr("disabled", false);
 						}
-						append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
+						if (value['id_activity'] == "5") {
+							if (value.request_item == null && value.request_support == null) {
+								append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+							}else{
+								if (value.request_item != null) {
+									if (value.request_item.status_item == "Requested") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'								
+									}else if (value.request_item.status_item == "Accepted") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Finish <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_item.status_item == "Rejected") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+									}
+								}else{
+									if (value.request_support.status == "Open") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Review</button></li>'
+									}else if (value.request_support.status == "Progress") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
+									}else if (value.request_support.status == "Done") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-success ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Finish <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_support.status == "Reject") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-danger ml-auto btn-sm" onclick="reviewRequestSupport(' + valuevalue.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+									}
+								}
+								
+
+							}
+
+							
+						}else{
+							append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						}
+						// append = append + '<li class="active list-group-item d-inline-flex btn-review" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
 					} else {
-						append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						if (value['id_activity'] == "5" && value.request_support == null) {
+							if (value.request_item == null) {
+								append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+							}else{
+								if (value.request_item != null) {
+									if (value.request_item.status_item == "Requested") {
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
+									}else if (value.request_item.status_item == "Accepted") {
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Accepted <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_item.status_item == "Rejected") {
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Rejected <i class="fa fa-times"></i></button></li>'
+									}
+								}else{
+									if (value.request_support.status == "Open") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Review</button></li>'
+									}else if (value.request_support.status == "Progress") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
+									}else if (value.request_support.status == "Done") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_support.status == "Reject") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+									}
+								}
+							}
+							
+						}else{
+							append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
+						}
+						
 					}
 				});
+
 				$("#jobSumaryDetailProgress").append(append)
 				// $("#jobSumaryDetailButton").html()
 			}
@@ -408,6 +647,658 @@
 		});
 
 	})
+
+
+	function reviewRequestItem(id){
+		$.ajax({
+			type:"GET",
+			url:"{{env('API_LINK_CUSTOM')}}/job/getStatusRequestItem",
+			data:{
+				id_history:id,
+			},
+			success: function(result){
+				$.each(result, function(key, value){
+					$("#headerTitle").empty("")
+					var append8 = ""
+					append8 = append8 + '<div id="status_item">'
+					append8 = append8 + '</div>'
+					append8 = append8 + '<div class="form-group" id="name_eng_req">'
+					append8 = append8 + '</div>'
+					append8 = append8 + '<hr> '
+
+					$("#headerTitle").append(append8);
+
+					if (value.status_item == "Requested") {
+						$("#status_item").html("<span class='badge badge-warning' style='color: blue;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
+
+						var onclickReject = "onclick=btnAcceptReqItem('reject',"+id+")"
+
+						var onclickApprove = "onclick=btnAcceptReqItem('approve',"+id+")"
+
+						var onclickCancel  = "onclick=cancel()"
+
+						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
+					}else if (value.status_item == "Accepted") {
+
+						$("#status_item").html("<span class='badge badge-success' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
+
+						$("#modal-footer-request").html("");
+					}else{
+
+						$("#status_item").html("<span class='badge badge-danger' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
+
+						$("#modal-footer-request").html("");
+					}
+
+
+					$("#itemRequestTitle").empty("")
+
+					var append = ""
+					append = append + '<label><b>Item Request</b></label>'
+					append = append + '<h6 id="item_req"></h6>'
+					append = append + '<p><i id="item_function"></i></p>'
+					append = append + '<hr>'
+
+					$("#itemRequestTitle").append(append);
+
+
+					$("#documentationTitle").empty("")
+
+					var append1 = ""
+					append1 = append1 + '<label><b>Documentation item</b></label><br>'
+					append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+					append1 = append1 + '<hr>'
+
+					$("#documentationTitle").append(append1)
+
+					$("#InvoiceTitle").empty("")
+
+					var append2 = ""
+					append2 = append2 + '<label><b>Invoice item</b></label>'
+					append2 = append2 + '<h6 id="alamat_req">Alamat harga beli</h6>'
+					append2 = append2 + '<hr>'
+
+					$("#InvoiceTitle").append(append2)
+
+					$("#priceTitle").empty("")
+
+					var append3 = ""
+					append3 = append3 + '<label><b>Price Item</b></label>'
+					append3 = append3 + '<h6 id="price_req">Rp. 7.500.000,00</h6>'
+					append3 = append3 + '<hr>'
+
+					$("#dateTitle").append(append3)
+
+					var append4 = ""
+					append4 = append4 + '<label><b>Date Request</b></label>'
+					append4 = append4 + '<h6 id="date_req">29 Juni 2020</h6>'
+					append4 = append4 + '<hr>'
+
+					$("#dateTitle").append(append4)
+
+					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.user.name  +"</h6>");
+					$("#item_req").html(value.name_item);
+					$("#item_function").html(value.function_item);
+					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+					$("#alamat_req").html(value.invoice_item);
+					$("#price_req").html(value.price_item);
+					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
+					$("#historyChat").css("display","none")
+					$("#updateChat").css("display","none")
+
+
+					$("#img_req" ).click(function() {
+						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+						$('#imagemodal').modal('show');  
+					})
+					// img.onclick = function(){
+					//   // modalImg.src = this.src;
+					// 	$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+					// 	$('#imagemodal').modal('show');   
+					// }
+				})
+			}
+		})
+
+		$("#modalRequestTitle").html('Review Request Item Engineer');
+		$("#reviewRequestModal").modal('toggle');
+	
+	}
+
+	function reviewRequestSupport(id){
+		$.ajax({
+			type:"GET",
+			url:"{{env('API_LINK_CUSTOM')}}/job/getJobSupportEach",
+			data:{
+				id_support:id,
+			},
+			success: function(result){
+				$.each(result, function(key, value){
+					if (value.status == "Open") {
+						$("#updateChat").css("display","none")
+						$("#status_item").html("<span class='badge badge-warning' style='color: blue;float: right;margin-top: -5px;margin-right:-5px'>"+value.status+"</span>");
+
+						var onclickReject = "onclick=btnAcceptReqSupport('reject',"+id+")"
+
+						var onclickApprove = "onclick=btnAcceptReqSupport('approve',"+id+")"
+
+						var onclickCancel  = "onclick=cancel()"
+
+						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
+
+						$("#headerTitle").empty("")
+						var append8 = ""
+						append8 = append8 + '<div id="status_item">'
+						append8 = append8 + '</div>'
+						append8 = append8 + '<div class="form-group" id="name_eng_req">'
+						append8 = append8 + '</div>'
+						append8 = append8 + '<hr> '
+
+						$("#headerTitle").append(append);
+
+
+						$("#itemRequestTitle").empty("")
+
+						var append = ""
+						append = append + '<label><b>Problem Support</b></label>'
+						append = append + '<h6 id="item_req"></h6>'
+						append = append + '<p><i id="problem_support"></i></p>'
+						append = append + '<hr>'
+
+						append = append + '<label><b>Reason Support</b></label>'
+						append = append + '<h6 id="item_req"></h6>'
+						append = append + '<p><i id="reason_support"></i></p>'
+						append = append + '<hr>'
+
+						$("#itemRequestTitle").append(append);
+
+
+						$("#documentationTitle").empty("")
+
+						var append1 = ""
+						append1 = append1 + '<label><b>Documentation item</b></label><br>'
+						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+						append1 = append1 + '<hr>'
+
+						$("#documentationTitle").append(append1)
+
+						var append4 = ""
+						append4 = append4 + '<label><b>Date Request</b></label>'
+						append4 = append4 + '<h6 id="date_req">29 Juni 2020</h6>'
+						append4 = append4 + '<hr>'
+
+						$("#dateTitle").append(append4)
+
+						$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.job.latest_history.user_name  +"</h6>");
+						
+						
+					}else if (value.status == "Progress") {
+
+						$("#headerTitle").empty("")
+						var append7 = ""
+						append7 = append7 + '<div class="row">'
+						append7 = append7 + '<div class="col-md-6">'
+						append7 = append7 + '<span class="">Maintenance Router</span><br>'	
+						append7 = append7 + '<span class="">BPJS Kesehatan</span>'
+						append7 = append7 + '</div>'
+
+						append7 = append7 + '<div class="col-md-6 text-right">'
+						append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
+						append7 = append7 + '<span class="badge badge-warning" style="color: green;">'+ value.status +'</span>'
+						append7 = append7 + '</div>'
+						append7 = append7 + '</div>'
+						append7 = append7 + '<hr>'
+		
+						
+						$("#headerTitle").append(append7)
+
+						$("#itemRequestTitle").empty("")
+
+						var append = ""
+						append = append + '<div class="row">'
+						append = append + '<div class="col-md-6">'
+						append = append + '<label><b>Problem Support</b></label>'	
+						append = append + '<p><i id="problem_support"></i></p>'
+						append = append + '</div>'
+								
+						append = append + '<div class="col-md-6">'
+						append = append + '<label><b>Reason Support</b></label>'
+						append = append + '<p><i id="reason_support"></i></p>'
+						append = append + '</div>'
+						append = append + '</div>'
+						append = append + '<hr>'
+
+						$("#itemRequestTitle").append(append);
+
+						$("#documentationTitle").empty("")
+
+						var append1 = ""
+						append1 = append1 + '<label><b>Evidence</b></label><br>'
+						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+						append1 = append1 + '<hr>'
+
+						$("#documentationTitle").append(append1)
+
+
+						$("#historyTitle").empty("")
+
+						var append6 = ""
+
+						append6 = append6 + '<label><b>History Progress</b></label>'
+
+						$("#historyTitle").append(append6)
+
+						$("#historyChat").css("display","block")
+
+						var append5 = ""
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						$("#historyChat").append(append5)
+						$("#historyChat").addClass("scrolly")
+
+						$("#updateChat").css("display","block")
+						$("#updateChat").empty("")
+						var updateChat = ""
+						// updateChat = updateChat + '<div class="input-group mycustom">'
+					 //    updateChat = updateChat + '<input type="text" class="form-control rounded-0" id="validationDefaultUsername" placeholder="Update" aria-describedby="inputGroupPrepend2" required>'
+					 //    updateChat = updateChat + '<div class="input-group-prepend">'
+					 //    updateChat = updateChat +   '<input type="submit" vlaue="submit" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
+					 //    updateChat = updateChat + '</div>'
+					 //    updateChat = updateChat + '</div>'
+
+
+						updateChat = updateChat + '<div class="input-group mycustom">'
+					    updateChat = updateChat + '<textarea class="textChat form-control" id="textChat" style="height:40px;resize:none" placeholder="Update"></textarea>'
+					    updateChat = updateChat + '<div class="input-group-prepend">'
+					    updateChat = updateChat +   '<input type="submit" value="kirim" onclick="updateChat()" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
+					    updateChat = updateChat + '</div>'
+					    updateChat = updateChat + '</div>'	
+					    // autosize(document.querySelectorAll('textarea'));				    
+						$("#updateChat").append(updateChat)
+
+						var onclickApprove = "onclick=btnAcceptReqSupport('done',"+id+")"
+						var onclickCancel  = "onclick=cancel()"
+
+						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button><button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button><button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
+					
+					}else if (value.status == "Done") {
+						$("#headerTitle").empty("")
+						var append7 = ""
+						append7 = append7 + '<div class="row">'
+						append7 = append7 + '<div class="col-md-6">'
+						append7 = append7 + '<span class="">Maintenance Router</span><br>'	
+						append7 = append7 + '<span class="">BPJS Kesehatan</span>'
+						append7 = append7 + '</div>'
+
+						append7 = append7 + '<div class="col-md-6 text-right">'
+						append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
+						append7 = append7 + '<span class="badge badge-success">'+ value.status +'</span>'
+						append7 = append7 + '</div>'
+						append7 = append7 + '</div>'
+						append7 = append7 + '<hr>'
+		
+						
+						$("#headerTitle").append(append7)
+
+						$("#itemRequestTitle").empty("")
+
+						var append = ""
+						append = append + '<div class="row">'
+						append = append + '<div class="col-md-6">'
+						append = append + '<label><b>Problem Support</b></label>'	
+						append = append + '<p><i id="problem_support"></i></p>'
+						append = append + '</div>'
+								
+						append = append + '<div class="col-md-6">'
+						append = append + '<label><b>Reason Support</b></label>'
+						append = append + '<p><i id="reason_support"></i></p>'
+						append = append + '</div>'
+						append = append + '</div>'
+						append = append + '<hr>'
+
+						$("#itemRequestTitle").append(append);
+
+						$("#documentationTitle").empty("")
+
+						var append1 = ""
+						append1 = append1 + '<label><b>Evidence</b></label><br>'
+						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+						append1 = append1 + '<hr>'
+
+						$("#documentationTitle").append(append1)
+
+
+						$("#historyTitle").empty("")
+
+						var append6 = ""
+
+						append6 = append6 + '<label><b>History Progress</b></label>'
+
+						$("#historyTitle").append(append6)
+
+						$("#historyChat").css("display","block")
+
+						var append5 = ""
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+						$("#historyChat").append(append5)
+						$("#historyChat").addClass("scrolly")
+
+						$("#updateChat").css("display","block")
+						$("#updateChat").empty("")
+
+						$("#modal-footer-request").html("");
+					}else{
+						$("#status_item").html("<span class='badge badge-danger' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status+"</span>");
+
+						$("#modal-footer-request").html("");
+					}
+
+					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+value.picture_support);
+					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
+					$("#problem_support").html(value.problem_support);
+					$("#reason_support").html(value.reason_support);
+
+					$("#img_req" ).click(function() {
+						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+ value.picture_support);
+						$('#imagemodal').modal('show');  
+					})
+				})
+			}
+		})
+		$("#modalRequestTitle").html('Review Request Support Engineer');
+		$("#reviewRequestModal").modal('toggle');
+	
+	}
+
+	var modal = document.getElementById("modaImage");
+	var modalImg = document.getElementById("imagepreview");
+	var img = document.getElementById("img_req");
+
+	function btnAcceptReqItem(status,id_history){
+		
+		if (status == 'approve') {
+			console.log('approve ya');
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to approve this request Job",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestItem",
+						data:{
+							id_history:id_history,
+							status:status,
+						},
+						success:function(){
+							Swal.showLoading()
+							Swal.fire(
+								'Accepted!',
+								'Request Item has been accepted',
+								'success'
+							).then((result) => {
+								if (result.value) {
+									location.reload()
+								}
+							})
+						}
+					})
+
+				}
+			})
+			
+		}else{
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to reject this request Job",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestItem",
+						data:{
+							id_history:id_history,
+							status:status,
+						},
+						success:function(){
+							Swal.showLoading()
+							Swal.fire(
+								'Rejected!',
+								'Request Item has been rejected',
+								'error'
+							).then((result) => {
+								if (result.value) {
+									location.reload()
+								}
+							})
+						}
+					})
+
+				}
+			})
+			
+			console.log('reject ih');
+		
+		}
+	}
+
+	function btnAcceptReqSupport(status,id_support){
+
+		if (status == 'approve') {
+			console.log('approve ya');
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to approve this request Job",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						data:{
+							id_support:id_support,
+							status:status,
+						},
+						success:function(){
+							Swal.showLoading()
+							Swal.fire(
+								'Accepted!',
+								'Request Support has been accepted',
+								'success'
+							).then((result) => {
+								if (result.value) {
+									location.reload()
+								}
+							})
+						}
+					})
+
+				}
+			})
+			
+		}else if (status == 'reject'){
+			
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to reject this request Job",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						data:{
+							id_support:id_support,
+							status:status,
+						},
+						success:function(){
+							Swal.showLoading()
+							Swal.fire(
+								'Rejected!',
+								'Request Support has been rejected',
+								'error'
+							).then((result) => {
+								if (result.value) {
+									location.reload()
+								}
+							})
+						}
+					})
+
+				}
+			})
+			
+		}else{
+
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to finish this progress",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						data:{
+							id_support:id_support,
+							status:status,
+						},
+						success:function(){
+							Swal.showLoading()
+							Swal.fire(
+								'Finished!',
+								'Request Support has been finished',
+								'success'
+							).then((result) => {
+								if (result.value) {
+									location.reload()
+								}
+							})
+						}
+					})
+
+				}
+			})
+		}
+	}
+
+	function updateChat(){
+		console.log("ooooooo");
+		var textChat = $("#textChat").val();
+		$("#historyChat").append('<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'+ textChat +'</span><sub class="bubleSub">17.00</sub></div></div>')
+		$("#textChat").val("");
+		$("#textChat").attr("placeholder","Update");
+	}
+
+	function cancel(){
+		$('#reviewRequestModal').modal('hide');
+	}
 
 	function updateApplyer(id_engineer,name_engineer){
 		Swal.fire({
