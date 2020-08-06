@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Crypt;
+use DB;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+
+use SimpleXLSX\SimpleXLSX;
+// use shuchkin\simplexlsx;
 class GuestController extends Controller
 {
     //
@@ -15,8 +19,7 @@ class GuestController extends Controller
 			'verify' => false
 		]);
     	$respond = $client->request('GET', env('API_LINK_CUSTOM') . '/job/getJobForLoAPDF',[
-	    	// 'query' => ['id_job' => Crypt::decrypt($parameter)["id_job"]]
-	    	'query' => ['id_job' => 50]
+	    	'query' => ['id_job' => Crypt::decrypt($parameter)["id_job"]]
 	    ]);
 		
 	    $respond = json_decode($respond->getBody(),true);
@@ -45,5 +48,15 @@ class GuestController extends Controller
 	    // return $data;
 	    // return $respond;
 		return view('guest.job_detail',compact('data'));
+    }
+
+    public function guestState(Request $req){
+    	return DB::table('test')->where('id_candidate',1)->orderBy('id','DESC')->first()->id_current_tab;
+    }
+
+    public function testExcelRead(Request $req){
+		$test = SimpleXLSX::parse('test2.xlsx');
+		return $test->row();
+    	return "testExcelRead";
     }
 }
