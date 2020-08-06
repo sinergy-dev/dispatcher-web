@@ -39,11 +39,54 @@
         .text-muted2 {
             color:#b2b7bb;
         }
+
+        .float-left{
+            float: left;
+        }
+
+        .float-right{
+            float: right;
+        }
+
+        .padding-footer{
+            padding:0rem 1.5rem;
+        }
+
+        div.padding-footer span:hover{
+            /*background-color: #b2b7bb;*/
+            cursor: pointer;
+            color: #3490dc!important;
+        }
+
+        .notificationContent{
+            /*overflow:auto;
+            width: 80%;*/
+            overflow:auto;
+        }
+
+        .header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index:99;
+            margin-bottom: -25px;
+        }
+
+        .content{
+            z-index: 1;
+            margin-top: 50px;
+        }
+
+        .pointer{
+            cursor: pointer;
+        }
     </style>
+    @yield('style')
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm header">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -73,6 +116,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('region/index')}}">Region</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url('partner/index')}}">New Partner</a>
+                        </li>
                         @endauth
                     </ul>
 
@@ -85,11 +131,14 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                                 @if (Route::has('register'))
-                                    <li class="nav-item">
+                                   <!--  <li class="nav-item">
                                         <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    </li>
+                                    </li> -->
                                 @endif
                             @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/partner') }}">{{ __('Join Partner') }}</a>
+                            </li>
                         @else
                            
                             <li class="nav-item dropdown">
@@ -113,14 +162,22 @@
                                 <a class="nav-link" href="messages"><i class="fa fa-bell"></i> <span class="sr-only">(current)</span></a>
                             </li> -->
                             <li class="nav-item dropdown">
-                                <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;"></span> <!-- your badge -->
+                                <span class="badge badge-pill badge-primary" style="float:right;margin-bottom:-10px;"></span> 
+                                <!-- your badge -->
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-bell"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right" style="min-width: 15rem" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right notificationContent" style="min-width: 15rem" aria-labelledby="navbarDropdown">
                                     <span class="dropdown-item dropdown-header" id="notificationCount"></span>
                                     <div class="dropdown-divider"></div>
                                     <div id="notificationContent"></div>
+                                    
+                                    <div class="notificationFooter padding-footer" style="display: none;">
+                                        <span class="btn-view" onclick="btnView()">View All</span>
+                                        <span class="float-right btn-read" onclick="btnRead()">
+                                            Read All
+                                        </span>
+                                    </div>
                                 </div>
                             </li>
 
@@ -133,8 +190,12 @@
 
         @if(Route::is('job.idex'))
             @yield('content')
+        @elseif(Route::is('partner'))
+        <main class="content py-4">
+            @yield('content')
+        </main>
         @else
-        <main class="py-4">
+        <main class="py-4 content">
             @yield('content')
         </main>
         @endif
@@ -168,7 +229,7 @@
             var notificationCount = 0;
             var notificationCountAll = 0;
             var notificationCountReal = [];
-            $("#notificationContent").empty()
+            // $("#notificationContent").empty()
             for (i = snapshot_dump.length - 1; i > -1; i--) {
                 notificationCountReal.push(i)
             }
@@ -182,7 +243,8 @@
                         if(data.status == "unread"){
                             notificationCount = notificationCount + 1
                             addNotification(data,notificationCount,notificationCountReal[index])
-                        } else if(data.status == "read"){
+                        } 
+                        else if(data.status == "read"){
                             // notificationCount = notificationCount - 1
                             addNotificationRead(data,notificationCount,notificationCountReal[index])
                         }
@@ -190,6 +252,7 @@
                 }
                 notificationCountAll = notificationCountAll + 1
             })
+
         });
 
         function sendNotification(title,message,data,index) {
@@ -213,11 +276,28 @@
 
             var append = ""
             // console.log(data.job)
-            append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
-            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary"><i class="fas fa-circle"></i></span>'
+            if (data.history == "On Progress") {
+                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job +  '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
+            }else if(data.history == "OK Basic"){
+                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#advance" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
+            }else if(data.history == "OK Agreement"){
+                append = append + '<a href="' + "{{url('engineer/index')}}/"  + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
+                // append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#interview" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
+            }else if(data.history == "OK Partner"){
+                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#interview" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
+            }else{
+                append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item pointer" onclick="readNotification(' + index + ')">'
+            }
+            // append = append + '<a class="dropdown-item" onclick="readNotification(' + index + ')">'
+            append = append + '<i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
+            // append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
+            
             // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
             append = append + '</a>'
+            append = append + '<hr>'
+            // append = append + '<div class="padding-footer"><span onclick="btnView()">View All</span><span onclick="btnRead()" class="float-right">Read All</span></div>'
             $("#notificationContent").append(append)
+            $(".notificationFooter").css("display","block")
 
         }
 
@@ -226,14 +306,15 @@
             if(notificationCount == 0){
                 $("#notificationCount").text('Noting Notifications')
                 $(".badge.badge-pill.badge-primary").text("")
+                $(".notificationFooter").css("display","none");
             }
 
-            var append = ""
-            append = append + '<a href="#" class="dropdown-item text-muted2" onclick="readNotification(' + index + ')">'
-            append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
-            // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
-            append = append + '</a>'
-            $("#notificationContent").append(append)
+            // var append = ""
+            // append = append + '<a href="#" class="dropdown-item text-muted2" onclick="readNotification(' + index + ')">'
+            // append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
+            // // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
+            // append = append + '</a>'
+            // $("#notificationContent").append(append)
 
         }
 
@@ -277,8 +358,64 @@
 
         }
 
+
+        function btnRead(){
+            firebase.database().ref('notification/web-notif').on('value', function(snapshot) {
+                snapshot_dump = snapshot.val()
+                // $("#notificationContent").empty()
+                snapshot_dump.forEach(function(data,index){
+                        if(data.to == "{{Auth::user()->email}}"){
+                            if(data.status == "unread"){
+                                    firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
+                                    console.log(snapshot.val())
+                                    var data = snapshot.val()
+                                    firebase.database().ref('notification/web-notif/' + index).set({
+                                        to: data.to,
+                                        from: data.from,
+                                        title: data.title,
+                                        message: data.message,
+                                        status: "read",
+                                        date_time : data.date_time,
+                                        job : data.job,
+                                        history : data.history,
+                                        showed : "true"
+                                    });
+                                })
+                            }                        
+                        }
+                })
+            });
+            // location.reload();
+        }
+
+        function btnView(){
+             // window.open("{{url('job/notification_all')}}","_blank");
+             location.href = "{{url('job/notification_all')}}";
+        } 
+
+        // $(".notificationContent").scrollTop($(".notificationContent")[0].scrollHeight); 
+
+        // $(".notificationContent").scroll(function() {
+        //     if($(".notificationContent").scrollTop() == 0) {
+        //            // ajax call get data from server and append to the div
+        //            function scrollNotification(data,index){
+
+        //                 var append = ""
+        //                 // console.log(data.job)
+        //                 append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
+        //                 append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary"><i class="fas fa-circle"></i></span>'
+        //                 // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
+        //                 append = append + '</a>'
+        //                 append = append + '<hr>'
+        //                 $("#notificationContent").append(append)
+
+        //            }
+        //     }
+        // }); 
+
     </script>
     @endauth
+    @yield('script2')
 
 </body>
 </html>
