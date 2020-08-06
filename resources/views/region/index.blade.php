@@ -72,21 +72,24 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-7">
-
-				<div class="pb-3 mb-4 border-bottom">
-					<h3>Region List</h3>
+			<div class="col-md-8">
+				<div class="d-inline-flex  align-items-center">
+					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Add Region</button>
+					<h3 class="ml-3" style="margin-bottom: 0px !important">Region List</h3>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<div class="pb-3 mb-4 border-bottom">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Create Region</button>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="pb-3 mb-4 border-bottom">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search">
+			<div class="col-md-4">
+				<div class="d-inline-flex pb-3 border-bottom">
+					<div class="btn-group" role="group">
+						<button id="jobShowCount" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show 10</button>
+						<div class="dropdown-menu" id="jobShowCountList">
+							<span class="dropdown-item active pointer" onclick="changeJobShowCount(10)">10 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(25)">25 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(50)">50 List</span>
+						</div>
+					</div>
+					<div class="ml-2 input-group">
+						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
 						</div>
@@ -234,7 +237,6 @@
 	// Jquery Dependency
 
 	$(document).ready(function(){
-		$('#datatable-engineer').DataTable();
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/client/getClientList",
@@ -249,13 +251,9 @@
             $.each(result, function(key, value){
               table = table + '<tr>';
 	          table = table + '<td>' + $no++ + '</td>';
-	          table = table + '<td>' + value.customer_name + '</td>';
-	          if (value.location_client ==  null) {
-	          	table = table + '<td>' + '' + '</td>';
-	          }else{
-	          	table = table + '<td>' + value.location_client.location_name + '</td>';
-	          }
-	          table = table + '<td>' + value.address + '</td>';
+	          table = table + '<td>' + ' - ' + '</td>';
+	       	  table = table + '<td>' + ' - ' + '</td>';
+	          table = table + '<td>' + ' - ' + '</td>';
 	          table = table + '<td>' + '' + '</td>';
 	          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
               table = table + '</tr>';
