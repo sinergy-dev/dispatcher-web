@@ -474,8 +474,11 @@
 
 <script type="text/javascript">
 	// Jquery Dependency
+	var first = true
+	var user = "moderator"
 
 	$(document).ready(function(){
+		// var first = true
 		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
 		console.log(id_job)
 		$.ajax({
@@ -766,6 +769,7 @@
 	}
 
 	function reviewRequestSupport(id){
+		var first = true
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/job/getJobSupportEach",
@@ -773,244 +777,284 @@
 				id_support:id,
 			},
 			success: function(result){
-				$.each(result, function(key, value){
-					if (value.status == "Open") {
-						$("#updateChat").css("display","none")
-						$("#status_item").html("<span class='badge badge-warning' style='color: blue;float: right;margin-top: -5px;margin-right:-5px'>"+value.status+"</span>");
+				if (result.job_support.status == "Open") {
+					$("#updateChat").css("display","none")
+					$("#status_item").html("<span class='badge badge-warning' style='color: blue;float: right;margin-top: -5px;margin-right:-5px'>"+result.job_support.status+"</span>");
 
-						var onclickReject = "onclick=btnAcceptReqSupport('reject',"+id+")"
+					var onclickReject = "onclick=btnAcceptReqSupport('reject',"+id+")"
 
-						var onclickApprove = "onclick=btnAcceptReqSupport('approve',"+id+")"
+					var onclickApprove = "onclick=btnAcceptReqSupport('approve',"+id+")"
 
-						var onclickCancel  = "onclick=cancel()"
+					var onclickCancel  = "onclick=cancel()"
 
-						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
+					$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
 
-						$("#headerTitle").empty("")
-						var append8 = ""
-						append8 = append8 + '<div id="status_item">'
-						append8 = append8 + '</div>'
-						append8 = append8 + '<div class="form-group" id="name_eng_req">'
-						append8 = append8 + '</div>'
-						append8 = append8 + '<hr> '
+					$("#headerTitle").empty("")
+					var append8 = ""
+					append8 = append8 + '<div id="status_item">'
+					append8 = append8 + '</div>'
+					append8 = append8 + '<div class="form-group" id="name_eng_req">'
+					append8 = append8 + '</div>'
+					append8 = append8 + '<hr> '
 
-						$("#headerTitle").append(append);
-
-
-						$("#itemRequestTitle").empty("")
-
-						var append = ""
-						append = append + '<label><b>Problem Support</b></label>'
-						append = append + '<h6 id="item_req"></h6>'
-						append = append + '<p><i id="problem_support"></i></p>'
-						append = append + '<hr>'
-
-						append = append + '<label><b>Reason Support</b></label>'
-						append = append + '<h6 id="item_req"></h6>'
-						append = append + '<p><i id="reason_support"></i></p>'
-						append = append + '<hr>'
-
-						$("#itemRequestTitle").append(append);
+					$("#headerTitle").append(append);
 
 
-						$("#documentationTitle").empty("")
+					$("#itemRequestTitle").empty("")
 
-						var append1 = ""
-						append1 = append1 + '<label><b>Documentation item</b></label><br>'
-						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
-						append1 = append1 + '<hr>'
+					var append = ""
+					append = append + '<label><b>Problem Support</b></label>'
+					append = append + '<h6 id="item_req"></h6>'
+					append = append + '<p><i id="problem_support"></i></p>'
+					append = append + '<hr>'
 
-						$("#documentationTitle").append(append1)
+					append = append + '<label><b>Reason Support</b></label>'
+					append = append + '<h6 id="item_req"></h6>'
+					append = append + '<p><i id="reason_support"></i></p>'
+					append = append + '<hr>'
 
-						var append4 = ""
-						append4 = append4 + '<label><b>Date Request</b></label>'
-						append4 = append4 + '<h6 id="date_req">29 Juni 2020</h6>'
-						append4 = append4 + '<hr>'
-
-						$("#dateTitle").append(append4)
-
-						$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.job.latest_history.user_name  +"</h6>");
-						
-						
-					}else if (value.status == "Progress") {
-
-						$("#headerTitle").empty("")
-						var append7 = ""
-						append7 = append7 + '<div class="row">'
-						append7 = append7 + '<div class="col-md-6">'
-						append7 = append7 + '<span class="">Maintenance Router</span><br>'	
-						append7 = append7 + '<span class="">BPJS Kesehatan</span>'
-						append7 = append7 + '</div>'
-
-						append7 = append7 + '<div class="col-md-6 text-right">'
-						append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
-						append7 = append7 + '<span class="badge badge-warning" style="color: green;">'+ value.status +'</span>'
-						append7 = append7 + '</div>'
-						append7 = append7 + '</div>'
-						append7 = append7 + '<hr>'
-		
-						
-						$("#headerTitle").append(append7)
-
-						$("#itemRequestTitle").empty("")
-
-						var append = ""
-						append = append + '<div class="row">'
-						append = append + '<div class="col-md-6">'
-						append = append + '<label><b>Problem Support</b></label>'	
-						append = append + '<p><i id="problem_support"></i></p>'
-						append = append + '</div>'
-								
-						append = append + '<div class="col-md-6">'
-						append = append + '<label><b>Reason Support</b></label>'
-						append = append + '<p><i id="reason_support"></i></p>'
-						append = append + '</div>'
-						append = append + '</div>'
-						append = append + '<hr>'
-
-						$("#itemRequestTitle").append(append);
-
-						$("#documentationTitle").empty("")
-
-						var append1 = ""
-						append1 = append1 + '<label><b>Evidence</b></label><br>'
-						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
-						append1 = append1 + '<hr>'
-
-						$("#documentationTitle").append(append1)
+					$("#itemRequestTitle").append(append);
 
 
-						$("#historyTitle").empty("")
+					$("#documentationTitle").empty("")
 
-						var append6 = ""
+					var append1 = ""
+					append1 = append1 + '<label><b>Documentation item</b></label><br>'
+					append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+					append1 = append1 + '<hr>'
 
-						append6 = append6 + '<label><b>History Progress</b></label>'
+					$("#documentationTitle").append(append1)
 
-						$("#historyTitle").append(append6)
+					var append4 = ""
+					append4 = append4 + '<label><b>Date Request</b></label>'
+					append4 = append4 + '<h6 id="date_req">29 Juni 2020</h6>'
+					append4 = append4 + '<hr>'
 
-						$("#historyChat").css("display","block")
+					$("#dateTitle").append(append4)
 
-						var append5 = ""
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						$("#historyChat").append(append5)
-						$("#historyChat").addClass("scrolly")
-
-						$("#updateChat").css("display","block")
-						$("#updateChat").empty("")
-						var updateChat = ""
-						// updateChat = updateChat + '<div class="input-group mycustom">'
-					 //    updateChat = updateChat + '<input type="text" class="form-control rounded-0" id="validationDefaultUsername" placeholder="Update" aria-describedby="inputGroupPrepend2" required>'
-					 //    updateChat = updateChat + '<div class="input-group-prepend">'
-					 //    updateChat = updateChat +   '<input type="submit" vlaue="submit" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
-					 //    updateChat = updateChat + '</div>'
-					 //    updateChat = updateChat + '</div>'
-
-
-						updateChat = updateChat + '<div class="input-group mycustom">'
-					    updateChat = updateChat + '<textarea class="textChat form-control" id="textChat" style="height:40px;resize:none" placeholder="Update"></textarea>'
-					    updateChat = updateChat + '<div class="input-group-prepend">'
-					    updateChat = updateChat +   '<input type="submit" value="kirim" onclick="updateChat()" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
-					    updateChat = updateChat + '</div>'
-					    updateChat = updateChat + '</div>'	
-					    // autosize(document.querySelectorAll('textarea'));				    
-						$("#updateChat").append(updateChat)
-
-						var onclickApprove = "onclick=btnAcceptReqSupport('done',"+id+")"
-						var onclickCancel  = "onclick=cancel()"
-
-						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button><button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button><button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
+					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ result.job_support.job.latest_history.user_name  +"</h6>");
 					
-					}else if (value.status == "Done") {
-						$("#headerTitle").empty("")
-						var append7 = ""
-						append7 = append7 + '<div class="row">'
-						append7 = append7 + '<div class="col-md-6">'
-						append7 = append7 + '<span class="">Maintenance Router</span><br>'	
-						append7 = append7 + '<span class="">BPJS Kesehatan</span>'
-						append7 = append7 + '</div>'
+					
+				}else if (result.job_support.status == "Progress") {
 
-						append7 = append7 + '<div class="col-md-6 text-right">'
-						append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
-						append7 = append7 + '<span class="badge badge-success">'+ value.status +'</span>'
-						append7 = append7 + '</div>'
-						append7 = append7 + '</div>'
-						append7 = append7 + '<hr>'
-		
-						
-						$("#headerTitle").append(append7)
+					$("#headerTitle").empty("")
+					var append7 = ""
+					append7 = append7 + '<div class="row">'
+					append7 = append7 + '<div class="col-md-6">'
+					append7 = append7 + '<span class="">Maintenance Router</span><br>'	
+					append7 = append7 + '<span class="">BPJS Kesehatan</span>'
+					append7 = append7 + '</div>'
 
-						$("#itemRequestTitle").empty("")
+					append7 = append7 + '<div class="col-md-6 text-right">'
+					append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
+					append7 = append7 + '<span class="badge badge-warning" style="color: green;">'+ result.job_support.status +'</span>'
+					append7 = append7 + '</div>'
+					append7 = append7 + '</div>'
+					append7 = append7 + '<hr>'
+	
+					
+					$("#headerTitle").append(append7)
 
-						var append = ""
-						append = append + '<div class="row">'
-						append = append + '<div class="col-md-6">'
-						append = append + '<label><b>Problem Support</b></label>'	
-						append = append + '<p><i id="problem_support"></i></p>'
-						append = append + '</div>'
-								
-						append = append + '<div class="col-md-6">'
-						append = append + '<label><b>Reason Support</b></label>'
-						append = append + '<p><i id="reason_support"></i></p>'
-						append = append + '</div>'
-						append = append + '</div>'
-						append = append + '<hr>'
+					$("#itemRequestTitle").empty("")
 
-						$("#itemRequestTitle").append(append);
+					var append = ""
+					append = append + '<div class="row">'
+					append = append + '<div class="col-md-6">'
+					append = append + '<label><b>Problem Support</b></label>'	
+					append = append + '<p><i id="problem_support"></i></p>'
+					append = append + '</div>'
+							
+					append = append + '<div class="col-md-6">'
+					append = append + '<label><b>Reason Support</b></label>'
+					append = append + '<p><i id="reason_support"></i></p>'
+					append = append + '</div>'
+					append = append + '</div>'
+					append = append + '<hr>'
 
-						$("#documentationTitle").empty("")
+					$("#itemRequestTitle").append(append);
 
-						var append1 = ""
-						append1 = append1 + '<label><b>Evidence</b></label><br>'
-						append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
-						append1 = append1 + '<hr>'
+					$("#documentationTitle").empty("")
 
-						$("#documentationTitle").append(append1)
+					var append1 = ""
+					append1 = append1 + '<label><b>Evidence</b></label><br>'
+					append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+					append1 = append1 + '<hr>'
+
+					$("#documentationTitle").append(append1)
 
 
-						$("#historyTitle").empty("")
+					$("#historyTitle").empty("")
 
-						var append6 = ""
+					var append6 = ""
 
-						append6 = append6 + '<label><b>History Progress</b></label>'
+					append6 = append6 + '<label><b>History Progress</b></label>'
 
-						$("#historyTitle").append(append6)
+					$("#historyTitle").append(append6)
 
-						$("#historyChat").css("display","block")
+					$("#historyChat").empty()
 
-						var append5 = ""
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-						append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-						$("#historyChat").append(append5)
-						$("#historyChat").addClass("scrolly")
+					$("#historyChat").css("display","block")
 
-						$("#updateChat").css("display","block")
-						$("#updateChat").empty("")
+					var append5 = ""
 
-						$("#modal-footer-request").html("");
-					}else{
-						$("#status_item").html("<span class='badge badge-danger' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status+"</span>");
-
-						$("#modal-footer-request").html("");
-					}
-
-					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+value.picture_support);
-					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
-					$("#problem_support").html(value.problem_support);
-					$("#reason_support").html(value.reason_support);
-
-					$("#img_req" ).click(function() {
-						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+ value.picture_support);
-						$('#imagemodal').modal('show');  
+					$.each(result.job_support_chat,function(key,value){
+						if(value.from == "moderator"){
+							append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+							append5 = append5 + value.message
+							append5 = append5 + '</span><sub class="bubleSub">'
+							append5 = append5 + moment(value.time,"X").format("HH:mm")
+							append5 = append5 + '</sub></div></div>'
+						} else {
+							append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+							append5 = append5 + value.message
+							append5 = append5 + '</span><sub class="bubleSub">'
+							append5 = append5 + moment(value.time,"X").format("HH:mm")
+							append5 = append5 + '</sub></div></div>'
+						}
 					})
+
+					
+					$("#historyChat").append(append5)
+
+			        firebase.database().ref('job_support/1/chat').on('value', function(snapshot) {
+			            snapshot_dump = snapshot.val()
+			            // console.log(snapshot_dump[snapshot_dump.length - 1])
+			            var value = snapshot_dump[snapshot_dump.length - 1]
+						var temp = ""
+						if(value.from == "moderator"){
+							temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+						} else {
+							temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+						}
+						temp = temp + value.message
+						temp = temp + '</span><sub class="bubleSub">'
+						temp = temp + moment(value.time,"X").format("HH:mm")
+						temp = temp + '</sub></div></div>'
+						if(!first){
+							$("#historyChat").append(temp)
+						} else {
+							first = false
+						}
+						document.getElementById('historyChat').scrollTop = document.getElementById('historyChat').scrollHeight
+						$("#textChat").val("");
+						$("#textChat").attr("placeholder","Update");
+			        });
+					$("#historyChat").addClass("scrolly")
+
+					$("#updateChat").css("display","block")
+					$("#updateChat").empty("")
+					var updateChat = ""
+					// updateChat = updateChat + '<div class="input-group mycustom">'
+				 //    updateChat = updateChat + '<input type="text" class="form-control rounded-0" id="validationDefaultUsername" placeholder="Update" aria-describedby="inputGroupPrepend2" required>'
+				 //    updateChat = updateChat + '<div class="input-group-prepend">'
+				 //    updateChat = updateChat +   '<input type="submit" vlaue="submit" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
+				 //    updateChat = updateChat + '</div>'
+				 //    updateChat = updateChat + '</div>'
+
+
+					updateChat = updateChat + '<div class="input-group mycustom">'
+				    updateChat = updateChat + '<textarea class="textChat form-control" id="textChat" style="height:40px;resize:none" placeholder="Update"></textarea>'
+				    updateChat = updateChat + '<div class="input-group-prepend">'
+				    updateChat = updateChat +   '<input type="submit" value="kirim" onclick="updateChat()" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
+				    updateChat = updateChat + '</div>'
+				    updateChat = updateChat + '</div>'	
+				    // autosize(document.querySelectorAll('textarea'));				    
+					$("#updateChat").append(updateChat)
+
+					var onclickApprove = "onclick=btnAcceptReqSupport('done',"+id+")"
+					var onclickCancel  = "onclick=cancel()"
+
+					$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button><button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button><button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
+				
+				}else if (result.job_support.status == "Done") {
+					$("#headerTitle").empty("")
+					var append7 = ""
+					append7 = append7 + '<div class="row">'
+					append7 = append7 + '<div class="col-md-6">'
+					append7 = append7 + '<span class="">Maintenance Router</span><br>'	
+					append7 = append7 + '<span class="">BPJS Kesehatan</span>'
+					append7 = append7 + '</div>'
+
+					append7 = append7 + '<div class="col-md-6 text-right">'
+					append7 = append7 + '<span class="" id="date_req">2 August</span><br>'
+					append7 = append7 + '<span class="badge badge-success">'+ result.job_support.status +'</span>'
+					append7 = append7 + '</div>'
+					append7 = append7 + '</div>'
+					append7 = append7 + '<hr>'
+	
+					
+					$("#headerTitle").append(append7)
+
+					$("#itemRequestTitle").empty("")
+
+					var append = ""
+					append = append + '<div class="row">'
+					append = append + '<div class="col-md-6">'
+					append = append + '<label><b>Problem Support</b></label>'	
+					append = append + '<p><i id="problem_support"></i></p>'
+					append = append + '</div>'
+							
+					append = append + '<div class="col-md-6">'
+					append = append + '<label><b>Reason Support</b></label>'
+					append = append + '<p><i id="reason_support"></i></p>'
+					append = append + '</div>'
+					append = append + '</div>'
+					append = append + '<hr>'
+
+					$("#itemRequestTitle").append(append);
+
+					$("#documentationTitle").empty("")
+
+					var append1 = ""
+					append1 = append1 + '<label><b>Evidence</b></label><br>'
+					append1 = append1 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req" class="img_req">'
+					append1 = append1 + '<hr>'
+
+					$("#documentationTitle").append(append1)
+
+
+					$("#historyTitle").empty("")
+
+					var append6 = ""
+
+					append6 = append6 + '<label><b>History Progress</b></label>'
+
+					$("#historyTitle").append(append6)
+
+					$("#historyChat").css("display","block")
+
+					var append5 = ""
+					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
+					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					$("#historyChat").append(append5)
+					$("#historyChat").addClass("scrolly")
+
+					$("#updateChat").css("display","block")
+					$("#updateChat").empty("")
+
+					$("#modal-footer-request").html("");
+				}else{
+					$("#status_item").html("<span class='badge badge-danger' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+result.job_support.status+"</span>");
+
+					$("#modal-footer-request").html("");
+				}
+
+				$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+result.job_support.picture_support);
+				$("#date_req").html(moment(result.job_support.date_add).format("DD MMMM YYYY"));
+				$("#problem_support").html(result.job_support.problem_support);
+				$("#reason_support").html(result.job_support.reason_support);
+
+				$("#img_req" ).click(function() {
+					$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+ result.job_support.picture_support);
+					$('#imagemodal').modal('show');  
 				})
 			}
 		})
@@ -1289,11 +1333,16 @@
 	}
 
 	function updateChat(){
+		firebase.database().ref('job_support/1/chat/' + $(".bubleChatItem").length).set({
+                from: user,
+                message: $("#textChat").val(),
+                time: parseInt(moment().format("X"))
+            });
 		console.log("ooooooo");
 		var textChat = $("#textChat").val();
-		$("#historyChat").append('<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'+ textChat +'</span><sub class="bubleSub">17.00</sub></div></div>')
-		$("#textChat").val("");
-		$("#textChat").attr("placeholder","Update");
+		// $("#historyChat").append('<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'+ textChat +'</span><sub class="bubleSub">17.00</sub></div></div>')
+		// $("#textChat").val("");
+		// $("#textChat").attr("placeholder","Update");
 	}
 
 	function cancel(){
