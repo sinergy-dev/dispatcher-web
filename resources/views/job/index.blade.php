@@ -17,6 +17,9 @@
 	.step.finish {
 		background-color: #4CAF50;
 	}.
+	.pointer{
+		cursor: pointer;
+	}
 </style>
 <main role="main">
 	<div class="container">
@@ -84,7 +87,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="d-inline-flex align-items-center">
 					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)">
 						<i class="fas fa-plus"></i> Add Job
@@ -92,14 +95,19 @@
 					<h3 style="margin-bottom: 0px !important" class="ml-3">Job List</h3>
 				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="d-inline-flex pb-3 border-bottom">
+			<div class="col-md-6">
+				<div class="d-inline-flex pb-3 border-bottom" style="float: right;">
+					<div class="btn-group" style="padding-right: 10px">
+						<button data-toggle="dropdown" type="button" onclick="jobStatusFilter()" class="btn btn-secondary dropdown-toggle dropbtn">Filter <i class="fas fa-filter"></i></button>
+						<div class="dropdown-menu statusContent" id="jobStatusContent">
+						</div>
+					</div>
 					<div class="btn-group" role="group">
 						<button id="jobShowCount" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Show 10</button>
 						<div class="dropdown-menu" id="jobShowCountList">
-							<span class="dropdown-item active" onclick="changeJobShowCount(10)">10 List</span>
-							<span class="dropdown-item" onclick="changeJobShowCount(25)">25 List</span>
-							<span class="dropdown-item" onclick="changeJobShowCount(50)">50 List</span>
+							<span class="dropdown-item active pointer" onclick="changeJobShowCount(10)">10 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(25)">25 List</span>
+							<span class="dropdown-item pointer" onclick="changeJobShowCount(50)">50 List</span>
 						</div>
 					</div>
 					<div class="ml-2 input-group">
@@ -173,7 +181,7 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="col-md-12" id="paginationJob" >
+				<div class="col-md-12" id="paginationJob">
 					<nav aria-label="Page navigation example" class="ml-auto">
 						<ul class="pagination justify-content-end" id="jobPaginateHolder">
 							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -524,11 +532,12 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body card-body d-flex flex-column align-items-start">
+			<div class="modal-body card-body d-flex flex-column">
 				<div class="ml-1">
 					<div class="d-flex d-inline-block align-items-center">
 						<strong class="text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
-						<span class="ml-auto badge badge-success">Done</span>
+						<!-- <span class="ml-auto badge badge-success" id="statusShowSummary">Done</span> -->
+						<div class="ml-auto" id="statusShowSummary"></div>
 					</div>
 					<h2 class="mb-2" id="jobSumaryHolderTitle">
 						Create Internal Software
@@ -574,6 +583,7 @@
 		getDashboard();
 
 		$("#jobSearch").on('change',function(){
+			console.log($("#jobSearch").val());
 			if($("#jobSearch").val() != ""){
 				fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
 			} else {
@@ -677,11 +687,176 @@
 
 	})
 
+	function jobStatusFilter(){
+		var element = document.getElementById("jobStatusContent");
+		element.classList.toggle("statusContent");
+
+		var status = ["Open","Ready","Progress","Done"];
+
+		var append = "";
+		for (var i = 0 ; i < status.length; i++) {
+			if (i == 0) {
+				// var onclick = "jobFilter('"+ status[i] +"')";
+				var onclick = "jobFilter('dashboard/getJobListAndSumary/FilterStatus?search=" + status[i] + "','POST')";
+
+				append = append + '<span class="active dropdown-item pointer" onclick="'+ onclick +'">'+ status[i] +'</span>';
+			}else{
+				var onclick = "jobFilter('dashboard/getJobListAndSumary/FilterStatus?search=" + status[i] + "','POST')";
+
+				append = append + '<span class="dropdown-item pointer" onclick="'+ onclick +'">'+ status[i] +'</span>';
+			}
+			
+		}
+
+		$("#jobStatusContent").html(append);
+	}
+
+	function jobFilter(url,method){
+		console.log(url);
+		$.ajax({
+			type:method,
+			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			success: function (result) {
+				$(".jobHolderItem").remove()
+				var prepend = "<div class='row jobHolderItem'>"
+				var n = 25
+				$.each(result["data"], function( index, value ) {
+					if(value['job_status'] == "Open"){
+						var badgeJob = "danger"
+					} else if(value['job_status'] == "Ready"){
+						var badgeJob = "warning"
+					} else if(value['job_status'] == "Progress"){
+						var badgeJob = "primary"
+					} else if(value['job_status'] == "Done"){
+						var badgeJob = "success"
+					}
+					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
+					prepend = prepend + '<div class="col-md-6">'
+					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm"  border-radius:.25rem;">'
+					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;object-fit:cover">'
+					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
+					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
+					prepend = prepend + '			</div>'
+					prepend = prepend + '		</div>'
+					prepend = prepend + '		<div class="card-body d-flex flex-column align-items-start">'
+					prepend = prepend + '			<strong class="d-inline-block mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
+					prepend = prepend + '			<h4 class="mb-0">'
+					prepend = prepend + '				<a class="text-dark" href="#">' + jobName + '</a>'
+					prepend = prepend + '			</h4>'
+					prepend = prepend + '			<div class="mb-0 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
+					
+					//numeric format rupiah
+					var	number_string = value.job_price.toString(),
+					split	= number_string.split(','),
+					sisa 	= split[0].length % 3,
+					rupiah 	= split[0].substr(0, sisa),
+					ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+						
+					if (ribuan) {
+						separator = sisa ? '.' : '';
+						rupiah += separator + ribuan.join('.');
+					}
+					rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+
+
+					prepend = prepend + '<div class="mb-0">'+ 'Rp.' + rupiah +'</div>'
+					prepend = prepend + '<div class="mb-0 ml-auto">'
+					prepend = prepend + '			<span class="ml-auto text-primary" style="cursor: pointer;" href="#" onclick="showSumary(' + value['id'] + ')">Show Summary</span>'
+					prepend = prepend + '</div>'
+					prepend = prepend + '		</div>'
+					prepend = prepend + '	</div>'
+					prepend = prepend + '</div>'
+				});
+				$("#jobHolder").prepend(prepend + "</div>")
+				console.log(result["job"])
+
+				$("#jobPaginateHolder").empty("")
+				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+				var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+				var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+				var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+				
+				if(result["current_page"] == 1){
+					previous = "disabled"
+					first = result["current_page"],first_active = "active"
+					second = result["current_page"] + 1 
+					third = result["current_page"] + 2
+
+					var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
+					var previous_onclick = ""
+
+					if(result["last_page"] == 1){
+						next = "disabled"
+						var next_onclick = ""
+					} else {
+						var next_onclick = second_onclick
+					}
+				} else if (result["current_page"] == result["last_page"]){
+					previous = ""
+					next = "disabled"
+					if(result["last_page"] == 2){
+						first = result["current_page"] - 1
+						second = result["current_page"], second_active = "active"
+						third = result["current_page"]
+					} else {
+						first = result["current_page"] - 2
+						second = result["current_page"] - 1
+						third = result["current_page"],third_active = "active"
+					}
+
+					var first_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJob('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var previous_onclick = second_onclick
+					var next_onclick = ""
+
+				} else {
+					next = ""
+					previous = ""
+					first = result["current_page"] - 1
+					second = result["current_page"],second_active = "active"
+					third = result["current_page"] + 1
+					var previous_onclick = first_onclick
+					var next_onclick = third_onclick
+
+				}
+				var append = ""
+				append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+				append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+				if(result["last_page"] > 1){
+					append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+				}
+				if(result["last_page"] > 2){
+					append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+				}
+				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+				
+				$("#jobPaginateHolder").append(append)
+				if(method == "POST"){
+					if(result['total'] == 0){
+						$(".resultSearchCount").empty("").text("Not found")
+						$("#paginationJob").hide()
+					} else {
+						$(".resultSearchCount").empty("").text(result["total"] + " results")
+					}
+					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
+					$(".resultSearch").show()
+				} else {
+					$(".resultSearch").hide()
+				}
+
+			}
+		})
+	}
+
 	function getDashboard(){
 		$.ajax({
 			type:"GET",
 			url:"{{env('API_LINK_CUSTOM')}}/dashboard/getDashboardModerator",
 			success: function(result){
+				console.log(result);
 				$("#openJob").text(result.open)
 				$("#readyJob").text(result.ready)
 				$("#progressJob").text(result.progress)
@@ -704,7 +879,7 @@
 		$("#jobShowCountList").append(append)
 		if($("#jobSearch").val() != ""){
 			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
-		} else {
+		}else {
 			fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
 		}
 
@@ -730,9 +905,9 @@
 					}
 					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
-					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm" style="height: 148px; border-radius:.25rem;">'
+					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm"  border-radius:.25rem;">'
 					// prepend = prepend + '		<div style="width:160px;height: 148px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-position: center;">'
-					prepend = prepend + '		<div class="" style="width:160px;height: 147px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;">'
+					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;">'
 					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
 					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
 					prepend = prepend + '			</div>'
@@ -742,8 +917,26 @@
 					prepend = prepend + '			<h4 class="mb-0">'
 					prepend = prepend + '				<a class="text-dark" href="#">' + jobName + '</a>'
 					prepend = prepend + '			</h4>'
-					prepend = prepend + '			<div class="mb-1 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
+					prepend = prepend + '			<div class="mb-0 text-muted">' + moment(value['date_start']).format("DD MMMM") + " - " + moment(value['date_end']).format("DD MMMM YYYY") + '</div>'
+					
+					//numeric format rupiah
+					var	number_string = value.job_price.toString(),
+					split	= number_string.split(','),
+					sisa 	= split[0].length % 3,
+					rupiah 	= split[0].substr(0, sisa),
+					ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+						
+					if (ribuan) {
+						separator = sisa ? '.' : '';
+						rupiah += separator + ribuan.join('.');
+					}
+					rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+
+
+					prepend = prepend + '<div class="mb-0">'+ 'Rp.' + rupiah +'</div>'
+					prepend = prepend + '<div class="mb-0 ml-auto">'
 					prepend = prepend + '			<span class="ml-auto text-primary" style="cursor: pointer;" href="#" onclick="showSumary(' + value['id'] + ')">Show Summary</span>'
+					prepend = prepend + '</div>'
 					prepend = prepend + '		</div>'
 					prepend = prepend + '	</div>'
 					prepend = prepend + '</div>'
@@ -840,7 +1033,17 @@
 				id_job:id
 			},
 			success: function(result){
-				console.log(result.job.customer.customer_name)
+				console.log(result.job.job_status)
+				// console.log(result.job.customer.customer_name)
+				if(result.job.job_status == "Open"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-danger">Open</span>')
+				} else if(result.job.job_status == "Ready"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-warning">Ready</span>')
+				} else if(result.job.job_status == "Progress"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-primary">Progress</span>')
+				} else if(result.job.job_status == "Done"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-success">Done</span>')
+				}
 
 				$("#jobSumaryHolderCustomer").html(result.job.customer.customer_name)
 				$("#jobSumaryHolderTitle").html(result.job.job_name)
