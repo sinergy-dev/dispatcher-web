@@ -32,6 +32,10 @@ class JobController extends Controller
 		return view('job.index');
     }
 
+    public function notification_all(){
+        return view('job.notification_all');
+    }
+
     public function detail(){
     	return view('job.detail');
     }
@@ -129,7 +133,8 @@ class JobController extends Controller
 				"no_letter"     => $no_letter,
 				"qr_file"     => $name_qr,
 				"pdf_file"     => $name_pdf,
-				"created_by"     => "6"
+				"created_by"     => "6",
+                "id_job" => $req->id_job
 			]
 		]; 
 		
