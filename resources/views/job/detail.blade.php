@@ -85,36 +85,36 @@
 	}
 
 	.bubleChat {
-		padding: 5px;
+		/*padding: 5px;*/
 		/*max-width: 300px;*/
 		max-width: 100%;
 		/*border:solid 1px black;*/
-		margin: 5px;
+		margin: 2.5px;
 		/*padding: 5px;*/
 	}
 
 	.bubleChatItem {
+		border-radius: 7.5px;
 		max-width: 300px;
-		border:solid 1px black;
 		padding: 5px;
 	}
 
 	.bubleChatModerator{
 		background-color: yellow!important;
-		/*margin-right: 0px;
-	    margin-left: auto;*/
-		/*border:solid 1px black;
-		margin: 5px;
-		padding: 5px;*/
+		border:solid 1px black;
 	}
 
 	.bubleChatEngineer{
 		background-color: lightblue!important;
-		/*margin-left: 0px;
-	    margin-right: auto;
-		*//*border:solid 1px black;
-		margin: 5px;
-		padding: 5px;*/
+		border:solid 1px black;
+	}
+
+	.bubleChatDate {
+		background-color: #eee !important;
+		font-size: 10px;
+		padding-top: 2.5px;
+		padding-bottom: 2.5px;
+		border: none;
 	}
 
 	.bubleSub{
@@ -896,19 +896,37 @@
 					$("#historyChat").css("display","block")
 
 					var append5 = ""
-
+					var checker = result.job_support_chat[0].from
+					var checkerTime = moment(result.job_support_chat[0].time,"X").format("YYYY-MM-DD")
+					var marginCustom = ""
 					$.each(result.job_support_chat,function(key,value){
+						var time = moment(value.time,"X")
+						if(checker != value.from){
+							checker = value.from
+							marginCustom = "margin-top:5px"
+						} else {
+							marginCustom = ""
+						}
+						if(checkerTime != time.format("YYYY-MM-DD")){
+							checkerTime = time.format("YYYY-MM-DD")
+							append5 = append5 + '<div class="bubleChat d-block text-center" style="' + marginCustom + '"><div class="bubleChatItem bubleChatDate d-inline-flex"><span>'
+							append5 = append5 + time.format("D MMMM")
+							append5 = append5 + '</span>'
+							append5 = append5 + '</div></div>'
+						} else {
+
+						}
 						if(value.from == "moderator"){
-							append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+							append5 = append5 + '<div class="bubleChat d-block text-right" style="' + marginCustom + '"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
 							append5 = append5 + value.message
 							append5 = append5 + '</span><sub class="bubleSub">'
-							append5 = append5 + moment(value.time,"X").format("HH:mm")
+							append5 = append5 + time.format("HH:mm")
 							append5 = append5 + '</sub></div></div>'
 						} else {
-							append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+							append5 = append5 + '<div class="bubleChat d-block" style="' + marginCustom + '"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
 							append5 = append5 + value.message
 							append5 = append5 + '</span><sub class="bubleSub">'
-							append5 = append5 + moment(value.time,"X").format("HH:mm")
+							append5 = append5 + time.format("HH:mm")
 							append5 = append5 + '</sub></div></div>'
 						}
 					})
@@ -916,28 +934,28 @@
 					
 					$("#historyChat").append(append5)
 
-			        firebase.database().ref('job_support/1/chat').on('value', function(snapshot) {
+			        firebase.database().ref('job_support/4/chat').on('value', function(snapshot) {
 			            snapshot_dump = snapshot.val()
-			            // console.log(snapshot_dump[snapshot_dump.length - 1])
-			            var value = snapshot_dump[snapshot_dump.length - 1]
-						var temp = ""
-						if(value.from == "moderator"){
-							temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
-						} else {
-							temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
-						}
-						temp = temp + value.message
-						temp = temp + '</span><sub class="bubleSub">'
-						temp = temp + moment(value.time,"X").format("HH:mm")
-						temp = temp + '</sub></div></div>'
-						if(!first){
-							$("#historyChat").append(temp)
-						} else {
-							first = false
-						}
-						document.getElementById('historyChat').scrollTop = document.getElementById('historyChat').scrollHeight
-						$("#textChat").val("");
-						$("#textChat").attr("placeholder","Update");
+			            console.log(snapshot_dump)
+			   //          var value = snapshot_dump[snapshot_dump.length - 1]
+						// var temp = ""
+						// if(value.from == "moderator"){
+						// 	temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+						// } else {
+						// 	temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+						// }
+						// temp = temp + value.message
+						// temp = temp + '</span><sub class="bubleSub">'
+						// temp = temp + moment(value.time,"X").format("HH:mm")
+						// temp = temp + '</sub></div></div>'
+						// if(!first){
+						// 	$("#historyChat").append(temp)
+						// } else {
+						// 	first = false
+						// }
+						// document.getElementById('historyChat').scrollTop = document.getElementById('historyChat').scrollHeight
+						// $("#textChat").val("");
+						// $("#textChat").attr("placeholder","Update");
 			        });
 					$("#historyChat").addClass("scrolly")
 
@@ -1333,7 +1351,7 @@
 	}
 
 	function updateChat(){
-		firebase.database().ref('job_support/1/chat/' + $(".bubleChatItem").length).set({
+		firebase.database().ref('job_support/4/chat/' + ($(".bubleChatModerator").length + $(".bubleChatEngineer").length)).set({
                 from: user,
                 message: $("#textChat").val(),
                 time: parseInt(moment().format("X"))
