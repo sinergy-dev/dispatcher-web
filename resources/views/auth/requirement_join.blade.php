@@ -799,8 +799,13 @@
       
       document.getElementById("input-pEducation").placeholder = "Type your lastest Education here..";
     }else if (currentTab == 2) {
-      var cat = [];
-      // var cat = JSON.parse(localStorage.getItem("category"))
+      if (JSON.parse(localStorage.getItem("category")) == null) {
+        var localCat = []
+      }else{
+        var localCat = JSON.parse(localStorage.getItem("category"))
+      }
+
+      console.log(localCat+" "+"localCat")
       $(".progressbar li#validation").addClass("active");
       $(".progressbar li#advanced").addClass("active");
       initialJobCategory();
@@ -824,21 +829,50 @@
               // $(".img__wrap[data-value='"+JSON.parse(localStorage.getItem("category"))+"']").attr("data-value",value.id).addClass('active')
 
               $("#jobCategoryList").append(append)
-
               
 
               $(".radio-group").on("click",".radio-custom[data-value='"+value.id+"']",function(){
-                  $(this).toggleClass('active')
+                  console.log(value.id+""+"data-value")
                   var val = $(this).attr('data-value')
-                  //kalau sudah di next terus prev kalau nomor awal udah di pilih brrti udah aktive mangkanya nilainya true terus jadi double
+                  $(this).toggleClass('active')
+                  // console.log(localCat)
                   if ($(this).hasClass("active")) {
-                    cat.push(val)
-                    localStorage.setItem("category", JSON.stringify(cat));
-                  }else{
-                    cat.splice(cat.indexOf(val),1)
-                    localStorage.setItem("category", JSON.stringify(cat));
+                    if (localCat.length == 0) {
+                      console.log(localCat.length)
+                      localCat.push(val)
+                      localStorage.setItem("category", JSON.stringify(localCat));
+                      // if (localCat.length == 0) {
+                      //   localCat.push(val)
+                      //   localStorage.setItem("category", localCat);
+                      // }else{
+                      //   var localCat = [JSON.stringify(JSON.parse(localStorage.getItem("category")))];
+                      //   localCat.push(val)
+                      //   localStorage.setItem("category", cat);
+                      // }
+                    }else if(localCat.indexOf("'"+ val +"'") == -1){
+                      localCat.push(val)
+                      // localStorage.removeItem("category");
+                      localStorage.setItem("category", JSON.stringify(localCat));
+                      // localStorage.removeItem("category");
+                    }
+                    // else{
+                    //   $(this).removeClass('active');
+                    //   localCat.splice(localCat.indexOf(val),1)
+                    //   localStorage.setItem("category", JSON.stringify(localCat));
+                    // }
+                  }
+                  else{
+                    // console.log(localCat)
+                    // localCat = JSON.parse(localStorage.getItem("category"))
+                    // cat.push(val)
+                    // localStorage.setItem("category", JSON.stringify(cat));
+                    localCat.splice(localCat.indexOf(val),1)
+                    localStorage.setItem("category", JSON.stringify(localCat));
                     // localStorage.removeItem("category");
                   }
+                  
+                  //kalau sudah di next terus prev kalau nomor awal udah di pilih brrti udah aktive mangkanya nilainya true terus jadi double
+                  
 
 
                   // $(this).parent().find('.radio').removeClass('active');
@@ -856,8 +890,9 @@
                     imageAlt: 'Custom image',
                   })
                   // $(this).attr("href", "#popup1");
-                  console.log(JSON.parse(localStorage.getItem('category')))         
+                  // console.log(JSON.parse(localStorage.getItem('category')))         
               })
+
             })
 
             $.each(JSON.parse(localStorage.getItem('category')),function(index,value){
@@ -1011,76 +1046,76 @@
       console.log(JSON.parse(localStorage.getItem("category")));
       console.log($("#inputJobLocation").val())
 
-      // Swal.fire({
-      //   title: 'Are you sure?',
-      //   text: "to submit your form",
-      //   icon: 'warning',
-      //   showCancelButton: true,
-      //   confirmButtonColor: '#3085d6',
-      //   cancelButtonColor: '#d33',
-      //   confirmButtonText: 'Yes',
-      //   cancelButtonText: 'No',
-      // }).then((result) => {
-      //   if (result.value) {
-      //     Swal.fire({
-      //       title: 'Please Wait..!',
-      //       text: "It's sending..",
-      //       allowOutsideClick: false,
-      //       allowEscapeKey: false,
-      //       allowEnterKey: false,
-      //       customClass: {
-      //         popup: 'border-radius-0',
-      //       },
-      //       onOpen: () => {
-      //         Swal.showLoading()
-      //       }
-      //     })
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "to submit your form",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.value) {
+          Swal.fire({
+            title: 'Please Wait..!',
+            text: "It's sending..",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            customClass: {
+              popup: 'border-radius-0',
+            },
+            onOpen: () => {
+              Swal.showLoading()
+            }
+          })
 
-      //     var fd = new FormData();
-      //     var files = $('#file-input')[0].files[0];
-      //     // fd.append('file',files);
-      //     fd.append('latest_education',$("#input-pEducation").val());
-      //     fd.append('portofolio_file',files);
-      //     fd.append('id_area',$("#inputJobLocation").val());
-      //     fd.append('id_category',id_category);
-      //     fd.append('history_status',3);
-      //     fd.append('history_user',1);
-      //     fd.append('identifier',$("#input-pIdentifier").val());
+          var fd = new FormData();
+          var files = $('#file-input')[0].files[0];
+          // fd.append('file',files);
+          fd.append('latest_education',$("#input-pEducation").val());
+          fd.append('portofolio_file',files);
+          fd.append('id_area',$("#inputJobLocation").val());
+          fd.append('id_category',[JSON.parse(localStorage.getItem("category"))]);
+          fd.append('history_status',3);
+          fd.append('history_user',1);
+          fd.append('identifier',$("#input-pIdentifier").val());
 
-      //     $.ajax({
-      //       type:"POST",
-      //       url:"{{env('API_LINK_CUSTOM')}}/join/postAdvancedJoin",
-      //       data:fd,
-      //       contentType: false,
-      //       processData: false,
-      //       success: function (result){
-      //         Swal.showLoading()
-      //         localStorage.clear();
-      //         Swal.fire(
-      //           'Congrats!',
-      //           'You`re Registered for Advanced Join Stage.',
-      //           'success'
-      //         ).then((result) => {
-      //           if (result.value) {
-      //             $(".progressbar li#validation").addClass("active");
-      //             $(".progressbar li#advanced").addClass("active");
-      //             $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank You for joining partner with us. </h2>")
-      //             $(".img-p").css("display","none")
-      //             $(".div-p").css("display","none")
-      //             $("#input-pEducation").css("display","none")
-      //             $("#input-pjobCategory").css("display","none")
-      //             $("#input-pLocation").css("display","none")
-      //             $("#input-pFiles").css("display","none");
-      //             $("#prevBtnAdvanced").css("display","none")
-      //             $("#nextBtnAdvanced").css("display","none")
+          $.ajax({
+            type:"POST",
+            url:"{{env('API_LINK_CUSTOM')}}/join/postAdvancedJoin",
+            data:fd,
+            contentType: false,
+            processData: false,
+            success: function (result){
+              Swal.showLoading()
+              localStorage.clear();
+              Swal.fire(
+                'Congrats!',
+                'You`re Registered for Advanced Join Stage.',
+                'success'
+              ).then((result) => {
+                if (result.value) {
+                  $(".progressbar li#validation").addClass("active");
+                  $(".progressbar li#advanced").addClass("active");
+                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank You for joining partner with us. </h2>")
+                  $(".img-p").css("display","none")
+                  $(".div-p").css("display","none")
+                  $("#input-pEducation").css("display","none")
+                  $("#input-pjobCategory").css("display","none")
+                  $("#input-pLocation").css("display","none")
+                  $("#input-pFiles").css("display","none");
+                  $("#prevBtnAdvanced").css("display","none")
+                  $("#nextBtnAdvanced").css("display","none")
                   
-      //             localStorage.clear();
-      //           }
-      //         })
-      //       }
-      //     })
-      //   }
-      // }); 
+                  localStorage.clear();
+                }
+              })
+            }
+          })
+        }
+      }); 
       
       
     }else{
