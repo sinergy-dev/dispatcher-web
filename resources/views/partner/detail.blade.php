@@ -107,6 +107,9 @@
 				  <li class="nav-item">
 				    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Interview information</a>
 				  </li>
+				  <li class="nav-item">
+				    <a class="nav-link" id="agreement-tab" data-toggle="tab" href="#agreement" role="tab" aria-controls="contact" aria-selected="false">Agreement information</a>
+				  </li>
 				</ul>
 				<div class="card">
 					<div class="card-body">
@@ -156,7 +159,7 @@
 								<div class="col-md-6">
 										
 								</div>
-								<div class="col-md-6" >
+								<div class="col-md-6" id="controlModerator">
 									<h5>Control Moderator</h5>
 									<div id="boxSubmitPartner">
 									</div>
@@ -227,6 +230,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
 function init_basic(id_candidate){
+	$("#controlModerator").show();
  	$.ajax({
 		type:"GET",
 		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
@@ -289,6 +293,7 @@ function init_basic(id_candidate){
 }
 
 function init_advanced(id_candidate){
+	$("#controlModerator").show();
 	$.ajax({
 		type:"GET",
 		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
@@ -367,6 +372,7 @@ function init_advanced(id_candidate){
 }
 
 function init_interview(id_candidate){
+	$("#controlModerator").show();
 	$.ajax({
 		type:"GET",
 		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
@@ -374,9 +380,6 @@ function init_interview(id_candidate){
 			id_candidate:id_candidate
 		},
 		success: function(result){
-			console.log(result)
-			// $.each(result.partner,function(index,value){
-				// $("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
 				$("#informationTitle").html('<span class="badge badge-success">Interview Information</span>')
 
 			  	var append = ""
@@ -415,15 +418,21 @@ function init_interview(id_candidate){
 
 				$("#filesContentAttach").empty("")
 				var appends = ""
-				appends = appends + '<div class="ul-basic">'
-				appends = appends + '<ul>'
-				appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
-				appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
-				appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span>'+ result.partner.candidate_account_name +'</li>'
-				appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span>'+ result.partner.candidate_account_number +'</li>'
-				appends = appends + '<li><span id="partnerAccNumber"><i class="fas fa-building"></i>  Address</span>'+ result.partner.address +'</li>'
-				appends = appends + '</ul>'
-				appends = appends + '</div>'	
+				// appends = appends + '<div class="ul-basic">'
+				// appends = appends + '<ul>'
+				// appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
+				// appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
+				// if (result.partner.candidate_account_name == null) {
+				// 	appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span> - </li>'
+				// 	appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span> - </li>'
+				// }else{
+				// 	appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span>'+ result.partner.candidate_account_name +'</li>'
+				// 	appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span>'+ result.partner.candidate_account_number +'</li>'
+				// }
+				
+				// appends = appends + '<li><span id="partnerAccNumber"><i class="fas fa-building"></i>  Address</span>'+ result.partner.address +'</li>'
+				// appends = appends + '</ul>'
+				// appends = appends + '</div>'	
 
 				appends = appends + '<br>'
 
@@ -542,13 +551,54 @@ function init_interview(id_candidate){
 
 					
 				})
-			// });
-
 			$.each(result.partner_progress,function(index,value){
 				if (value.history_status == 5) {
 					$("#box-dateTime").addClass( "hided");
 				}
 			})
+		}
+	})
+}
+
+function init_agreement(id_candidate){
+	$.ajax({
+		type:"GET",
+		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		data:{
+			id_candidate:id_candidate
+		},
+		success: function(result){
+				$("#informationTitle").html('<span class="badge badge-success">Agreement Information</span>')
+
+				$("#basic-information").empty("")
+
+				$("#filesTitleAttach").html("<span>Information of Partner Agreement </span>");
+
+				$("#filesContentAttach").empty("")
+				var appends = ""
+				appends = appends + '<div class="ul-basic">'
+				appends = appends + '<ul>'
+				appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
+				appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
+				if (result.partner.candidate_account_name == null) {
+					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span> - </li>'
+					appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span> - </li>'
+				}else{
+					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span>'+ result.partner.candidate_account_name +'</li>'
+					appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span>'+ result.partner.candidate_account_number +'</li>'
+				}
+				
+				appends = appends + '<li><span id="partnerAccNumber"><i class="fas fa-building"></i>  Address</span>'+ result.partner.address +'</li>'
+				appends = appends + '</ul>'
+				appends = appends + '</div>'	
+
+				$("#filesContentAttach").append(appends);
+
+				$("#controlModerator").hide();
+
+
+			  	$("#boxSubmitPartner").empty("")
+
 		}
 	})
 }
@@ -1036,6 +1086,10 @@ $(document).ready(function(){
 		init_interview(id_candidate)
 		init_interview(window.location.href.split("/")[5].replace('#','').split("h")[0])
 		$("#interview-tab").addClass("active")
+	} else if (window.location.href.split("/")[5].split("#")[1] == "agreement") {
+		init_agreement(id_candidate)
+		init_agreement(window.location.href.split("/")[5].replace('#','').split("h")[0])
+		$("#agreement-tab").addClass("active")
 	}
 
 	// init_basic(id_candidate)	
@@ -1054,6 +1108,9 @@ $(document).ready(function(){
 	  }else if(currId == "interview-tab"){
 	  	init_interview(id_candidate)
 	  	init_interview(window.location.href.split("/")[5].replace('#','').split("h")[0])
+	  }else if (currId == "agreement-tab") {
+	  	init_agreement(id_candidate)
+	  	init_agreement(window.location.href.split("/")[5].replace('#','').split("h")[0])
 	  }
 
 	  localStorage.setItem('activeTab', $(e.target).attr('href'));
