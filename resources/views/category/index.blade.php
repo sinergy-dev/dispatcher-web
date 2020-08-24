@@ -688,6 +688,11 @@
 		$("#categoryMainModal").modal('toggle')
 	}
 
+	function resetBtnMainn(){
+		$("#name_cat_main").val("");
+		$("#categoryMainModal").modal('toggle')
+	}
+
 
 </script>
 
