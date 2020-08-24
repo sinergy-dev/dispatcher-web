@@ -328,7 +328,7 @@
         <input id="input-pNik" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px;margin-top: 10px">
 
         <div class="image-upload btnCenter" id="input-pFilesKtp" style="display: none;margin-top: 10px">
-          <label for="file-input" style="position: relative;margin-left: -285px">
+          <label for="file-input" class="btnCenter">
             Upload Scan KTP
           </label>
           <input class="btnCenter" name="file_inputKtp" id="file-inputKtp" alt="Engineer On Demand" type="file" style="width: 400px" />
