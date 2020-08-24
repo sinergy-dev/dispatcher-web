@@ -149,9 +149,9 @@
 	bottom: 4px;z-index:9;
 	}
 
-	input{
+	/*input{
 		font-family: 'FontAwesome';
-	}
+	}*/
 	
 </style>
 <main role="main">
@@ -897,7 +897,8 @@
 
 					var append5 = ""
 					var checker = result.job_support_chat[0].from
-					var checkerTime = moment(result.job_support_chat[0].time,"X").format("YYYY-MM-DD")
+					// var checkerTime = moment(result.job_support_chat[0].time,"X").format("YYYY-MM-DD")
+					var checkerTime = "2020-01-01"
 					var marginCustom = ""
 					$.each(result.job_support_chat,function(key,value){
 						var time = moment(value.time,"X")
@@ -934,28 +935,31 @@
 					
 					$("#historyChat").append(append5)
 
-			        firebase.database().ref('job_support/4/chat').on('value', function(snapshot) {
+			        firebase.database().ref('job_support/' + result.job_support.id + '/chat').on('value', function(snapshot) {
 			            snapshot_dump = snapshot.val()
-			            console.log(snapshot_dump)
-			   //          var value = snapshot_dump[snapshot_dump.length - 1]
-						// var temp = ""
-						// if(value.from == "moderator"){
-						// 	temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
-						// } else {
-						// 	temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
-						// }
-						// temp = temp + value.message
-						// temp = temp + '</span><sub class="bubleSub">'
-						// temp = temp + moment(value.time,"X").format("HH:mm")
-						// temp = temp + '</sub></div></div>'
-						// if(!first){
-						// 	$("#historyChat").append(temp)
-						// } else {
-						// 	first = false
-						// }
-						// document.getElementById('historyChat').scrollTop = document.getElementById('historyChat').scrollHeight
-						// $("#textChat").val("");
-						// $("#textChat").attr("placeholder","Update");
+			            // console.log(Object.entries(snapshot_dump)[0][1].from)
+			            console.log(Object.entries(snapshot_dump).length - 1)
+			            var value = snapshot_dump[snapshot_dump.length - 1]
+			            var value = Object.entries(snapshot_dump)
+			            value = value[value.length - 1][1]
+						var temp = ""
+						if(value.from == "moderator"){
+							temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+						} else {
+							temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+						}
+						temp = temp + value.message
+						temp = temp + '</span><sub class="bubleSub">'
+						temp = temp + moment(value.time,"X").format("HH:mm")
+						temp = temp + '</sub></div></div>'
+						if(!first){
+							$("#historyChat").append(temp)
+						} else {
+							first = false
+						}
+						document.getElementById('historyChat').scrollTop = document.getElementById('historyChat').scrollHeight
+						$("#textChat").val("");
+						$("#textChat").attr("placeholder","Update");
 			        });
 					$("#historyChat").addClass("scrolly")
 
@@ -970,10 +974,14 @@
 				 //    updateChat = updateChat + '</div>'
 
 
-					updateChat = updateChat + '<div class="input-group mycustom">'
-				    updateChat = updateChat + '<textarea class="textChat form-control" id="textChat" style="height:40px;resize:none" placeholder="Update"></textarea>'
-				    updateChat = updateChat + '<div class="input-group-prepend">'
-				    updateChat = updateChat +   '<input type="submit" value="kirim" onclick="updateChat()" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
+					// updateChat = updateChat + '<div class="input-group mycustom">'
+					updateChat = updateChat + '<div class="input-group">'
+					updateChat = updateChat + '<input id="textChat" type="text" class="form-control" placeholder="Update Message" aria-label="Update Message" aria-describedby="basic-addon2">'
+  
+				    // updateChat = updateChat + '<textarea class="textChat form-control" id="textChat" style="height:40px;resize:none" placeholder="Update"></textarea>'
+				    updateChat = updateChat + '<div class="input-group-append">'
+				    updateChat = updateChat + '<button class="btn btn-outline-secondary" onclick="updateChat(' + result.job_support.id + ')" type="button"><i class="fas fa-paper-plane"></i></button>'
+				    // updateChat = updateChat +   '<input type="submit" value="kirim" onclick="updateChat()" class="btn btn-primary btn-sm rounded-0" id="inputGroupPrepend2">'
 				    updateChat = updateChat + '</div>'
 				    updateChat = updateChat + '</div>'	
 				    // autosize(document.querySelectorAll('textarea'));				    
@@ -982,7 +990,11 @@
 					var onclickApprove = "onclick=btnAcceptReqSupport('done',"+id+")"
 					var onclickCancel  = "onclick=cancel()"
 
-					$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button><button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button><button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
+					$("#modal-footer-request").empty()
+					$("#modal-footer-request").append("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button>")
+					$("#modal-footer-request").append("<button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button>")
+					$("#modal-footer-request").append("<button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button>")
+					$("#modal-footer-request").append("<button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
 				
 				}else if (result.job_support.status == "Done") {
 					$("#headerTitle").empty("")
@@ -1350,8 +1362,8 @@
 		}
 	}
 
-	function updateChat(){
-		firebase.database().ref('job_support/4/chat/' + ($(".bubleChatModerator").length + $(".bubleChatEngineer").length)).set({
+	function updateChat(id_support){
+		firebase.database().ref('job_support/' + id_support + '/chat/').push().set({
                 from: user,
                 message: $("#textChat").val(),
                 time: parseInt(moment().format("X"))

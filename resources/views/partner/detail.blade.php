@@ -71,6 +71,10 @@
 	  right: 10px;
 	}
 
+	.ul-basic ul li ul.listCategory{
+	 list-style-type: circle;
+	}
+
 	.zoom-effect{
 		position: relative;
 	}
@@ -79,7 +83,11 @@
 		transition: transform .2s; 
 	}
 
-	.zoom:hover {
+	.zoom:hover{
+		cursor: zoom-in;
+	}
+
+	.zoom:active {
 	  transform:scale(1.25);
 	  border: 1px solid;
 	  border-color: #3490dc;
@@ -87,7 +95,7 @@
 	  box-shadow: 5px 5px #3490dc;
 	  /* To bring top */
 	  position: relative;
-	  z-index: 9999; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+	  z-index: 9999!important; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 	}
 
 </style>
@@ -99,13 +107,13 @@
 			<div class="col-md-12">
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 				  <li class="nav-item">
-				    <a class="nav-link" id="basic-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Basic Information</a>
+				    <a class="nav-link" id="basic-tab" data-toggle="tab" href="#" role="tab" aria-controls="home" aria-selected="false">Basic Information</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link" id="advanced-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Advanced information</a>
+				    <a class="nav-link" id="advanced-tab" data-toggle="tab" href="#advance" role="tab" aria-controls="profile" aria-selected="false">Advanced information</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Interview information</a>
+				    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interview" role="tab" aria-controls="contact" aria-selected="false">Interview information</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link" id="agreement-tab" data-toggle="tab" href="#agreement" role="tab" aria-controls="contact" aria-selected="false">Agreement information</a>
@@ -125,20 +133,14 @@
 						
 						<div class="card-text">
 							<div class="row">
-								<div class="col-md-6 d-flex flex-column align-items-start">
+								<div class="col-md-6">
 									<strong class="d-inline-block text-primary" id="jobSumaryDetailCustomer">Disclaimer</strong>
-									<p class="mb-2" id="jobSumaryDetailTitle">
+									<p class="mb-2" id="DisclaimerIndo" style="text-align: justify;">
 										This is the bla bla blabla bla bla bla bla
 									</p>
-								</div>
-								<div class="col-md-6">
-									<p>
-										<span id="jobSumaryDetailAddress" style="float: right;">Jakarta, 16 Juli 2020 </span><br>
+									<p class="mb-2" id="DisclaimerEnglish" style="text-align: justify;">
+										This is the bla bla blabla bla bla bla bla
 									</p>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
 									<div class="ul-basic" id="basic-information">
 										<!-- <ul>
 											<li>Name : Budiarta</li>
@@ -150,9 +152,23 @@
 									</div>
 								</div>
 								<div class="col-md-6">
+									<p>
+										<span id="jobSumaryDetailAddress" style="float: right;">Jakarta, 16 Juli 2020 </span><br>
+									</p>
 									<h5 id="filesTitleAttach">Attachment Files</h5>
 									<div class="" id="filesContentAttach">
+									</div><br>
+									<h5 id="controlModerator">Control Moderator</h5>
+									<div id="boxSubmitPartner">
 									</div>
+								</div>
+							</div>
+							<!-- <div class="row">
+								<div class="col-md-6">
+									
+								</div>
+								<div class="col-md-6">
+									
 								</div>
 							</div>
 							<div class="row" style="margin-top: 10px;">
@@ -160,11 +176,9 @@
 										
 								</div>
 								<div class="col-md-6" id="controlModerator">
-									<h5>Control Moderator</h5>
-									<div id="boxSubmitPartner">
-									</div>
+									
 								</div>
-							</div>
+							</div> -->
 							<div class="row">
 								<div class="col-md-12">
 									<h5 style="margin-top: 8px">Progress</h5>
@@ -257,7 +271,7 @@ function init_basic(id_candidate){
 		  	var append2 = ""
 		  	append2 = append2 +	'<b>Kartu Tanda Penduduk</b>'
 		  	append2 = append2 + '<div class="zoom-effect">'
-			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom">'
+			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
 			append2 = append2 + '</div>'
 
 			$("#previewKtp").attr("onclick","previewKtp()")
@@ -265,6 +279,8 @@ function init_basic(id_candidate){
 		  	$("#filesContentAttach").html(append2)
 
 		  	$("#boxSubmitPartner").empty("")
+		  	$("#DisclaimerEnglish").html("Di dalam tahap basic information, calon engineer akan di seleksi berdasarkan backgroud life melalui upload KTP dan alamat tempat tinggal. Dengan ini kita bisa mengetahui domisili dari engineer tersebut dan area dimana dia akan bekerja.")
+		  	$("#DisclaimerIndo").html("<i> In the basic information stage, prospective engineers will be selected based on backgroud life through uploaded KTP and residential addresses. With this we can find out the domicile of the engineer and the area where he will work.</i>")
 		  	$.each(result.partner_progress,function(index,value){
 		  		if (index === 0) {
 		  			var button = "";
@@ -313,14 +329,15 @@ function init_advanced(id_candidate){
 			  	}
 			  	append = append + '<li> <span>Job Category picked</span>'
 			  	append = append + '<ul>'
-			  	append = append + '<li>'
-			  	if (result.partner.category[0] == null) {
+			  	
+			  	if (result.partner.category.length == 0) {
 			  		append = append + ' - '
 			  	}else{
-			  		append = append + result.partner.category[0].job_engineer.category_name
+			  		$.each(result.partner.category, function(key, value){
+			  			append = append + '<li>' + value.job_engineer.category_name + '</li>'
+			  		})
 			  	}
-			  	
-			  	append = append + '</li>'
+			  
 			  	append = append + '</ul>'
 			  	append = append + '</li>'
 				append = append + '</ul>'		
@@ -343,6 +360,8 @@ function init_advanced(id_candidate){
 			  	$("#filesContentAttach").html(append2)
 
 			  	$("#boxSubmitPartner").empty("")
+			  	$("#DisclaimerEnglish").html("Selanjutnya dalam tahap advance information, calon engineer akan di saring melalui latar belakang pendidikan, kategori pekerjaan dan portofolio yang telah di upload, berserta lokasi area yang dia pilih untuk pekerjaanya. Dengan demikian kita dapat menyeleksi engineer dengan kebutuhan kemampuan yang tepat dan lokasi yang akurat.")
+		  		$("#DisclaimerIndo").html("<i> Furthermore, in the advanced information stage, the prospective engineer will be filtered through his educational background, job categories and uploaded portfolios, along with the location of the area he has chosen for his work. Thus we can select engineers with the need for the right capabilities and accurate location.</i>")
 			  	$.each(result.partner_progress,function(index,value){
 			  		if (index === 0) {
 			  			var button = "";
@@ -391,7 +410,7 @@ function init_interview(id_candidate){
 			  	}else{
 			  		append = append + '<li><span> Schedule date</span>'+ moment(result.partner.interview.interview_date).format('dddd, MMMM Do YYYY')+' </li>'
 				  	append = append + '<li><span> Schedule time</span>'+ moment(result.partner.interview.interview_date).format('h:mm:ss')+' WIB - Finish </li>'
-				  	append = append + '<li><span> Media </span> <a href="#">'+ result.partner.interview.interview_link +'</a></li>'
+				  	append = append + '<li><span> Media </span><label style="color:blue">'+ result.partner.interview.interview_link +'<label></li>'
 			  	}
 			  	
 			  	append = append + '<li><span>Interviewer </span> Moderator</li>'
@@ -494,6 +513,8 @@ function init_interview(id_candidate){
 				
 
 			  	$("#boxSubmitPartner").empty("")
+			  	$("#DisclaimerEnglish").html("Interview dilakukan sebagai tahap akhir dari evaluasi engineer. Evaluasi terdiri dari validasi pemahaman materi, validasi category, validasi pendidikan terakhir, validasi persiapan perangkat, validasi lokasi hingga validasi personal. Jadi engginer yang nantinya akan join diharapkan memiliki standart yang sudah sesuai dengan category yang dia pilih sebelumnya.")
+		  		$("#DisclaimerIndo").html("<i>  The interview is conducted as the final stage of the engineer evaluation. Evaluation consists of material understanding validation, category validation, latest education validation, device preparation validation, location validation to personal validation. So the engineer who will join is expected to have a standard that is in accordance with the category he previously selected.</i>")
 			  	$.each(result.partner_progress,function(index,value){
 			  		if (index === 0) {
 			  			var button = "";
@@ -507,7 +528,7 @@ function init_interview(id_candidate){
 
 			  			if(value.history_status == "4"){
 				  			$("#partnerSetSchedule").attr("disabled",false);
-							$("#partnerSubmitReject").attr("disabled",false);
+							$("#partnerSubmitReject").attr("disabled",true);
 							$("#partnerSetSchedule").attr("onclick","submitPartnerSetSchedule("+ result.partner.id + ")")
 							$("#partnerSetAgree").attr("disabled",true);
 							$("#partnerSetResult").attr("disabled",true);
@@ -578,17 +599,19 @@ function init_agreement(id_candidate){
 				var appends = ""
 				appends = appends + '<div class="ul-basic">'
 				appends = appends + '<ul>'
-				appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
-				appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
+				// appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
+				// appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
 				if (result.partner.candidate_account_name == null) {
-					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span> - </li>'
+					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Bank Name</span> - </li>'
 					appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span> - </li>'
+					appends = appends + '<li><span id="partnerAccAlias"><i class="fa fa-user" aria-hidden="true"></i> Account Alias</span> - </li>'
 				}else{
-					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Account Name</span>'+ result.partner.candidate_account_name +'</li>'
+					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Bank Name</span>'+ result.partner.candidate_account_name +'</li>'
 					appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span>'+ result.partner.candidate_account_number +'</li>'
+					appends = appends + '<li><span id="partnerAccAlias"><i class="fa fa-user" aria-hidden="true"></i> Account Alias</span>'+ result.partner.candidate_account_alias  +'</li>'
 				}
 				
-				appends = appends + '<li><span id="partnerAccNumber"><i class="fas fa-building"></i>  Address</span>'+ result.partner.address +'</li>'
+				// appends = appends + '<li><span id="partnerAccNumber"><i class="fas fa-building"></i>  Address</span>'+ result.partner.address +'</li>'
 				appends = appends + '</ul>'
 				appends = appends + '</div>'	
 
@@ -596,8 +619,10 @@ function init_agreement(id_candidate){
 
 				$("#controlModerator").hide();
 
-
 			  	$("#boxSubmitPartner").empty("")
+
+			  	$("#DisclaimerEnglish").html("kosong")
+		  		$("#DisclaimerIndo").html("<i>empty</i>")
 
 		}
 	})

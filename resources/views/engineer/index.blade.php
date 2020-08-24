@@ -212,7 +212,7 @@
 						</div>
 
 						<div class="mb-3">
-							<label for="client">Account Name</label>
+							<label for="client">Bank Name</label>
 							<input type="text" class="form-control" name="account_name" id="account_name" required>
 							<div class="invalid-feedback">
 								Please Fill an Account Name.
@@ -222,6 +222,14 @@
 						<div class="mb-3">
 							<label for="client">Account Number</label>
 							<input type="number" class="form-control" name="account_number" id="account_number" required>
+							<div class="invalid-feedback">
+								Please Fill an Account Number.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">Your Alias</label>
+							<input type="text" class="form-control" name="account_alias" id="account_alias" required>
 							<div class="invalid-feedback">
 								Please Fill an Account Number.
 							</div>
@@ -549,6 +557,7 @@
 	            	$("#adress_eng").val(result.partner.address);
 	            	$("#account_name").val(result.partner.candidate_account_name);
 	            	$("#account_number").val(result.partner.candidate_account_number);
+	            	$("#account_alias").val(result.partner.candidate_account_alias);
 	            	// console.log(result.partner.location[0].id_area)
 	            	$("#inputJobLocation").prop("disabled", false)
 	            	$("#inputJobArea").prop("disabled", false)
@@ -783,6 +792,7 @@
 						id_location:$("#inputJobLocation").select2().val(),
 						account_name:$("#account_name").val(),
 						account_number:$("#account_number").val(),
+						account_alias:$("#account_alias").val(),
 						id_candidate:id,
 						history_user:0,
 						history_status:9,

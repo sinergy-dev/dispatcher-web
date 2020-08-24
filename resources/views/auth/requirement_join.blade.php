@@ -434,13 +434,17 @@
       </div>
       <div style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;" id="input-account">
         <div class="row" style="display: none;background-color: white!important;padding: 10px!important" id="box-account">
-          <div class="col-md-6">
-            <label><b>Account Name</b></label>
-            <input type="text" class="form-control" id="account_name" style="width: 200px" name="" placeholder="your account name!">
+          <div class="col-md-4">
+            <label><b>Bank Name</b></label>
+            <input type="text" class="form-control" id="account_name" style="width: 200px" name="" placeholder="ex: BANK NEGARA INDONESIA">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label><b>Account Number</b></label>
-            <input type="number" class="form-control" id="account_number" style="width: 200px" name="" placeholder="your account number!">
+            <input type="number" class="form-control" id="account_number" style="width: 200px" name="" placeholder="ex: 34567521XXX">
+          </div>
+          <div class="col-md-4">
+            <label><b>Your Alias</b></label>
+            <input type="text" class="form-control" id="account_alias" style="width: 200px" name="" placeholder="ex: Emilia Winan">
           </div>
         </div>        
       </div>
@@ -469,8 +473,203 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript">
 
+    if (window.location.href.split("/")[4] != null) {
+      $.ajax({
+            url: "{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerIdentifier",
+            type:"POST",
+            data:{
+              identifier:window.location.href.split("/")[4],
+            },
+            success: function(result){
+              if (result.status == "On Progress") {
+                $(".progressbar li#validation").addClass("active");
+                $("#tabA").show();
+                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                $("#input-pAddress").css("display","none")
+                $("#input-pPhone").css("display","none")
+                $("#input-pEmail").css("display","none")
+                $("#input-pName").css("display","none")
+                $("#input-pNik").css("display","none")
+                $("#input-pFilesKtp").css("display","none");
+                $("#hasJoined").css("display","none")
+                $("#prevBtnBasic").css("display","none")
+                $("#nextBtnBasic").css("display","none")
+                $(".img-p").css("display","none")
+                $(".div-p").css("display","none")
+                $("#tabC").hide();
+                $("#tabB").show();
+              }else if (result.status == "OK Basic") {
+                $(".progressbar li#validation").addClass("active");
+                $(".progressbar li#advanced").addClass("active");
+                $("#tabA").show();
+                // $("#tabB").css("display","block")
+                $("#tabC").hide();
+                $("#tabD").show();
+                if (result.latest_education != null) {
+                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                  $("#input-pAddress").css("display","none")
+                  $("#input-pPhone").css("display","none")
+                  $("#input-pEmail").css("display","none")
+                  $("#input-pName").css("display","none")
+                  $("#input-pNik").css("display","none")
+                  $("#input-pFilesKtp").css("display","none");
+                  $("#hasJoined").css("display","none")
+                  $("#prevBtnAdvanced").css("display","none")
+                  $("#nextBtnAdvanced").css("display","none")
+                  $(".img-p").css("display","none")
+                  $(".div-p").css("display","none")
+                }
+              }else if (result.status == "OK Advance") {
+                if (result.interview == null) {
+                  $(".progressbar li#validation").addClass("active");
+                  $(".progressbar li#advanced").addClass("active");
+                  $("#tabA").show();
+                  $("#tabC").hide();
+                  $("#tabD").show();
+                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                  $("#input-pAddress").css("display","none")
+                  $("#input-pPhone").css("display","none")
+                  $("#input-pEmail").css("display","none")
+                  $("#input-pName").css("display","none")
+                  $("#input-pNik").css("display","none")
+                  $("#input-pFilesKtp").css("display","none");
+                  $("#hasJoined").css("display","none")
+                  $("#prevBtnAdvanced").css("display","none")
+                  $("#nextBtnAdvanced").css("display","none")
+                  $(".img-p").css("display","none")
+                  $(".div-p").css("display","none")
+                }else{
+                  console.log(result.interview.interview_media)
+                  console.log(result.interview.interview_link)
+                  $(".text-p").html("<h4>Hi ("+ result.name +"), Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. So prepare yourself and good luck!</h4>")
+                  var append = ""
+                  append = append + '<tr>'
+                  append = append + '<th>Date</th>'
+                  append = append + '<td>'+ moment(result.interview.interview_date).format('dddd, MMMM Do YYYY') +'</td>'
+                  append = append + '</tr>'
+                  append = append + '<tr>'
+                  append = append + '<th>Time</th>'
+                  append = append + '<td>'+moment(result.interview.interview_date).format('h:mm:ss a') + " - Finish" +'</td>'
+                  append = append + '</tr>'
+                  append = append + '<tr>'
+                  append = append + '<th>Link</th>'
+                  if (result.interview.status == "started" || result.interview.status == "done") {
+                    append = append + '<td><a target="_blank" href="'+ result.interview.interview_link + '">'+ result.interview.interview_link + '</a></td>'
+                  }else{
+                    append = append + '<td>Room not started yet</td>'
+                  }
+                  append = append + '</tr>'
+                  $("#table-partner").append(append)                
+                  $(".progressbar li#validation").addClass("active");
+                  $(".progressbar li#advanced").addClass("active");
+                  $(".progressbar li#interview").addClass("active");
+                  $("#tabA").show();
+                  $("#tabC").hide();
+                  $("#tabE").show();
+
+                }
+              }else if (result.status == "OK Interview"){
+                $("#tabA").show();
+                $("#tabC").hide();
+                $("#tabF").show();
+                $(".progressbar li#validation").addClass("active");
+                $(".progressbar li#advanced").addClass("active");
+                $(".progressbar li#interview").addClass("active");
+                $(".progressbar li#result").addClass("active");
+                $("input:checkbox").on('click', function() {
+                  // in the handler, 'this' refers to the box clicked on
+                  var $box = $(this);
+                  if ($box.is(":checked")) {
+
+                    // the name of the box is retrieved using the .attr() method
+                    // as it is assumed and expected to be immutable
+                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                    // the checked state of the group/box on the other hand will change
+                    // and the current value is retrieved using .prop() method
+                    $(group).prop("checked", false);
+                    $box.prop("checked", true);
+                    console.log($('.optradio:checked').val())
+                    if ($('.optradio:checked').val() == "accept") {
+                      $( "#box-account" ).toggle(function() {
+                          $( this ).addClass( "hided" );
+                      }, function() {
+                          $( this ).removeClass( "showed" );
+                      });
+                      $("#account_name").change(function(){
+                        localStorage.setItem("account_name", $("#account_name").val());
+                        localStorage.getItem("account_name");
+                      })
+
+                      $("#account_number").change(function(){
+                        localStorage.setItem("account_number",  $("#account_number").val());
+                        localStorage.getItem("account_number");
+                      })
+
+                      $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"accept"' + ")")
+                    }else{
+                      $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"reject"' + ")")
+                      $("#box-account").hide("slow");
+                    }
+                    $("#agreeBtnPartner").attr("disabled",false);
+                  } else {
+                    $box.prop("checked", false);
+                    $( "#box-account" ).hide("slow");
+                    $("#agreeBtnPartner").attr("disabled",true);
+                  }
+                  
+                }); 
+              }else if (result.status == "OK Agreement") {
+                $(".progressbar li#validation").addClass("active");
+                $(".progressbar li#advanced").addClass("active");
+                $(".progressbar li#interview").addClass("active");
+                $(".progressbar li#result").addClass("active");
+                $("#tabA").show();
+                $("#tabC").hide();
+                $("#tabF").show();
+                $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep Follow up on our website for your new account user information! </h2>")
+                $(".img-p").css("display","none")
+                $(".div-p").css("display","none")
+                $("#input-radio-a").css("display","none")
+                $("#input-radio-b").css("display","none")
+                $("#input-account").css("display","none")
+                $("#agreeBtnPartner").css("display","none")
+              }else if (result.status == "OK Partner") {
+                $(".text-p").html("<h4>Hi ("+ result.name +"), You`re now a partner of the company.You can pick the job based on your job category and get paid. But you can only pick the job from Sinergy Freelance App. So please download our mobile app in the play store or app store. And the following bellow is our username and password for your Sinergy Freelance App. Thank you and good luck!</h4>")
+                  var append = ""
+                  append = append + '<tr>'
+                  append = append + '<th>Username</th>'
+                  append = append + '<td>haloengineer</td>'
+                  append = append + '</tr>'
+                  append = append + '<tr>'
+                  append = append + '<th>Password</th>'
+                  append = append + '<td>sinergy</td>'
+                  append = append + '</tr>'
+                  append = append + '<tr>'
+                  append = append + '<th>App Store</th>'
+                  append = append + '<td><a href="#" target="_blank">https://www.apple.com/ios/app-store</a></td>'
+                  append = append + '</tr>'
+                  append = append + '<tr>'
+                  append = append + '<th>PlayStore</th>'
+                  append = append + '<td><a href="#" target="_blank">https://play.google.com/store?hl=en</a></td>'
+                  append = append + '</tr>'
+                  $("#table-partner").append(append)                
+                  $(".progressbar li#validation").addClass("active");
+                  $(".progressbar li#advanced").addClass("active");
+                  $(".progressbar li#interview").addClass("active");
+                  $(".progressbar li#result").addClass("active");
+                  $("#tabA").show();
+                  $("#tabC").hide();
+                  $("#tabE").show();
+              }
+              console.log(result)
+            }
+      })
+    }else{
+      $("#tabB").show();
+    }
+
   var currentTab = 0;
-  $("#tabB").show();
+  
   // $.ajax({
   //     url: "{{url('guestState')}}",
   //     type:"GET",
@@ -1080,7 +1279,11 @@
           fd.append('id_category',[JSON.parse(localStorage.getItem("category"))]);
           fd.append('history_status',3);
           fd.append('history_user',1);
-          fd.append('identifier',$("#input-pIdentifier").val());
+          if ($("#input-pIdentifier").val() == "") {
+            fd.append('identifier',window.location.href.split("/")[4]);
+          }else{
+            fd.append('identifier',$("#input-pIdentifier").val());
+          }
 
           $.ajax({
             type:"POST",
@@ -1212,8 +1415,8 @@
                 append = append + '</tr>'
                 append = append + '<tr>'
                 append = append + '<th>Link</th>'
-                if (result.interview.status == "not started" || result.interview.status == "done") {
-                  append = append + '<td<a href="'+ result.interview.interview_link + '">" '+ result.interview.interview_link + '"</a></td>'
+                if (result.interview.status == "started" || result.interview.status == "done") {
+                  append = append + '<td><a href="'+ result.interview.interview_link + '">'+ result.interview.interview_link + '</a></td>'
                 }else{
                   append = append + '<td>Room not started yet</td>'
                 }
@@ -1324,8 +1527,8 @@
           }
       })
     }    
+  
   }  
-
 
   function submitAgreePartner(id,status){
     var fd = new FormData();
@@ -1362,6 +1565,7 @@
           fd.append('history_status',8);
           fd.append('account_name',$("#account_name").val());
           fd.append('account_number',$("#account_number").val());
+          fd.append('account_alias',$("#account_alias").val());
 
           $.ajax({
               url: "{{env('API_LINK_CUSTOM')}}/join/postPartnerAgreement",

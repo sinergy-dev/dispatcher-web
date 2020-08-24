@@ -190,6 +190,8 @@ function fillDataPartner(url,method){
 	          	var statusPartner = ""
 	          } else if (value.status == "OK Basic"){
 	          	var statusPartner = "#advance"
+	          } else if (value.status == "OK Agreement" || value.status == "OK Partner"){
+	          	var statusPartner = "#agreement"
 	          } else {
 	          	var statusPartner = "#interview"
 	          }
