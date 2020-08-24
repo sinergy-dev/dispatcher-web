@@ -184,6 +184,8 @@ function fillDataPartner(url,method){
 	          	var badgeStatus = "badge-primary";
 	          }else if (value.status == "OK Partner") {
 	          	var badgeStatus = "badge-success";
+	          }else{
+	          	var badgeStatus = "badge-danger";
 	          }
 	          table = table + '<td> <span class="badge '+ badgeStatus +'">' + value.status + '</span> </td>';
 	          if (value.status == "On Progress"){

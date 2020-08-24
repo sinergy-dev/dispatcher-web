@@ -17,9 +17,6 @@ Route::get('/', function () {
 
 Route::get('guestState','GuestController@guestState');
 
-Route::get('/partner', function(){
-	return view('auth.requirement_join');
-})->name('partner');
 
 // Route::get('/partner/{id}', function(){
 // 	return view('auth.requirement_join');
@@ -49,10 +46,19 @@ Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
 Route::get('/engineer/index','EngineerController@index')->name('engineer.index');
 
 Route::get('/client/index','ClientController@index')->name('client.index');
+Route::get('/category/index','CategoryController@index')->name('category.index');
+
+Route::get('/partner', function(){
+	return view('auth.requirement_join');
+})->name('partner');
 
 Route::get('/region/index','RegionController@index')->name('region.index');
 
 Route::get('/partner/index','PartnerController@index')->name('partner.index');
 Route::get('/partner/detail/{id}','PartnerController@detail')->name('partner.detail');
+
+Route::get('/partner/{id}', function(){
+	return view('auth.requirement_join');
+})->name('partner.join');
 
 Route::get('job/notification_all','JobController@notification_all')->name('job_notification_all');

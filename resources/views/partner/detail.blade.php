@@ -462,11 +462,11 @@ function init_interview(id_candidate){
 				appends = appends + '<span>Schedule date & time :</span>'
 				appends = appends + '<input class="form-control" type="text" id="datetimepicker1"><br>'
 
-				appends = appends + '<span>Media Interview</span>'
-				appends = appends + '<input class="form-control type="text" id="input-Media"/><br>'
+				// appends = appends + '<span>Media Interview</span>'
+				// appends = appends + '<input class="form-control type="text" id="input-Media"/><br>'
 
-				appends = appends + '<span>Media link</span>'
-				appends = appends + '<input class="form-control type="text" id="input-Interviewer"/>'
+				// appends = appends + '<span>Media link</span>'
+				// appends = appends + '<input class="form-control type="text" id="input-Interviewer"/>'
 
 				appends = appends + '</div>'
 
@@ -1138,12 +1138,12 @@ $(document).ready(function(){
 	  	init_agreement(window.location.href.split("/")[5].replace('#','').split("h")[0])
 	  }
 
-	  localStorage.setItem('activeTab', $(e.target).attr('href'));
+	  // localStorage.setItem('activeTab', $(e.target).attr('href'));
 	  });
-	  var activeTab = localStorage.getItem('activeTab');
-	  if(activeTab){
-	       $('#myTab a[href="' + activeTab + '"]').tab('show');
-	  }
+	  // var activeTab = localStorage.getItem('activeTab');
+	  // if(activeTab){
+	  //      $('#myTab a[href="' + activeTab + '"]').tab('show');
+	  // }
 
 	fillProgress(window.location.href.split("/")[5].replace('#','').split("h")[0]);
 })

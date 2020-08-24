@@ -99,7 +99,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav nav ml-auto">
                         @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('home')}}">Home <span class="sr-only">(current)</span></a>
@@ -107,7 +107,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('job/index')}}">Job List</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="{{url('engineer/index')}}">Engineer</a>
                         </li>
                         <li class="nav-item">
@@ -115,9 +115,21 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('region/index')}}">Region</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('partner/index')}}">New Partner</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Setting<span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{url('category/index')}}">Category</a>
+                                <a class="dropdown-item" href="{{url('client/index')}}">Client</a>
+                                <a class="dropdown-item" href="{{url('engineer/index')}}">Engineer</a>
+                                <a class="dropdown-item" href="{{url('region/index')}}">Region</a>
+
+                            </div>
                         </li>
                         @endauth
                     </ul>
