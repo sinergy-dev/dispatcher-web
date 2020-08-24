@@ -768,7 +768,6 @@
 					prepend = prepend + '</div>'
 				});
 				$("#jobHolder").prepend(prepend + "</div>")
-				console.log(result["job"])
 
 				$("#jobPaginateHolder").empty("")
 				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
@@ -942,7 +941,7 @@
 					prepend = prepend + '</div>'
 				});
 				$("#jobHolder").prepend(prepend + "</div>")
-				console.log(result["job"])
+				
 
 				$("#jobPaginateHolder").empty("")
 				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
