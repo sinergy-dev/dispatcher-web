@@ -124,7 +124,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{url('category/index')}}">Category</a>
+                                <a class="dropdown-item" href="{{url('setting/category/index')}}">Category</a>
                                 <a class="dropdown-item" href="{{url('client/index')}}">Client</a>
                                 <a class="dropdown-item" href="{{url('engineer/index')}}">Engineer</a>
                                 <a class="dropdown-item" href="{{url('region/index')}}">Region</a>

@@ -533,7 +533,7 @@
 						// headers: {
 						//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						// },
-						url: "{{env('API_LINK_CUSTOM')}}/category/postCategory",
+						url: "{{env('API_LINK_CUSTOM')}}/setting/category/postCategory",
 						type:"POST",
 						data:fd,
 						contentType: false,
@@ -570,7 +570,7 @@
 				headers: {
 		           Accept:"application/json"
 		        },
-				url: "{{env('API_LINK_CUSTOM')}}/category/postCategoryMain",
+				url: "{{env('API_LINK_CUSTOM')}}/setting/category/postCategoryMain",
 				type:"POST",
 				data:{
 					category_main_name:$("#name_cat_main").val(),
@@ -633,7 +633,7 @@
 					headers: {
 			           Accept:"application/json"
 			        },
-					url: "{{env('API_LINK_CUSTOM')}}/category/postUpdateCategory",
+					url: "{{env('API_LINK_CUSTOM')}}/setting/category/postUpdateCategory",
 					type:"POST",
 					data:fd,
 					contentType: false,
@@ -684,11 +684,6 @@
 	}
 
 	function resetBtnMain(){
-		$("#name_cat_main").val("");
-		$("#categoryMainModal").modal('toggle')
-	}
-
-	function resetBtnMainn(){
 		$("#name_cat_main").val("");
 		$("#categoryMainModal").modal('toggle')
 	}

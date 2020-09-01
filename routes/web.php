@@ -46,7 +46,7 @@ Route::get('/job/detail/{id}', 'JobController@detail')->name('job.detail');
 Route::get('/engineer/index','EngineerController@index')->name('engineer.index');
 
 Route::get('/client/index','ClientController@index')->name('client.index');
-Route::get('/category/index','CategoryController@index')->name('category.index');
+Route::get('/setting/category/index','CategoryController@index')->name('category.index');
 
 Route::get('/partner', function(){
 	return view('auth.requirement_join');
