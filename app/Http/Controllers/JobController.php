@@ -91,7 +91,7 @@ class JobController extends Controller
     	$parameter = Crypt::encrypt([
     		'id_job' => $req->id_job
     	]);
-    	$url_source = "https://172.16.1.200:8080/loa/" . $parameter;
+    	$url_source = env('WEB_LINK_CUSTOM_PUBLIC') . "/loa/" . $parameter;
     	$url_qr = app('bitly')->getUrl($url_source);
     	QrCode::size(50)->generate($url_qr,$name_qr);
 

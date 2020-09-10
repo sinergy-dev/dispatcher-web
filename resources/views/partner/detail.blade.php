@@ -731,7 +731,7 @@ function submitPartnerProgressAccept(id,status){
 	              ).then((result) => {
 	                if (result.value) {
 	                  // location.reload()
-	                  window.location.reload("https://172.16.1.200:8080/partner/detail/"+ id +"#interview")
+	                  window.location.reload("{{env('WEB_LINK_CUSTOM_PUBLIC')}}/partner/detail/"+ id +"#interview")
 	                }
 	              })
 	            }
