@@ -17,7 +17,7 @@
                 <!-- <div class="card-header"></div> -->
 
                 <div class="card-body" style="align-items: center;justify-content: center;padding: 100px">
-                    <img src="{{env('API_LINK_CUSTOM2')}}\storage\image\user_photo\freelance-profile-2.png" width="150px" height="150px" style="display: block;margin: auto;position: relative;">
+                    <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" style="display: block;margin: auto;position: relative;">
                     <div style="display: block;margin: auto;position: relative;text-align: center;color: #b3a7db">Sinergy Freelance</div>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

@@ -312,7 +312,7 @@
 
   <div id="tabB" style="padding-top: 100px;display: none">
       <div class="col-md-12">
-         <img src="{{env('API_LINK_CUSTOM2')}}\storage\image\user_photo\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
+         <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
         <div style="text-align: center;color: #b3a7db;font-size: 20px" class="center-in div-p">Sinergy Freelance</div>
 
         <p class="center-in text-p" style="width: 500px;text-align: center;">Sinergy Freelance is a mobile app that can be used to freelancer for searching the job, do the job, and get payment. But first, you have to join partner to become a Sinergy Freelancer.</p>
