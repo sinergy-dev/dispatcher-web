@@ -42,3 +42,7 @@ public/img
 
 # Ignore Image QR
 public/job_qr*
+# Ignore MacOS Generate File
+._*
+.DS*
+
