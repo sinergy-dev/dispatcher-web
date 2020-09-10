@@ -48,7 +48,7 @@ class JobController extends Controller
 			'verify' => false
 		]);
 
-    	$url_pdf_data = env('API_LINK_CUSTOM') . '/job/getJobForLoAPDF';
+    	$url_pdf_data = env('API_LINK_CUSTOM_PUBLIC') . '/job/getJobForLoAPDF';
     	$pdf_data = $client->request('GET', $url_pdf_data,[
 	    	'query' => ['id_job' => $req->id_job]
 	    ]);
@@ -102,7 +102,7 @@ class JobController extends Controller
     	$pdf = PDF::loadView('pdf.letter_of_assignment',compact('data'));
     	Storage::put("public/" . $name_pdf, $pdf->output());
 
-		$url_qr = env('API_LINK_CUSTOM') . '/job/createJob/postQRRecive';
+		$url_qr = env('API_LINK_CUSTOM_PUBLIC') . '/job/createJob/postQRRecive';
 		$send_qr_image = $client->request('POST', $url_qr, [
 		'multipart' => [
 			[
@@ -115,7 +115,7 @@ class JobController extends Controller
             ]]
 		]);
 
-		$url_pdf = env('API_LINK_CUSTOM') . '/job/createJob/postPDFRecive';
+		$url_pdf = env('API_LINK_CUSTOM_PUBLIC') . '/job/createJob/postPDFRecive';
 		$send_pdf_file = $client->request('POST', $url_pdf, [
 		'multipart' => [
 			[
@@ -138,7 +138,7 @@ class JobController extends Controller
 			]
 		]; 
 		
-		$url_letter = env('API_LINK_CUSTOM') . '/job/createJob/postLetter';
+		$url_letter = env('API_LINK_CUSTOM_PUBLIC') . '/job/createJob/postLetter';
 		$send_letter = $client->request('POST', $url_letter, $options);
 
 		return $pdf->stream($name_pdf);
