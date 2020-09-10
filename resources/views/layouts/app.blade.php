@@ -249,7 +249,7 @@
                 if(notificationCountAll < 10){
                     if(data.to == "{{Auth::user()->email}}"){
                         if(data.showed == "false"){
-                            sendNotification(data.title,data.message)
+                            sendNotification(data.title,data.message,data.job)
                             setNotificationShowed(notificationCountReal[index],data)
                         }
                         if(data.status == "unread"){
@@ -267,17 +267,17 @@
 
         });
 
-        function sendNotification(title,message,data,index) {
+        function sendNotification(title,message,job_id) {
 
             if (Notification.permission !== 'granted')
                 Notification.requestPermission();
             else {
                 var notification = new Notification(title, {
-                    icon: 'https://image.flaticon.com/icons/svg/25/25643.svg',
+                    icon: '{{env("API_LINK_CUSTOM2")}}/storage/image/user_photo/freelance-profile-2.png',
                     body: message,
                 });
                 notification.onclick = function() {
-                    window.open('http://stackoverflow.com/a/13328397/1269037');
+                    window.open("{{env('API_LINK_CUSTOM')}}:8080/" + job_id);
                 };
             }
         }
