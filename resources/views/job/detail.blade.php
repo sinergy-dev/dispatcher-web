@@ -269,11 +269,11 @@
 									<button href="#" class="btn btn-success flex-row-reverse ml-auto" id="jobSumaryDetailPay" onclick="payJob()" disabled>Pay Jobs</button>
 								</div>
 							</div>
-							<div class="row">
+							<div class="row" id="jobSumaryDetailProgressHolder">
 								<div class="col-md-12">
 									<h5 style="margin-top: 8px">Progress</h5>
 									<ul class="list-group list-group-flush" id="jobSumaryDetailProgress">
-										<li class="list-group-item">05 February - 16:28 [Alam] - Moderator Open Job</li>
+										<!-- <li class="list-group-item">05 February - 16:28 [Alam] - Moderator Open Job</li>
 										<li class="list-group-item">05 February - 16:28 [Alam] - Teddy Apply job</li>
 										<li class="list-group-item">05 February - 16:28 [Alam] - Moderator accept Teddy Apply</li>
 										<li class="list-group-item">05 February - 16:28 [Alam] - Teddy Start Job</li>
@@ -284,7 +284,7 @@
 										<li class="list-group-item">05 February - 16:28 [Alam] - Jobs has been reviewed</li>
 										<li class="list-group-item">05 February - 16:28 [Alam] - Jobs has beed confirm by customer</li>
 										<li class="list-group-item">05 February - 16:28 [Alam] - Moderator make payment for teddy job</li>
-										<li class="list-group-item">05 February - 16:28 [Alam] - Teddy Confirm payment has beed recived</li>
+										<li class="list-group-item">05 February - 16:28 [Alam] - Teddy Confirm payment has beed recived</li> -->
 									</ul>
 								</div>
 							</div>
@@ -362,7 +362,7 @@
 				<div class="modal-body">
 					<div class="tab" style="display: none">
 						<h5>Adjust Final Price</h5>
-						<input type="text" data-type="currency" disabled id="payJobPrice">
+						<input type="text" data-type="currency" id="payJobPrice">
 					</div>
 					<div class="tab" style="display: none">
 						<h5>Payment Info</h5>
@@ -478,6 +478,16 @@
 	var user = "moderator"
 
 	$(document).ready(function(){
+
+		$(document).on("keypress", "#textChat", function(e){
+			if(e.which == 13){
+				var inputVal = $(this).val();
+				updateChat($("#textChat").next().children().attr('onclick').split("(")[1].split(")")[0])
+				// alert("You've entered: " + inputVal);
+			}
+		});
+
+
 		// var first = true
 		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
 		console.log(id_job)
@@ -621,11 +631,18 @@
 						append = append + '<div class="col-md-6" style="margin-bottom: 10px;">'
 						append = append + 	'<div class="card">'
 						append = append + 		'<div class="card-body">'
-						append = append + 			'<strong class="text-default">Level 1</strong>'
-						append = append + 			'<h3 class="mb-0">'
-						append = append + 				'<a class="text-dark" href="#">' + value['user']['name'] + '</a>'
-						append = append + 			'</h3>'
-						append = append + 			'<button type="button" class="btn-apply-job btn  btn-sm ' + statusButton + ' float-right" onclick="' + onclick + '" ' + statusDisable + '>' + statusText + '</button>' 
+						append = append + 			'<div class="mb-0">'
+						append = append + 				'<strong class="text-default">Level 1</strong>'
+						append = append + 				'<h3 class="text-dark">' + value['user']['name'] + '</h3>'
+						append = append + 			'</div>'
+						// append = append + 			'<div class="mb-0">'
+						// append = append + 				value['user']['email']
+						// append = append + 			'</div>'
+						append = append + 			'<div class="mb-0">'
+						append = append + 				'<i class="fa fa-phone" aria-hidden="true"></i> ' + value['user']['phone'] + '<br>'
+						append = append + 				'<i class="fa fa fa-envelope" aria-hidden="true"></i> ' + value['user']['email']
+						append = append + 				'<button type="button" class="btn-apply-job btn  btn-sm ' + statusButton + ' float-right" onclick="' + onclick + '" ' + statusDisable + '>' + statusText + '</button>' 
+						append = append + 			'</div>'
 						// append = append + 			'<span class="text-' + statusText + '">' + value['status'] + '</span> '
 						append = append + 		'</div>'
 						append = append + 	'</div>'
@@ -681,7 +698,7 @@
 
 						var onclickCancel  = "onclick=cancel()"
 
-						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Done</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
+						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
 					}else if (value.status_item == "Done") {
 
 						$("#status_item").html("<span class='badge badge-success' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
@@ -788,7 +805,7 @@
 
 					var onclickCancel  = "onclick=cancel()"
 
-					$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Done</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
+					$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
 
 					$("#headerTitle").empty("")
 					var append8 = ""
@@ -980,9 +997,9 @@
 
 					$("#modal-footer-request").empty()
 					$("#modal-footer-request").append("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button>")
-					$("#modal-footer-request").append("<button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Vidcall</button>")
-					$("#modal-footer-request").append("<button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+">Remote</button>")
-					$("#modal-footer-request").append("<button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Done</button>");
+					$("#modal-footer-request").append("<button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+" disabled>Vidcall</button>")
+					$("#modal-footer-request").append("<button class='btn btn-danger' id='btnRequestApproval1' "+onclickApprove+" disabled>Remote</button>")
+					$("#modal-footer-request").append("<button class='btn btn-success' id='btnRequestApproval1' "+onclickApprove+">Finish</button>");
 				
 				}else if (result.job_support.status == "Done") {
 					$("#headerTitle").empty("")
@@ -1367,7 +1384,7 @@
                 message: $("#textChat").val(),
                 time: parseInt(moment().format("X"))
             });
-		console.log("ooooooo");
+		// console.log("ooooooo");
 		var textChat = $("#textChat").val();
 		// $("#historyChat").append('<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'+ textChat +'</span><sub class="bubleSub">17.00</sub></div></div>')
 		// $("#textChat").val("");
@@ -1392,7 +1409,7 @@
 			if (result.value) {
 				Swal.fire({
 					title: 'Please Wait..!',
-					text: "It's sending..",
+					text: "It's sending and creating LoA...",
 					allowOutsideClick: false,
 					allowEscapeKey: false,
 					allowEnterKey: false,
@@ -1554,7 +1571,7 @@
 				success: function(result){
 					Swal.fire(
 						'Reviewed!',
-						'Job has been Reviewd.',
+						'Job has been Reviewed.',
 						'success'
 					).then((result) => {
 						if (result.value) {
