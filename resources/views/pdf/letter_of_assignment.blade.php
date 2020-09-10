@@ -3,9 +3,6 @@
 <head>
 	<title>Letter of Assignment</title>
 	<style type="text/css">
-		table > tbody > tr > td {
-			/*font-size: 15px*/
-		}
 		body {
 			line-height: 1.2;
 			font-size: small;
@@ -15,7 +12,7 @@
 		header { position: fixed; top: -60px; left: 0px; right: 0px; height: 50px; }
 		footer { position: fixed; bottom: -10px; left: 0px; right: 0px; height: 50px; }
 		.table_cover {
-			background-image:url(https://sinergy-dev.xyz/storage/image/pdf_image/footer7.png);
+			background-image:url({{$data['footer']}});
 			background-repeat: no-repeat;
 		}
 	</style>
@@ -206,8 +203,6 @@
 			<td style="width: 50%">
 				<div style="text-align: center">
 					<img style="width: 50" src="{{$data['qr_file']}}">
-					<!-- <img style="width: 100px" src="https://raw.githubusercontent.com/SimpleSoftwareIO/simple-qrcode/master/docs/imgs/example-1.png?raw=true"> -->
-					<!-- {!! QrCode::size(100)->generate('https://sinergy-dev.xyz'); !!} -->
 					<br><i>for detail information</i>
 				</div>
 			</td>
@@ -220,16 +215,6 @@
 				<b>PT. Sinergy Informasi Pratama</b>
 			</td>
 		</tr>
-		<!-- <tr>
-			<td style="text-align:center; width: 100%" colspan="2">
-				Person In Charge
-				<br>
-				<br>
-				<br>
-				<br>
-				<b><u>Briliyan Aditya</u></b>
-			</td>
-		</tr> -->
 	</table>
 </body>
 </html>
