@@ -61,6 +61,7 @@ class JobController extends Controller
 		$source = json_decode($pdf_data->getBody(),true);
 
     	$data = [
+            "footer" => env('API_LINK_CUSTOM_PUBLIC') . '/storage/image/pdf_image/footer7.png',
     		"no_letter" => $no_letter,
     		"qr_file" => $name_qr,
     		"engineer_name" => $source['engineer']['name'],
