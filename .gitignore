@@ -46,3 +46,5 @@ public/job_qr*
 ._*
 .DS*
 
+# Ignore firebase receive message
+public/firebase-messaging-sw.js
