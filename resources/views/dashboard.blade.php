@@ -149,7 +149,7 @@
                     var append = "";
                     append = append + '<div class="col-md-3">';
                     append = append + '<div class="card">';
-                    append = append + '<img class="card-img-top" id="img-profil" src="{{env("API_LINK_CUSTOM2")}}/'+ value.photo +'" alt="Card image cap">';
+                    append = append + '<img class="card-img-top" id="img-profil" src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ value.photo +'" alt="Card image cap">';
                     append = append + '<div class="card-body">'
                     append = append + '<h5 class="card-title" id="top_name">'+ value.name +'</h5><h6> Join : '+ moment(value['date_of_join']).format("DD MMMM YYYY") +'</h6><p class="card-text"><p> Achievement <br> ' + value.count + ' Job .</p>';
                     append = append + '<p>Engineer`s Fee : Rp.'+ rupiah +'</p>'
