@@ -281,7 +281,7 @@
 		$("#inputJobClient").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterClientAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterClientAll",
 				dataType: 'json',
 			}
 		});
@@ -289,7 +289,7 @@
 		$("#inputJobRegion").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll",
 				dataType: 'json',
 			}
 		});
@@ -300,7 +300,7 @@
 			$("#inputJobArea").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
 					dataType: 'json',
 				}
 			});
@@ -312,7 +312,7 @@
 			$("#inputJobLocation").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
 					dataType: 'json',
 				}
 			});
@@ -321,7 +321,7 @@
 		$("#inputJobPic").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterPicAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
 				dataType: 'json',
 			}
 		})
@@ -329,7 +329,7 @@
 		$("#inputJobLevel").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLevelAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLevelAll",
 				dataType: 'json',
 			}
 		})
@@ -337,7 +337,7 @@
 		$("#inputJobCategory").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterCategoryAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterCategoryAll",
 				dataType: 'json',
 			}
 		})
@@ -374,7 +374,7 @@
 	function fillDataClient(url,method){
 		$.ajax({
 			type:method,
-			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
 			success: function (result) {
 				var n = 25
 
@@ -489,7 +489,7 @@
 	function showSumary(id){
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobOpen",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobOpen",
 			data:{
 				id_job:id
 			},
@@ -521,7 +521,7 @@
 	function finalize(){
 		var splited = $("#inputJobRangeDate").val().split(' - ');
 		$.ajax({
-			url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterFinalize",
+			url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterFinalize",
 			data: {
 				id_location:$("#inputJobLocation").select2("data")[0].id,
 				id_pic:$("#inputJobPic").select2("data")[0].id,
@@ -573,7 +573,7 @@
 					headers: {
 					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
-					url: "{{env('API_LINK_CUSTOM')}}/client/postNewClient",
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/client/postNewClient",
 					type:"POST",
 					data:{
 						_token: "{{ csrf_token() }}",

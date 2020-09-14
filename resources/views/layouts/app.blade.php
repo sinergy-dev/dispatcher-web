@@ -277,7 +277,7 @@
                     body: message,
                 });
                 notification.onclick = function() {
-                    window.open("{{env('API_LINK_CUSTOM')}}:8080/" + job_id);
+                    window.open("{{env('WEB_LINK_CUSTOM_PUBLIC')}}" + job_id);
                 };
             }
         }

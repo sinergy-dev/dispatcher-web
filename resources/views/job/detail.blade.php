@@ -358,7 +358,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Pay Job</h5>
 			</div>
-			<!-- <form method="POST" action="{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorInvoice" enctype="multipart/form-data" id="invoiceForm"> -->
+			<!-- <form method="POST" action="{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postPayedByModeratorInvoice" enctype="multipart/form-data" id="invoiceForm"> -->
 				<div class="modal-body">
 					<div class="tab" style="display: none">
 						<h5>Adjust Final Price</h5>
@@ -493,7 +493,7 @@
 		console.log(id_job)
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobProgress",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobProgress",
 			data:{
 				id_job:id_job
 			},
@@ -595,7 +595,7 @@
 
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJopApplyer",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJopApplyer",
 			data:{
 				id_job:id_job
 			},
@@ -673,7 +673,7 @@
 	function reviewRequestItem(id){
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getStatusRequestItem",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getStatusRequestItem",
 			data:{
 				id_history:id,
 			},
@@ -760,7 +760,7 @@
 					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.user.name  +"</h6>");
 					$("#item_req").html(value.name_item);
 					$("#item_function").html(value.function_item);
-					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
 					$("#alamat_req").html(value.invoice_item);
 					$("#price_req").html(value.price_item);
 					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
@@ -769,12 +769,12 @@
 
 
 					$("#img_req" ).click(function() {
-						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
 						$('#imagemodal').modal('show');  
 					})
 					// img.onclick = function(){
 					//   // modalImg.src = this.src;
-					// 	$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+value.documentation_item);
+					// 	$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
 					// 	$('#imagemodal').modal('show');   
 					// }
 				})
@@ -790,7 +790,7 @@
 		var first = true
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobSupportEach",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobSupportEach",
 			data:{
 				id_support:id,
 			},
@@ -1093,13 +1093,13 @@
 					$("#modal-footer-request").html("");
 				}
 
-				$("#img_req").attr("src", "{{env('API_LINK_CUSTOM')}}/"+result.job_support.picture_support);
+				$("#img_req").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+result.job_support.picture_support);
 				$("#date_req").html(moment(result.job_support.date_add).format("DD MMMM YYYY"));
 				$("#problem_support").html(result.job_support.problem_support);
 				$("#reason_support").html(result.job_support.reason_support);
 
 				$("#img_req" ).click(function() {
-					$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM')}}/"+ result.job_support.picture_support);
+					$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+ result.job_support.picture_support);
 					$('#imagemodal').modal('show');  
 				})
 			}
@@ -1144,7 +1144,7 @@
 
 					$.ajax({
 						type:"POST",
-						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestItem",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postStatusRequestItem",
 						data:{
 							id_history:id_history,
 							status:status,
@@ -1194,7 +1194,7 @@
 
 					$.ajax({
 						type:"POST",
-						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestItem",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postStatusRequestItem",
 						data:{
 							id_history:id_history,
 							status:status,
@@ -1252,7 +1252,7 @@
 
 					$.ajax({
 						type:"POST",
-						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postStatusRequestSupport",
 						data:{
 							id_support:id_support,
 							status:status,
@@ -1303,7 +1303,7 @@
 
 					$.ajax({
 						type:"POST",
-						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postStatusRequestSupport",
 						data:{
 							id_support:id_support,
 							status:status,
@@ -1354,7 +1354,7 @@
 
 					$.ajax({
 						type:"POST",
-						url:"{{env('API_LINK_CUSTOM')}}/job/postStatusRequestSupport",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postStatusRequestSupport",
 						data:{
 							id_support:id_support,
 							status:status,
@@ -1422,7 +1422,7 @@
 				})
 				$.ajax({
 					type:"POST",
-					url:"{{env('API_LINK_CUSTOM')}}/job/postApplyerUpdate",
+					url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postApplyerUpdate",
 					data:{
 						id_engineer:id_engineer,
 						id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
@@ -1461,7 +1461,7 @@
 	function payJob(){
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobOpen",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobOpen",
 			data:{
 				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0]
 			},
@@ -1480,7 +1480,7 @@
 	function payJobFirst(){
 		$.ajax({
 			type:"POST",
-			url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorFirst",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postPayedByModeratorFirst",
 			data:{
 				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 				id_moderator:"{{Auth::user()->id}}",
@@ -1499,7 +1499,7 @@
 	function payJobSecond(){
 		$.ajax({
 			type:"POST",
-			url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorSecond",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postPayedByModeratorSecond",
 			data:{
 				id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 				id_moderator:"{{Auth::user()->id}}",
@@ -1522,7 +1522,7 @@
 
 		$.ajax({
 			type:"POST",
-			url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorInvoice",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postPayedByModeratorInvoice",
 			data:fd,
 			contentType: false,
             processData: false,
@@ -1534,7 +1534,7 @@
 		if(status == "done"){
 			$.ajax({
 				type:"POST",
-				url:"{{env('API_LINK_CUSTOM')}}/job/postFinishedByModerator",
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postFinishedByModerator",
 				data:{
 					id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 					id_moderator:"{{Auth::user()->id}}",
@@ -1563,7 +1563,7 @@
 		if(status == "done"){
 			$.ajax({
 				type:"POST",
-				url:"{{env('API_LINK_CUSTOM')}}/job/postReviewedByModerator",
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postReviewedByModerator",
 				data:{
 					id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
 					id_moderator:"{{Auth::user()->id}}"
@@ -1596,7 +1596,7 @@
 	function showSumary(id){
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/job/getJobOpen",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobOpen",
 			data:{
 				id_job:id
 			},
@@ -1628,7 +1628,7 @@
 	// function finalize(){
 	// 	var splited = $("#inputJobRangeDate").val().split(' - ');
 	// 	$.ajax({
-	// 		url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterFinalize",
+	// 		url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterFinalize",
 	// 		data: {
 	// 			id_location:$("#inputJobLocation").select2("data")[0].id,
 	// 			id_pic:$("#inputJobPic").select2("data")[0].id,
@@ -1687,7 +1687,7 @@
 
 				$.ajax({
 					type:"POST",
-					url:"{{env('API_LINK_CUSTOM')}}/job/postPayedByModeratorInvoice",
+					url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postPayedByModeratorInvoice",
 					data:fd,
 					contentType: false,
 					processData: false,

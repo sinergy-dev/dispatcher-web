@@ -154,8 +154,8 @@ $("#jobSearch").on('change',function(){
 function fillDataPartner(url,method){
 	$.ajax({
 		type:method,
-		url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
-		// url:"{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+		// url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerList",
 		success: function (result) {
 			var n = 25
 

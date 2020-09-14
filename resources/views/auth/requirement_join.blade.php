@@ -475,7 +475,7 @@
 
     if (window.location.href.split("/")[4] != null) {
       $.ajax({
-            url: "{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerIdentifier",
+            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerIdentifier",
             type:"POST",
             data:{
               identifier:window.location.href.split("/")[4],
@@ -911,7 +911,7 @@
 
         $.ajax({
           type:"POST",
-          url:"{{env('API_LINK_CUSTOM')}}/join/postBasicJoin",
+          url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postBasicJoin",
           headers: {
             Accept:"application/json"
           },
@@ -1011,7 +1011,7 @@
       function initialJobCategory(){
         $.ajax({
           type:"GET",
-          url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobCategory",
+          url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/dashboard/getJobCategory",
           success:function(result){
             $("#jobCategoryList").empty("")
             $.each(result.job_category, function( index, value ) {
@@ -1145,7 +1145,7 @@
       $("#inputJobRegion").select2({
         theme: 'bootstrap4',
         ajax: {
-          url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll",
+          url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll",
           dataType: 'json',
         }
       });
@@ -1161,7 +1161,7 @@
         $("#inputJobArea").select2({
           theme: 'bootstrap4',
           ajax: {
-            url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
             dataType: 'json',
           }
         });
@@ -1173,7 +1173,7 @@
         $("#inputJobLocation").select2({
           theme: 'bootstrap4',
           ajax: {
-            url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
             dataType: 'json',
           }
         });
@@ -1287,7 +1287,7 @@
 
           $.ajax({
             type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postAdvancedJoin",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postAdvancedJoin",
             data:fd,
             contentType: false,
             processData: false,
@@ -1339,7 +1339,7 @@
       $("#tabC").hide();
     }else{
       $.ajax({
-          url: "{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerIdentifier",
+          url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerIdentifier",
           type:"POST",
           data:{
             identifier:($("#input-pIdentifier").val())
@@ -1568,7 +1568,7 @@
           fd.append('account_alias',$("#account_alias").val());
 
           $.ajax({
-              url: "{{env('API_LINK_CUSTOM')}}/join/postPartnerAgreement",
+              url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postPartnerAgreement",
               type:"POST",
               data:fd,
               contentType: false,
@@ -1606,7 +1606,7 @@
       fd.append('account_name',$("#account_name").val());
       fd.append('account_number',$("#account_number").val());
       $.ajax({
-          url: "{{env('API_LINK_CUSTOM')}}/join/postPartnerAgreement",
+          url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postPartnerAgreement",
           type:"POST",
           data:fd,
           success: function(result){

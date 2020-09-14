@@ -247,7 +247,7 @@ function init_basic(id_candidate){
 	$("#controlModerator").show();
  	$.ajax({
 		type:"GET",
-		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
 		data:{
 			id_candidate:id_candidate
 		},
@@ -312,7 +312,7 @@ function init_advanced(id_candidate){
 	$("#controlModerator").show();
 	$.ajax({
 		type:"GET",
-		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
 		data:{
 			id_candidate:id_candidate
 		},
@@ -394,7 +394,7 @@ function init_interview(id_candidate){
 	$("#controlModerator").show();
 	$.ajax({
 		type:"GET",
-		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
 		data:{
 			id_candidate:id_candidate
 		},
@@ -584,7 +584,7 @@ function init_interview(id_candidate){
 function init_agreement(id_candidate){
 	$.ajax({
 		type:"GET",
-		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
 		data:{
 			id_candidate:id_candidate
 		},
@@ -663,7 +663,7 @@ function submitPartnerProgressAccept(id,status){
 
 	          $.ajax({
 	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM')}}/join/postSubmitPartner",
+	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
 	            data:fd,
 	            contentType: false,
 	            processData: false,
@@ -717,7 +717,7 @@ function submitPartnerProgressAccept(id,status){
 
 	          $.ajax({
 	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM')}}/join/postSubmitPartner",
+	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
 	            data:fd,
 	            contentType: false,
 	            processData: false,
@@ -776,7 +776,7 @@ function submitPartnerProgressReject(id,status){
 
 	          $.ajax({
 	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM')}}/join/postSubmitPartner",
+	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
 	            data:fd,
 	            contentType: false,
 	            processData: false,
@@ -830,7 +830,7 @@ function submitPartnerProgressReject(id,status){
 
 	          $.ajax({
 	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM')}}/join/postSubmitPartner",
+	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
 	            data:fd,
 	            contentType: false,
 	            processData: false,
@@ -893,7 +893,7 @@ function submitPartnerSetSchedule(id){
 
           $.ajax({
             type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postScheduleInterview",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postScheduleInterview",
             data:fd,
             contentType: false,
             processData: false,
@@ -950,7 +950,7 @@ function submitPartnerStartRoom(id,link){
 
           $.ajax({
             type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postStartInterview",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postStartInterview",
             data:fd,
             contentType: false,
             processData: false,
@@ -996,7 +996,7 @@ function submitPartnerSetResult(id){
 
           $.ajax({
             type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postResultInterview",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postResultInterview",
             data:fd,
             contentType: false,
             processData: false,
@@ -1042,7 +1042,7 @@ function submitPartnerAgreement(id){
 
           $.ajax({
             type:"POST",
-            url:"{{env('API_LINK_CUSTOM')}}/join/postAgreementInterview",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postAgreementInterview",
             data:fd,
             contentType: false,
             processData: false,
@@ -1058,7 +1058,7 @@ function submitPartnerAgreement(id){
 function fillProgress(id_candidate){
 	$.ajax({
 		type:"GET",
-		url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
 		data:{
 			id_candidate:id_candidate
 		},

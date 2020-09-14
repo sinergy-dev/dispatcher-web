@@ -326,7 +326,7 @@
 		})
 
 		$.ajax({
-			url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobCategoryMain",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/dashboard/getJobCategoryMain",
 			type:"GET",
 			success:function(result){
 				var arr = result.results;
@@ -360,7 +360,7 @@
 	function fillDataCat(url,method){
 		$.ajax({
 			type:method,
-			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
 			success: function (result) {
 				var n = 25
 
@@ -465,7 +465,7 @@
 		console.log(id);
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/dashboard/getJobCategory",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/dashboard/getJobCategory",
 			success: function(result){
 				$.each(result['job_category'], function(key, value){
 					if (value.id == id) {
@@ -533,7 +533,7 @@
 						// headers: {
 						//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						// },
-						url: "{{env('API_LINK_CUSTOM')}}/setting/category/postCategory",
+						url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/setting/category/postCategory",
 						type:"POST",
 						data:fd,
 						contentType: false,
@@ -570,7 +570,7 @@
 				headers: {
 		           Accept:"application/json"
 		        },
-				url: "{{env('API_LINK_CUSTOM')}}/setting/category/postCategoryMain",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/setting/category/postCategoryMain",
 				type:"POST",
 				data:{
 					category_main_name:$("#name_cat_main").val(),
@@ -633,7 +633,7 @@
 					headers: {
 			           Accept:"application/json"
 			        },
-					url: "{{env('API_LINK_CUSTOM')}}/setting/category/postUpdateCategory",
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/setting/category/postUpdateCategory",
 					type:"POST",
 					data:fd,
 					contentType: false,

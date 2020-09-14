@@ -420,7 +420,7 @@
 		$("#inputJobRegion").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll",
 				dataType: 'json',
 			}
 		});
@@ -431,7 +431,7 @@
 			$("#inputJobArea").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
 					dataType: 'json',
 				}
 			});
@@ -443,7 +443,7 @@
 			$("#inputJobLocation").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
 					dataType: 'json',
 				}
 			});
@@ -452,7 +452,7 @@
 		$("#inputJobRegion_update").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll",
 				dataType: 'json',
 			}
 		});
@@ -463,7 +463,7 @@
 			$("#inputJobArea_update").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
 					dataType: 'json',
 				}
 			});
@@ -475,7 +475,7 @@
 			$("#inputJobLocation_update").select2({
 				theme: 'bootstrap4',
 				ajax: {
-					url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
 					dataType: 'json',
 				}
 			});
@@ -484,7 +484,7 @@
 		$("#inputJobPic").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterPicAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
 				dataType: 'json',
 			}
 		})
@@ -492,7 +492,7 @@
 		$("#inputJobLevel").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterLevelAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLevelAll",
 				dataType: 'json',
 			}
 		})
@@ -500,7 +500,7 @@
 		$("#inputJobCategory").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/job/createJob/getParameterCategoryAll",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterCategoryAll",
 				dataType: 'json',
 			}
 		})
@@ -535,7 +535,7 @@
 		$("#candidateEngineerList").select2({
 			theme: 'bootstrap4',
 			ajax: {
-				url: "{{env('API_LINK_CUSTOM')}}/partner/getNewPartnerSelectedList",
+				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerSelectedList",
 				dataType: 'json',
 			}
 		})
@@ -543,7 +543,7 @@
 		$("#candidateEngineerList").change(function(){
 		  $.ajax({
             type:"GET",
-            url:"{{env('API_LINK_CUSTOM')}}/partner/getDetailPartnerList",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
             data:{
             	id_candidate:$("#candidateEngineerList").val(),
             },
@@ -587,7 +587,7 @@
 	function fillDataEng(url,method){
 		$.ajax({
 			type:method,
-			url:"{{env('API_LINK_CUSTOM')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
 			success: function (result) {
 				var n = 25
 
@@ -707,7 +707,7 @@
 
 		$.ajax({
 			type:"GET",
-			url:"{{env('API_LINK_CUSTOM')}}/engineer/getEngineerList",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/engineer/getEngineerList",
 			success: function(result){
 				$.each(result['data'], function(key, value){
 					if (value.id == btn_detail) {
@@ -779,7 +779,7 @@
 					// headers: {
 					//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					// },
-					url: "{{env('API_LINK_CUSTOM')}}/engineer/postNewEngineer",
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/engineer/postNewEngineer",
 					type:"POST",
 					data:{
 						_token: "{{ csrf_token() }}",
@@ -872,7 +872,7 @@
 					headers: {
 					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
-					url: "{{env('API_LINK_CUSTOM')}}/engineer/updateEngineerData",
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/engineer/updateEngineerData",
 					type:"POST",
 					data:{
 						_token: "{{ csrf_token() }}",

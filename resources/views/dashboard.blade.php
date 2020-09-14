@@ -129,7 +129,7 @@
     function getDashboard(){
         $.ajax({
             type:"GET",
-            url:"{{env('API_LINK_CUSTOM')}}/dashboard/getTopEngineer",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/dashboard/getTopEngineer",
             success: function(result){
                 $.each(result, function( index, value ) {
                     
