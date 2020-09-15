@@ -175,9 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Kreait\Laravel\Firebase\ServiceProvider::class,
-        SimpleSoftwareIO\QrCode\ServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        LaraCrafts\UrlShortener\UrlShortenerServiceProvider::class,
 
 
 
