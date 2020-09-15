@@ -1059,17 +1059,41 @@
 					$("#historyChat").css("display","block")
 
 					var append5 = ""
-					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>Apa yang sedang kamu butuhkan?</span><sub class="bubleSub">17.00</sub></div></div>'
-					append5 = append5 + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>Saya butuh</span><sub class="bubleSub">22.00</sub></div></div>'
+					$.each(result.job_support_chat,function(key,value){
+						var time = moment(value.time,"X")
+						if(checker != value.from){
+							checker = value.from
+							marginCustom = "margin-top:5px"
+						} else {
+							marginCustom = ""
+						}
+						if(checkerTime != time.format("YYYY-MM-DD")){
+							checkerTime = time.format("YYYY-MM-DD")
+							append5 = append5 + '<div class="bubleChat d-block text-center" style="' + marginCustom + '"><div class="bubleChatItem bubleChatDate d-inline-flex"><span>'
+							append5 = append5 + time.format("D MMMM")
+							append5 = append5 + '</span>'
+							append5 = append5 + '</div></div>'
+						} else {
+
+						}
+						if(value.from == "moderator"){
+							append5 = append5 + '<div class="bubleChat d-block text-right" style="' + marginCustom + '"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+							append5 = append5 + value.message
+							append5 = append5 + '</span><sub class="bubleSub">'
+							append5 = append5 + time.format("HH:mm")
+							append5 = append5 + '</sub></div></div>'
+						} else {
+							append5 = append5 + '<div class="bubleChat d-block" style="' + marginCustom + '"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+							append5 = append5 + value.message
+							append5 = append5 + '</span><sub class="bubleSub">'
+							append5 = append5 + time.format("HH:mm")
+							append5 = append5 + '</sub></div></div>'
+						}
+					})
+
+					
 					$("#historyChat").append(append5)
+
 					$("#historyChat").addClass("scrolly")
 
 					// $("#updateChat").css("display","block")
