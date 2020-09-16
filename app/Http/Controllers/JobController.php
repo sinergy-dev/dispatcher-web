@@ -22,7 +22,7 @@ use Crypt;
 class JobController extends Controller
 {
 	public function __construct(Database $database) {
-		$this->middleware('auth');
+		// $this->middleware('auth');
 		$this->database = $database;
 	}
 
@@ -85,7 +85,7 @@ class JobController extends Controller
     		"job_pic_phone" => $source['job']['pic']['pic_phone'],
     		"job_pic_email" => $source['job']['pic']['pic_mail'],
 
-    		"moderator" => Auth::user()->name
+    		"moderator" => $req->moderator
     	];
 
     	$parameter = Crypt::encrypt([
