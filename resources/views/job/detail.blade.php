@@ -1455,9 +1455,10 @@
 					success: function (result){
 						$.ajax({
 							type:"GET",
-							url:"{{url('/job/detail/createLetterAndQR')}}",
+							url:"{{env('WEB_LINK_CUSTOM_PUBLIC')}}/job/detail/createLetterAndQR",
 							data:{
-								id_job:window.location.href.split("/")[5].replace('#','').split("h")[0]
+								id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
+								moderator:"{{Auth::user()->name}}"
 							},
 							success:function(){
 								Swal.showLoading()
