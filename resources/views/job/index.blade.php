@@ -6,6 +6,7 @@
 <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 
 <style type="text/css">
 	.step {
@@ -18,6 +19,9 @@
 		background-color: #4CAF50;
 	}.
 	.pointer{
+		cursor: pointer;
+	}
+	a.setting-list:not([href]):not([tabindex]):hover {
 		cursor: pointer;
 	}
 </style>
@@ -92,11 +96,19 @@
 					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter" onclick="showTab(0)">
 						<i class="fas fa-plus"></i> Add Job
 					</button>
-					<h3 style="margin-bottom: 0px !important" class="ml-3">Job List</h3>
+					<h3 style="margin-bottom: 0px !important" class="ml-3">Job List</h3>	
+					<i class="fas fa-cog" style="margin-left: 15px;color:#6c757d" data-toggle="dropdown" id="navbarDropdown">                       
+					</i>	
+					<div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+	                    <a class="dropdown-item setting-list" data-value='list'>Move to List <i class="fa fa-list" style="margin-left: 5px"></i></a>
+	                    <a class="dropdown-item setting-list" data-value="grid">Move to Card <i class="fas fa-square" style="margin-left: 5px"></i></a>
+	                </div>
+
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="d-inline-flex pb-3 border-bottom" style="float: right;">
+					
 					<div class="btn-group" style="padding-right: 10px">
 						<button data-toggle="dropdown" type="button" onclick="jobStatusFilter()" class="btn btn-secondary dropdown-toggle dropbtn">Filter <i class="fas fa-filter"></i></button>
 						<div class="dropdown-menu statusContent" id="jobStatusContent">
@@ -111,11 +123,12 @@
 						</div>
 					</div>
 					<div class="ml-2 input-group">
-						<input type="text" id="jobSearch" class="form-control" placeholder="Search">
+						<input type="text" id="jobSearch" name="jobSearch" class="form-control jobSearch" placeholder="Search" onchange="changeSearch(this.value)">
 						<div class="input-group-append">
-							<button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+							<button type="button" class="btn btn-secondary" onclick="changeSearch(document.getElementById('jobSearch').value)"><i class="fas fa-search"></i></button>
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -129,107 +142,15 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12" id="jobHolder">
-				<!-- <div class="col-md-12">
-					<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
-						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-						<div class="card-body d-flex flex-column align-items-start">
-							<strong class="d-inline-block mb-2 text-primary">PT. Sinergy Informasi Pratama</strong>
-							<h4 class="mb-0">
-								<a class="text-dark" href="#">Create Internal Software</a>
-							</h4>
-							<div class="mb-1 text-muted">Nov 12</div>
-							<a class="ml-auto" href="#">Show Summary</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
-						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-						<div class="card-body d-flex flex-column align-items-start">
-							<strong class="d-inline-block mb-2 text-primary">PT. Sinergy Informasi Pratama</strong>
-							<h4 class="mb-0">
-								<a class="text-dark" href="#">Create Internal Software</a>
-							</h4>
-							<div class="mb-1 text-muted">Nov 12</div>
-							<a class="ml-auto" href="#">Show Summary</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
-						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-						<div class="card-body d-flex flex-column align-items-start">
-							<strong class="d-inline-block mb-2 text-primary">PT. Sinergy Informasi Pratama</strong>
-							<h4 class="mb-0">
-								<a class="text-dark" href="#">Create Internal Software</a>
-							</h4>
-							<div class="mb-1 text-muted">Nov 12</div>
-							<a class="ml-auto" href="#">Show Summary</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
-						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/200x148?theme=thumb" alt="Thumbnail [200x150]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-						<div class="card-body d-flex flex-column align-items-start">
-							<strong class="d-inline-block mb-2 text-primary">PT. Sinergy Informasi Pratama</strong>
-							<h4 class="mb-0">
-								<a class="text-dark" href="#">Create Internal Software</a>
-							</h4>
-							<div class="mb-1 text-muted">Nov 12</div>
-							<a class="ml-auto" href="#">Show Summary</a>
-						</div>
-					</div>
-				</div> -->
+				<!--content disini-->
 				<div class="col-md-12" id="paginationJob">
 					<nav aria-label="Page navigation example" class="ml-auto">
-						<ul class="pagination justify-content-end" id="jobPaginateHolder">
-							<li class="page-item"><a class="page-link" href="#">Previous</a></li>
-							<li class="page-item"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#">Next</a></li>
-						</ul>
+						
 					</nav>
 				</div>
 			</div>
 			<div class="col-md-6" id="jobSumaryHolder" style="display: none">
 				<div class="col-md-12">
-					<!-- <div class="card flex-md-row mb-4 shadow-sm" style=" height: 150px;">
-						<img style="border-radius: 3px 0 0 3px;" class="flex-auto d-none d-lg-block" data-src="holder.js/148x148?theme=thumb" alt="Thumbnail [148x148]" style="width: 200px; height: 250px;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1725f5000c5%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1725f5000c5%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.20000076293945%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-						<div class="card-body d-flex flex-column align-items-start">
-							<strong class="d-inline-block mb-2 text-primary">PT. Sinergy Informasi Pratama</strong>
-							<h4 class="mb-0">
-								<a class="text-dark" href="#">Create Internal Software</a>
-							</h4>
-							<div class="mb-1 text-muted">Nov 12</div>
-							<p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-						</div>
-					</div> -->
-					<!-- <div class="card">
-						<div class="card-body d-flex flex-column align-items-start">
-							<h5 class="card-title border-bottom">Job Sumary</h5>
-							<div class="card-text">
-								<strong class="d-inline-block text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
-								<h2 class="mb-2" id="jobSumaryHolderTitle">
-									Create Internal Software
-								</h2>
-								<h5>Job Description</h5>
-								<p id="jobSumaryHolderDescription">
-								</p>
-								<h5>Job Requirement</h5>
-								<p id="jobSumaryHolderRequirement">
-								</p>
-								<p>
-									<span id="jobSumaryHolderAddress"><i class="fas fa-building"></i> Head Quarter - PT. Sinergy Informasi Pratama </span><br>
-									<span id="jobSumaryHolderLocation"><i class="fas fa-map-marker"></i> Kembangan - Jakarta Barat - Jakarta </span><br>
-									<span id="jobSumaryHolderLevel"><i class="fas fa-signal"></i> Level 3 </span><br>
-									<span id="jobSumaryHolderDuration"><i class="fas fa-calendar-alt"></i> 1 Desember - 21 Desember 2020 </span><br>
-								</p>
-							</div>
-							<a href="#" class="btn btn-primary ml-auto" id="jobSumaryHolderButton">Show More</a>
-						</div>
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -572,6 +493,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.2/cjs/popper.min.js"></script> -->
 <!-- <script type="text/javascript" src="https://unpkg.com/@popperjs/core@2"></script> -->
 
@@ -581,18 +503,21 @@
 	$(document).ready(function(){
 
 		getDashboard();
-
-		$("#jobSearch").on('change',function(){
-			console.log($("#jobSearch").val());
-			if($("#jobSearch").val() != ""){
-				fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
-			} else {
-				fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
-				$(".resultSearch").hide()
-			}
-		})
+		// $("#jobSearch").on('change',function(){
+			
+			
+		// })
+		// $("#jobSearch").on('change',function(){
+		// 	if($("#jobSearch").val() != ""){
+		// 		fillDataJobList("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=list","POST")
+		// 	} else {
+		// 		// fillDataJobList("dashboard/getJobListAndSumary/paginate?type=list","GET")
+		// 		// $(".resultSearch").hide()
+		// 	}
+		// })
 		
-		fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
+		
+		fillDataJob("dashboard/getJobListAndSumary/paginate?type=card","GET")
 
 		$("#inputJobClient").select2({
 			theme: 'bootstrap4',
@@ -687,6 +612,26 @@
 
 	})
 
+	function changeSearch(val)
+	{
+		console.log("tes");
+		if ($(".jobHolderItem").is(':visible')) {
+			if(val != ""){
+				fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=card","GET")
+			} else {
+				fillDataJob("dashboard/getJobListAndSumary/paginate?type=card","GET")
+				$(".resultSearch").hide()
+			}
+		}else{
+			if(val != ""){
+				fillDataJobList("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=list","GET")
+			} else {
+				fillDataJobList("dashboard/getJobListAndSumary/paginate?type=list","GET")
+				$(".resultSearch").hide()
+			}
+		}
+	}
+
 	function jobStatusFilter(){
 		var element = document.getElementById("jobStatusContent");
 		element.classList.toggle("statusContent");
@@ -767,7 +712,7 @@
 					prepend = prepend + '	</div>'
 					prepend = prepend + '</div>'
 				});
-				$("#jobHolder").prepend(prepend + "</div>")
+				$("#jobHolder").prepend(prepend + "</div>")				
 
 				$("#jobPaginateHolder").empty("")
 				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
@@ -876,10 +821,20 @@
 		append = append + '<span class="dropdown-item ' + active_50 + '" onclick="changeJobShowCount(50)">50 List</span>'
 		$("#jobShowCountList").empty()
 		$("#jobShowCountList").append(append)
-		if($("#jobSearch").val() != ""){
-			fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val(),"POST")
-		}else {
-			fillDataJob("dashboard/getJobListAndSumary/paginate?","GET")
+		if ($(".jobHolderItem").is(':visible')) {
+			if($("#jobSearch").val() != ""){
+				fillDataJob("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=card","GET")
+			} else {
+				fillDataJob("dashboard/getJobListAndSumary/paginate?type=card","GET")
+				$(".resultSearch").hide()
+			}
+		}else{
+			if($("#jobSearch").val() != ""){
+				fillDataJobList("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=list","GET")
+			} else {
+				fillDataJobList("dashboard/getJobListAndSumary/paginate?type=list","GET")
+				$(".resultSearch").hide()
+			}
 		}
 
 	}
@@ -889,9 +844,11 @@
 			type:method,
 			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
 			success: function (result) {
-				$(".jobHolderItem").remove()
-				var prepend = "<div class='row jobHolderItem'>"
+				
 				var n = 25
+				var prepend = "<div class='row jobHolderItem'>"
+
+				$(".jobHolderItem").remove()
 				$.each(result["data"], function( index, value ) {
 					if(value['job_status'] == "Open"){
 						var badgeJob = "danger"
@@ -940,8 +897,12 @@
 					prepend = prepend + '	</div>'
 					prepend = prepend + '</div>'
 				});
+			
 				$("#jobHolder").prepend(prepend + "</div>")
-				
+
+				$("#paginationJob nav").empty("")
+				var prepend2 = "<ul class='pagination justify-content-end' id='jobPaginateHolder'>"
+				$("#paginationJob nav").prepend(prepend2 + "</ul>")
 
 				$("#jobPaginateHolder").empty("")
 				var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
@@ -967,6 +928,7 @@
 						var next_onclick = second_onclick
 					}
 				} else if (result["current_page"] == result["last_page"]){
+					console.log("second")
 					previous = ""
 					next = "disabled"
 					if(result["last_page"] == 2){
@@ -986,6 +948,7 @@
 					var next_onclick = ""
 
 				} else {
+					console.log("last")
 					next = ""
 					previous = ""
 					first = result["current_page"] - 1
@@ -1007,14 +970,14 @@
 				append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
 				
 				$("#jobPaginateHolder").append(append)
-				if(method == "POST"){
+				if($(".jobSearch").val() != ""){
 					if(result['total'] == 0){
 						$(".resultSearchCount").empty("").text("Not found")
 						$("#paginationJob").hide()
 					} else {
 						$(".resultSearchCount").empty("").text(result["total"] + " results")
 					}
-					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1])
+					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1].split("&")[0])
 					$(".resultSearch").show()
 				} else {
 					$(".resultSearch").hide()
@@ -1022,7 +985,287 @@
 
 			}
 		})
+	
 	}
+
+	function fillDataJobList(url,method)
+	{
+		if($.fn.dataTable.isDataTable("#DataTables-jobList")){
+			$('#DataTables-jobList').DataTable().ajax.url("{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url 
+		            + "&per_page=" + $('#jobShowCount').text().split(" ")[1]).load();
+
+			$.ajax({
+				type:method,
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+				success: function (result) {
+					$("#paginationJob nav").empty("")
+					var prepend = "<ul class='pagination justify-content-end' id='jobPaginateHolder2'>"
+					$("#paginationJob nav").prepend(prepend + "</ul>")
+					var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+					var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					
+					if(result["current_page"] == 1){
+						console.log("one")
+						previous = "disabled"
+						first = result["current_page"],first_active = "active"
+						second = result["current_page"] + 1 
+						third = result["current_page"] + 2
+
+						var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+						var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+						var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
+						var previous_onclick = ""
+
+						if(result["last_page"] == 1){
+							next = "disabled"
+							var next_onclick = ""
+						} else {
+							var next_onclick = second_onclick
+						}
+					} else if (result["current_page"] == result["last_page"]){
+						console.log("two")
+						previous = ""
+						next = "disabled"
+						if(result["last_page"] == 2){
+							first = result["current_page"] - 1
+							second = result["current_page"], second_active = "active"
+							third = result["current_page"]
+						} else {
+							first = result["current_page"] - 2
+							second = result["current_page"] - 1
+							third = result["current_page"],third_active = "active"
+						}
+
+						var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+						var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+						var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+						var previous_onclick = second_onclick
+						var next_onclick = ""
+
+					} else {
+						console.log("three")
+						next = ""
+						previous = ""
+						first = result["current_page"] - 1
+						second = result["current_page"],second_active = "active"
+						third = result["current_page"] + 1
+						var previous_onclick = first_onclick
+						var next_onclick = third_onclick
+
+					}
+
+					var append = ""
+					append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+					append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+					if(result["last_page"] > 1){
+						append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+					}
+					if(result["last_page"] > 2){
+						append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+					}
+					append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+					
+					$("#jobPaginateHolder2").append(append)
+					if($(".jobSearch").val() != ""){
+						if(result['total'] == 0){
+							$(".resultSearchCount").empty("").text("Not found")
+							$("#paginationJob").hide()
+						} else {
+							$(".resultSearchCount").empty("").text(result["total"] + " results")
+						}
+						$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1].split("&")[0])
+						$(".resultSearch").show()
+					} else {
+						$(".resultSearch").hide()
+					}
+				},
+			})
+		}else{
+			var n = 25
+			var prepend2 = "<div class='row jobHolderItem2'>"
+			$(".jobHolderItem2").empty("");
+				prepend2 = prepend2 + '<div class="col-md-12 mb-4">'
+				prepend2 = prepend2 + '<table class="table table-striped" id="DataTables-jobList">'
+				prepend2 = prepend2 + '<thead>'
+			    prepend2 = prepend2 + '<tr>'
+			    prepend2 = prepend2 + '<th>Customer</th>'
+			    prepend2 = prepend2 + '<th>Project</th>'
+			    prepend2 = prepend2 + '<th>Latest History</th>'
+			    prepend2 = prepend2 + '<th>Price</th>'
+			    prepend2 = prepend2 + '<th>Status</th>'
+			    // prepend2 = prepend2 + '<th hidden>Latest Update</th>'
+			    prepend2 = prepend2 + '</tr>'
+			    prepend2 = prepend2 + '</thead>'
+			    prepend2 = prepend2 + '<tbody>'
+			    prepend2 = prepend2 + '<tr>'
+				prepend2 = prepend2 + '</tbody>'
+				prepend2 = prepend2 + '</table>'
+				prepend2 = prepend2 + '</div>'
+			$("#jobHolder").prepend(prepend2 + "</div>")
+
+			$("#DataTables-jobList").DataTable({
+				"ajax":{
+		            "type":method,
+		            "url":"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url 
+		            + "&per_page=" + $('#jobShowCount').text().split(" ")[1]
+		          },
+		          "columns": [
+		            {
+		            render: function ( data, type, row ) {
+		                return row.customer.customer_name;
+		              }
+		            },
+		            {
+		            render: function ( data, type, row ) {
+		                return row.job_name ;
+		              }
+		            },
+		            {
+		            render: function ( data, type, row ) {
+		                return moment(row.latest_history.history.date_time).format("L h:mm:ss a");
+		              }
+		            },
+		            {
+		            render: function ( data, type, row ) {
+		                return $.fn.dataTable.render.number(',', '.', 0, 'Rp.').display(row.job_price);
+		              }
+		            },
+		            {
+		            render: function ( data, type, row ) {
+		            	if(row.job_status == "Open"){
+							var badgeJob = "danger"
+						} else if(row.job_status == "Ready"){
+							var badgeJob = "warning"
+						} else if(row.job_status == "Progress"){
+							var badgeJob = "primary"
+						} else if(row.job_status == "Done"){
+							var badgeJob = "success"
+						}
+
+						return '<span class="badge badge-' + badgeJob + '">' + row.job_status + '</span>';
+		              }
+		            }, 
+		          ],
+				paging: false,
+				searching: false,
+				"bInfo" : false,
+				order: [[2, 'desc']],
+			});
+
+			$.ajax({
+				type:method,
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + url + "&per_page=" + $("#jobShowCount").text().split(" ")[1],
+				success: function (result) {
+					$("#paginationJob nav").empty("")
+					var prepend = "<ul class='pagination justify-content-end' id='jobPaginateHolder2'>"
+					$("#paginationJob nav").prepend(prepend + "</ul>")
+					var previous = "",next = "", first,second,third,first_active = "",second_active = "",third_active = ""
+					var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+					var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+					var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+					
+					if(result["current_page"] == 1){
+						console.log("one")
+						previous = "disabled"
+						first = result["current_page"],first_active = "active"
+						second = result["current_page"] + 1 
+						third = result["current_page"] + 2
+
+						var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+						var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 1) + "','" + method + "')"
+						var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] + 2) + "','" + method + "')"
+						var previous_onclick = ""
+
+						if(result["last_page"] == 1){
+							next = "disabled"
+							var next_onclick = ""
+						} else {
+							var next_onclick = second_onclick
+						}
+					} else if (result["current_page"] == result["last_page"]){
+						console.log("two")
+						previous = ""
+						next = "disabled"
+						if(result["last_page"] == 2){
+							first = result["current_page"] - 1
+							second = result["current_page"], second_active = "active"
+							third = result["current_page"]
+						} else {
+							first = result["current_page"] - 2
+							second = result["current_page"] - 1
+							third = result["current_page"],third_active = "active"
+						}
+
+						var first_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 2) + "','" + method + "')"
+						var second_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"] - 1) + "','" + method + "')"
+						var third_onclick = "onclick=fillDataJobList('" + url + "&page=" + (result["current_page"]) + "','" + method + "')"
+						var previous_onclick = second_onclick
+						var next_onclick = ""
+
+					} else {
+						console.log("three")
+						next = ""
+						previous = ""
+						first = result["current_page"] - 1
+						second = result["current_page"],second_active = "active"
+						third = result["current_page"] + 1
+						var previous_onclick = first_onclick
+						var next_onclick = third_onclick
+
+					}
+
+					var append = ""
+					append = append + '<li class="page-item ' + previous + '" ' + previous_onclick + '><span class="page-link">Previous</span></li>'
+					append = append + '<li class="page-item ' + first_active + '" ' + first_onclick + '><span class="page-link">' + first + '</span></li>'
+					if(result["last_page"] > 1){
+						append = append + '<li class="page-item ' + second_active + '" ' + second_onclick + '><span class="page-link">' + second + '</span></li>'
+					}
+					if(result["last_page"] > 2){
+						append = append + '<li class="page-item ' + third_active + '" ' + third_onclick + '><span class="page-link">' + third + '</span></li>'
+					}
+					append = append + '<li class="page-item ' + next + '" ' + next_onclick + '><span class="page-link">Next</span></li>'
+					
+					$("#jobPaginateHolder2").append(append)
+				},
+			})
+		
+		}
+		
+	}
+
+	$('.setting-list').click(function(){
+		if ($(this).data("value") == 'list') {
+			$(".jobHolderItem").hide();
+			$(".jobHolderItem2").show();
+			$("#paginationJob nav").empty("")
+			$("#jobSearch").removeClass("jobSearchGrid").addClass("jobSearchList")
+			if ($(".jobSearch").val() != "") {
+				$(".jobSearch").val("")
+				$(".resultSearch").hide()
+			}else{
+				$(".resultSearch").hide()
+			}
+			
+			
+			fillDataJobList("dashboard/getJobListAndSumary/paginate?type=list","GET")
+			
+		}else if ($(this).data("value") == 'grid') {
+			$(".jobHolderItem2").hide();
+			$(".jobHolderItem").show();
+			$("#paginationJob nav").empty("")
+			$("#jobSearch").removeClass("jobSearchList").addClass("jobSearchGrid")
+			if ($(".jobSearch").val() != "") {
+				$(".jobSearch").val("")
+				$(".resultSearch").hide()
+			}else{
+				$(".resultSearch").hide()
+			}
+			
+			fillDataJob("dashboard/getJobListAndSumary/paginate?type=card","GET")
+		}	
+	})
 
 	function showSumary(id){
 		$.ajax({
@@ -1201,7 +1444,6 @@
 	function formatNumber(n) {
 		return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 	}
-
 
 	function formatCurrency(input, blur) {
 		var input_val = input.val();
