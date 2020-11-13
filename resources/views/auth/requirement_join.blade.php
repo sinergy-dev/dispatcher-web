@@ -1,6 +1,33 @@
 @extends('layouts.app')
 @section('style')
 <style type="text/css">
+  .step {
+   text-align: center;
+  }
+
+  .step .col-md-2 {
+      background-color: #fff;
+      border: 1px solid #C0C0C0;
+      border-right: none;
+  }
+
+  .step .col-md-2:last-child {
+      border: 1px solid #C0C0C0;
+  }
+
+  .step .col-md-2:first-child {
+      border-radius: 5px 0 0 5px;
+  }
+
+  .step .col-md-2:last-child {
+      border-radius: 0 5px 5px 0;
+  }
+
+  .step .col-md-2:hover {
+      color: #F58723;
+      cursor: pointer;
+  }
+
   .hided{
     display: none;
   }
@@ -8,11 +35,11 @@
   .showed{
     display: block;
   }
-
+/*
   .container2{
     width: 600px;
       margin: 100px auto; 
-  }
+  }*/
   .progressbar {
     counter-reset: step;
   }
@@ -294,38 +321,55 @@
       width: 70%;
     }
   }
+
+  .ui-datepicker{ left: 50% !important; margin-left: -25.5em !important;}
+
 </style>
 @endsection
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet" />
+<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+
 <div class="container">
-  <div id="tabA">
-    <ul class="progressbar">
-      <li class="active">Basic Information</li>
-      <li id="validation">Validation</li>
-      <li id="advanced">Advanced Information</li>
-      <li id="interview">Interview schedule</li>
-      <li id="result">Result</li>
-    </ul>
-  </div>
+  <!-- <div class="row"> -->
+    <div id="tabA">
+    <!--   <div id="div1" class="col-md-2">
+          <span class="fas fa-cloud-download"></span>
+          <p>Download Application</p>
+      </div> -->
+      <ul class="progressbar">
+        <li class="active">Basic Information</li>
+        <li id="validation">Validation</li>
+        <li id="advanced">Advanced Information</li>
+        <li id="interview">Interview schedule</li>
+        <li id="result">Result</li>
+      </ul>
+    </div>
+  <!-- </div> -->
 
   <div id="tabB" style="padding-top: 100px;display: none">
       <div class="col-md-12">
          <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
         <div style="text-align: center;color: #b3a7db;font-size: 20px" class="center-in div-p">Sinergy Freelance</div>
 
-        <p class="center-in text-p" style="width: 500px;text-align: center;">Sinergy Freelance is a mobile app that can be used to freelancer for searching the job, do the job, and get payment. But first, you have to join partner to become a Sinergy Freelancer.</p>
+        <p class="center-in text-p" style="width: 600px;text-align: center;">Sinergy Freelance is a mobile app that can be used to freelancer for searching the job, do the job, and get payment. But first, you have to join partner to become a Sinergy Freelancer.</p>
 
         <input id="input-pName" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
         <input id="input-pEmail" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
+        <input id="input-pDateBirth" type="text" placeholder="Input your date of birth...." class="center-in" style="display: none;width: 300px">
+
         <input id="input-pPhone" type="number" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
         <textarea id="input-pAddress" class="center-in textArea-pAdress" style="display: none;width: 400px;"></textarea>
 
-        <input id="input-pNik" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px;margin-top: 10px">
+        <input id="input-pNik" type="text" pattern="[a-zA-Z0-9]+" maxlength="16" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px;margin-top: 10px">
+
+        <div class="invalid-feedback">
+           Max input is 16 digit number!
+        </div>
 
         <div class="image-upload btnCenter" id="input-pFilesKtp" style="display: none;margin-top: 10px">
           <label for="file-input" class="btnCenter">
@@ -336,8 +380,10 @@
 
         <div class="btnCenter">
           <button id="prevBtnBasic" style="margin: 10px;display: none" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(-1)">Prev</button>
-          <button id="nextBtnBasic" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(1)">Show me</button>
-          <a style="margin-right: -125px;margin-top: 15px;" onclick="hasJoined()" id="hasJoined">Have been join</a>  
+          <button id="nextBtnBasic" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(1)">Join Us</button>
+        </div>
+        <div class="btnCenter">
+            <a onclick="hasJoined()" id="hasJoined" style="margin-top: -10px;color:#216bff">Have been join?</a>  
         </div>
 
       </div>
@@ -359,7 +405,7 @@
 
   <div id="tabD" style="padding-top: 100px;display: none;">
     <div class="col-md-12">
-      <h1 class="text-p center-in" style="width: 500px;text-align: center;">Hello Sinergy, Thank's for join us and congratulations to you who passed in first stage registration.</h1>
+      <h1 class="text-p center-in" style="width: 600px;text-align: center;">Thank's for join us and congratulations to you who passed in first stage registration.</h1>
 
       <input id="input-pEducation" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
@@ -411,14 +457,14 @@
 
       <div class="btnCenter">
         <button id="prevBtnAdvanced" style="margin: 10px;display: none" class="btn btn-primary btn-secondary" onclick="nextPrevAdvanced(-1)">Prev</button>
-        <button id="nextBtnAdvanced" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevAdvanced(1)">Got Next Step</button>
+        <button id="nextBtnAdvanced" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevAdvanced(1)">Next Step</button>
       </div>
     </div>
   </div>  
 
   <div id="tabE" style="padding-top: 100px;display: none;">
     <div class="col-md-12">
-      <h4 class="text-p center-in" style="width: 500px;text-align: center;">Hi (Engineer's name), Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. So prepare yourself and good luck!</h4>
+      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">Hi (Engineer's name), Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. So prepare yourself and good luck!</h4>
       <br><br>
       <table class="table" style="width: 280px;" id="table-partner">
         
@@ -428,7 +474,7 @@
 
   <div id="tabF" style="padding-top: 100px;display: none">
     <div class="col-md-12">
-      <h4 class="text-p center-in" style="width: 500px;text-align: center;">By checking this checkbox, you are agree to join the Comany Partner Agreement, Privacy Policy, and Cookie policy</h4><br>
+      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">By checking this checkbox, you are agree to join the Comany Partner Agreement, Privacy Policy, and Cookie policy</h4><br>
       <div class="radio" id="input-radio-a" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
         <label><input type="checkbox" name="optradio" class="optradio" value="accept"><i> I accept the terms and conditions </i></label>
       </div>
@@ -471,19 +517,61 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
 
-    if (window.location.href.split("/")[4] != null) {
-      $.ajax({
-            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerIdentifier",
-            type:"POST",
-            data:{
-              identifier:window.location.href.split("/")[4],
-            },
-            success: function(result){
-              if (result.status == "On Progress") {
-                $(".progressbar li#validation").addClass("active");
-                $("#tabA").show();
+  $('#input-pDateBirth').datepicker({
+    autoclose: true,
+    todayHighlight:true,
+    format: "yyyy-mm-dd",
+    language: "id",
+  });
+
+  // $('#input-pNik').on( "change", function(){
+  //   console.log("gggggg")
+  // })
+
+  // $('#input-pNik').change(function(){
+  //   console.log("sdsdsd")
+  //   if (this.value.length == 16) {
+  //     $('#input-pNik').addClass('is-invalid')
+  //   }
+  // })
+
+  if (window.location.href.split("/")[4] != null) {
+    $.ajax({
+          url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerIdentifier",
+          type:"POST",
+          data:{
+            identifier:window.location.href.split("/")[4],
+          },
+          success: function(result){
+            if (result.status == "On Progress") {
+              $(".progressbar li#validation").addClass("active");
+              $("#tabA").show();
+              $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+              $("#input-pAddress").css("display","none")
+              $("#input-pPhone").css("display","none")
+              $("#input-pEmail").css("display","none")
+              $("#input-pName").css("display","none")
+              $("#input-pNik").css("display","none")
+              $("#input-pFilesKtp").css("display","none");
+              $("#hasJoined").css("display","none")
+              $("#prevBtnBasic").css("display","none")
+              $("#nextBtnBasic").css("display","none")
+              $(".img-p").css("display","none")
+              $(".div-p").css("display","none")
+              $("#tabC").hide();
+              $("#tabB").show();
+            }else if (result.status == "OK Basic") {
+              $(".progressbar li#validation").addClass("active");
+              $(".progressbar li#advanced").addClass("active");
+              $("#tabA").show();
+              // $("#tabB").css("display","block")
+              $("#tabC").hide();
+              $("#tabD").show();
+              if (result.latest_education != null) {
                 $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
                 $("#input-pAddress").css("display","none")
                 $("#input-pPhone").css("display","none")
@@ -492,181 +580,159 @@
                 $("#input-pNik").css("display","none")
                 $("#input-pFilesKtp").css("display","none");
                 $("#hasJoined").css("display","none")
-                $("#prevBtnBasic").css("display","none")
-                $("#nextBtnBasic").css("display","none")
+                $("#prevBtnAdvanced").css("display","none")
+                $("#nextBtnAdvanced").css("display","none")
                 $(".img-p").css("display","none")
                 $(".div-p").css("display","none")
-                $("#tabC").hide();
-                $("#tabB").show();
-              }else if (result.status == "OK Basic") {
+              }
+            }else if (result.status == "OK Advance") {
+              if (result.interview == null) {
                 $(".progressbar li#validation").addClass("active");
                 $(".progressbar li#advanced").addClass("active");
                 $("#tabA").show();
-                // $("#tabB").css("display","block")
                 $("#tabC").hide();
                 $("#tabD").show();
-                if (result.latest_education != null) {
-                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
-                  $("#input-pAddress").css("display","none")
-                  $("#input-pPhone").css("display","none")
-                  $("#input-pEmail").css("display","none")
-                  $("#input-pName").css("display","none")
-                  $("#input-pNik").css("display","none")
-                  $("#input-pFilesKtp").css("display","none");
-                  $("#hasJoined").css("display","none")
-                  $("#prevBtnAdvanced").css("display","none")
-                  $("#nextBtnAdvanced").css("display","none")
-                  $(".img-p").css("display","none")
-                  $(".div-p").css("display","none")
-                }
-              }else if (result.status == "OK Advance") {
-                if (result.interview == null) {
-                  $(".progressbar li#validation").addClass("active");
-                  $(".progressbar li#advanced").addClass("active");
-                  $("#tabA").show();
-                  $("#tabC").hide();
-                  $("#tabD").show();
-                  $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
-                  $("#input-pAddress").css("display","none")
-                  $("#input-pPhone").css("display","none")
-                  $("#input-pEmail").css("display","none")
-                  $("#input-pName").css("display","none")
-                  $("#input-pNik").css("display","none")
-                  $("#input-pFilesKtp").css("display","none");
-                  $("#hasJoined").css("display","none")
-                  $("#prevBtnAdvanced").css("display","none")
-                  $("#nextBtnAdvanced").css("display","none")
-                  $(".img-p").css("display","none")
-                  $(".div-p").css("display","none")
-                }else{
-                  console.log(result.interview.interview_media)
-                  console.log(result.interview.interview_link)
-                  $(".text-p").html("<h4>Hi ("+ result.name +"), Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. So prepare yourself and good luck!</h4>")
-                  var append = ""
-                  append = append + '<tr>'
-                  append = append + '<th>Date</th>'
-                  append = append + '<td>'+ moment(result.interview.interview_date).format('dddd, MMMM Do YYYY') +'</td>'
-                  append = append + '</tr>'
-                  append = append + '<tr>'
-                  append = append + '<th>Time</th>'
-                  append = append + '<td>'+moment(result.interview.interview_date).format('h:mm:ss a') + " - Finish" +'</td>'
-                  append = append + '</tr>'
-                  append = append + '<tr>'
-                  append = append + '<th>Link</th>'
-                  if (result.interview.status == "started" || result.interview.status == "done") {
-                    append = append + '<td><a target="_blank" href="'+ result.interview.interview_link + '">'+ result.interview.interview_link + '</a></td>'
-                  }else{
-                    append = append + '<td>Room not started yet</td>'
-                  }
-                  append = append + '</tr>'
-                  $("#table-partner").append(append)                
-                  $(".progressbar li#validation").addClass("active");
-                  $(".progressbar li#advanced").addClass("active");
-                  $(".progressbar li#interview").addClass("active");
-                  $("#tabA").show();
-                  $("#tabC").hide();
-                  $("#tabE").show();
-
-                }
-              }else if (result.status == "OK Interview"){
-                $("#tabA").show();
-                $("#tabC").hide();
-                $("#tabF").show();
-                $(".progressbar li#validation").addClass("active");
-                $(".progressbar li#advanced").addClass("active");
-                $(".progressbar li#interview").addClass("active");
-                $(".progressbar li#result").addClass("active");
-                $("input:checkbox").on('click', function() {
-                  // in the handler, 'this' refers to the box clicked on
-                  var $box = $(this);
-                  if ($box.is(":checked")) {
-
-                    // the name of the box is retrieved using the .attr() method
-                    // as it is assumed and expected to be immutable
-                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                    // the checked state of the group/box on the other hand will change
-                    // and the current value is retrieved using .prop() method
-                    $(group).prop("checked", false);
-                    $box.prop("checked", true);
-                    console.log($('.optradio:checked').val())
-                    if ($('.optradio:checked').val() == "accept") {
-                      $( "#box-account" ).toggle(function() {
-                          $( this ).addClass( "hided" );
-                      }, function() {
-                          $( this ).removeClass( "showed" );
-                      });
-                      $("#account_name").change(function(){
-                        localStorage.setItem("account_name", $("#account_name").val());
-                        localStorage.getItem("account_name");
-                      })
-
-                      $("#account_number").change(function(){
-                        localStorage.setItem("account_number",  $("#account_number").val());
-                        localStorage.getItem("account_number");
-                      })
-
-                      $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"accept"' + ")")
-                    }else{
-                      $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"reject"' + ")")
-                      $("#box-account").hide("slow");
-                    }
-                    $("#agreeBtnPartner").attr("disabled",false);
-                  } else {
-                    $box.prop("checked", false);
-                    $( "#box-account" ).hide("slow");
-                    $("#agreeBtnPartner").attr("disabled",true);
-                  }
-                  
-                }); 
-              }else if (result.status == "OK Agreement") {
-                $(".progressbar li#validation").addClass("active");
-                $(".progressbar li#advanced").addClass("active");
-                $(".progressbar li#interview").addClass("active");
-                $(".progressbar li#result").addClass("active");
-                $("#tabA").show();
-                $("#tabC").hide();
-                $("#tabF").show();
-                $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep Follow up on our website for your new account user information! </h2>")
+                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                $("#input-pAddress").css("display","none")
+                $("#input-pPhone").css("display","none")
+                $("#input-pEmail").css("display","none")
+                $("#input-pName").css("display","none")
+                $("#input-pNik").css("display","none")
+                $("#input-pFilesKtp").css("display","none");
+                $("#hasJoined").css("display","none")
+                $("#prevBtnAdvanced").css("display","none")
+                $("#nextBtnAdvanced").css("display","none")
                 $(".img-p").css("display","none")
                 $(".div-p").css("display","none")
-                $("#input-radio-a").css("display","none")
-                $("#input-radio-b").css("display","none")
-                $("#input-account").css("display","none")
-                $("#agreeBtnPartner").css("display","none")
-              }else if (result.status == "OK Partner") {
-                $(".text-p").html("<h4>Hi ("+ result.name +"), You`re now a partner of the company.You can pick the job based on your job category and get paid. But you can only pick the job from Sinergy Freelance App. So please download our mobile app in the play store or app store. And the following bellow is our username and password for your Sinergy Freelance App. Thank you and good luck!</h4>")
-                  var append = ""
-                  append = append + '<tr>'
-                  append = append + '<th>Username</th>'
-                  append = append + '<td>haloengineer</td>'
-                  append = append + '</tr>'
-                  append = append + '<tr>'
-                  append = append + '<th>Password</th>'
-                  append = append + '<td>sinergy</td>'
-                  append = append + '</tr>'
-                  append = append + '<tr>'
-                  append = append + '<th>App Store</th>'
-                  append = append + '<td><a href="#" target="_blank">https://www.apple.com/ios/app-store</a></td>'
-                  append = append + '</tr>'
-                  append = append + '<tr>'
-                  append = append + '<th>PlayStore</th>'
-                  append = append + '<td><a href="#" target="_blank">https://play.google.com/store?hl=en</a></td>'
-                  append = append + '</tr>'
-                  $("#table-partner").append(append)                
-                  $(".progressbar li#validation").addClass("active");
-                  $(".progressbar li#advanced").addClass("active");
-                  $(".progressbar li#interview").addClass("active");
-                  $(".progressbar li#result").addClass("active");
-                  $("#tabA").show();
-                  $("#tabC").hide();
-                  $("#tabE").show();
+              }else{
+                console.log(result.interview.interview_media)
+                console.log(result.interview.interview_link)
+                $(".text-p").html("<h4>Hi "+ result.name +", Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. Please prepare yourself and good luck!</h4>")
+                var append = ""
+                append = append + '<tr>'
+                append = append + '<th>Date</th>'
+                append = append + '<td>'+ moment(result.interview.interview_date).format('dddd, MMMM Do YYYY') +'</td>'
+                append = append + '</tr>'
+                append = append + '<tr>'
+                append = append + '<th>Time</th>'
+                append = append + '<td>'+moment(result.interview.interview_date).format('h:mm:ss a') + " - Finish" +'</td>'
+                append = append + '</tr>'
+                append = append + '<tr>'
+                append = append + '<th>Link</th>'
+                if (result.interview.status == "started" || result.interview.status == "done") {
+                  append = append + '<td><a target="_blank" href="'+ result.interview.interview_link + '">'+ result.interview.interview_link + '</a></td>'
+                }else{
+                  append = append + '<td>Room not started yet</td>'
+                }
+                append = append + '</tr>'
+                $("#table-partner").append(append)                
+                $(".progressbar li#validation").addClass("active");
+                $(".progressbar li#advanced").addClass("active");
+                $(".progressbar li#interview").addClass("active");
+                $("#tabA").show();
+                $("#tabC").hide();
+                $("#tabE").show();
+
               }
-              console.log(result)
+            }else if (result.status == "OK Interview"){
+              $("#tabA").show();
+              $("#tabC").hide();
+              $("#tabF").show();
+              $(".progressbar li#validation").addClass("active");
+              $(".progressbar li#advanced").addClass("active");
+              $(".progressbar li#interview").addClass("active");
+              $(".progressbar li#result").addClass("active");
+              $("input:checkbox").on('click', function() {
+                // in the handler, 'this' refers to the box clicked on
+                var $box = $(this);
+                if ($box.is(":checked")) {
+
+                  // the name of the box is retrieved using the .attr() method
+                  // as it is assumed and expected to be immutable
+                  var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                  // the checked state of the group/box on the other hand will change
+                  // and the current value is retrieved using .prop() method
+                  $(group).prop("checked", false);
+                  $box.prop("checked", true);
+                  console.log($('.optradio:checked').val())
+                  if ($('.optradio:checked').val() == "accept") {
+                    $( "#box-account" ).toggle(function() {
+                        $( this ).addClass( "hided" );
+                    }, function() {
+                        $( this ).removeClass( "showed" );
+                    });
+                    $("#account_name").change(function(){
+                      localStorage.setItem("account_name", $("#account_name").val());
+                      localStorage.getItem("account_name");
+                    })
+
+                    $("#account_number").change(function(){
+                      localStorage.setItem("account_number",  $("#account_number").val());
+                      localStorage.getItem("account_number");
+                    })
+
+                    $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"accept"' + ")")
+                  }else{
+                    $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"reject"' + ")")
+                    $("#box-account").hide("slow");
+                  }
+                  $("#agreeBtnPartner").attr("disabled",false);
+                } else {
+                  $box.prop("checked", false);
+                  $( "#box-account" ).hide("slow");
+                  $("#agreeBtnPartner").attr("disabled",true);
+                }
+                
+              }); 
+            }else if (result.status == "OK Agreement") {
+              $(".progressbar li#validation").addClass("active");
+              $(".progressbar li#advanced").addClass("active");
+              $(".progressbar li#interview").addClass("active");
+              $(".progressbar li#result").addClass("active");
+              $("#tabA").show();
+              $("#tabC").hide();
+              $("#tabF").show();
+              $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep Follow up on our website for your new account user information! </h2>")
+              $(".img-p").css("display","none")
+              $(".div-p").css("display","none")
+              $("#input-radio-a").css("display","none")
+              $("#input-radio-b").css("display","none")
+              $("#input-account").css("display","none")
+              $("#agreeBtnPartner").css("display","none")
+            }else if (result.status == "OK Partner") {
+              $(".text-p").html("<h4>Hi <b>" +result.name +"</b>, You`re now a partner of the company.<br><br>You can pick the job based on your job category and get paid.<br><br>But you can only pick the job from Sinergy Freelance App.<br><br>So please download our mobile app in the play store or app store.<br><br> And the following bellow is your username and password for your Sinergy Freelance App.<br>Thank you and good luck!</h4>")
+                var append = ""
+                append = append + '<tr>'
+                append = append + '<th>Username</th>'
+                append = append + '<td>'+ result.email +'</td>'
+                append = append + '</tr>'
+                append = append + '<tr>'
+                append = append + '<th>Password</th>'
+                append = append + '<td>sinergy</td>'
+                append = append + '</tr>'
+                append = append + '<tr>'
+                append = append + '<th>App Store</th>'
+                append = append + '<td><a href="#" target="_blank">https://www.apple.com/ios/app-store</a></td>'
+                append = append + '</tr>'
+                append = append + '<tr>'
+                append = append + '<th>PlayStore</th>'
+                append = append + '<td><a href="#" target="_blank">https://play.google.com/store?hl=en</a></td>'
+                append = append + '</tr>'
+                $("#table-partner").append(append)                
+                $(".progressbar li#validation").addClass("active");
+                $(".progressbar li#advanced").addClass("active");
+                $(".progressbar li#interview").addClass("active");
+                $(".progressbar li#result").addClass("active");
+                $("#tabA").show();
+                $("#tabC").hide();
+                $("#tabE").show();
             }
-      })
-    }else{
-      $("#tabB").show();
-    }
+            console.log(result)
+          }
+    })
+  }else{
+    $("#tabB").show();
+  }
 
   var currentTab = 0;
   
@@ -694,6 +760,7 @@
       $("#input-pAddress").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
+      $("#input-pDateBirth").css("display","none")
       $("#input-pNik").css("display","none")
       $("#input-pFilesKtp").css("display","none");
       $("#hasJoined").css("display","none")
@@ -723,6 +790,7 @@
       $("#nextBtnBasic").html("Next")
       $("#input-pEmail").css("display","block")
       $("#input-pName").css("display","none")
+      $("#input-pDateBirth").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pAddress").css("display","none")
       $("#input-pNik").css("display","none")
@@ -751,7 +819,6 @@
 
         return re.test(email);
       }
-
       if (validateEmail(email)) {
         $("#input-pPhone").val(localStorage.getItem("phone"));
         $(".text-p").html("<h3 class='center-in' style=''> 3. And, your phone number please </h3>")
@@ -761,6 +828,7 @@
         $("#nextBtnBasic").html("Next")
         $("#input-pPhone").css("display","block")
         $("#input-pEmail").css("display","none")
+        $("#input-pDateBirth").css("display","none")
         $("#input-pName").css("display","none")
         $("#input-pAddress").css("display","none")
         $("#input-pNik").css("display","none")
@@ -784,9 +852,7 @@
         currentTab = currentTab -1;
         alert('Your email address not valid!')
         $("#nextBtnBasic").prop("disabled",true)
-      }
-      
-      
+      } 
     }else if (currentTab == 4) {
       localStorage.setItem("phone", $("#input-pPhone").val())
       $("#input-pAddress").val(localStorage.getItem("address"));
@@ -798,6 +864,7 @@
       $("#input-pAddress").css("display","block")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
+      $("#input-pDateBirth").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pNik").css("display","none")
       $("#input-pFilesKtp").css("display","none");
@@ -819,21 +886,49 @@
 
       document.getElementById("input-pAddress").placeholder = "Your address ex: Jl. Kembangan, Jakarta Barat , RT.05 / RW.10,11610";
     }else if (currentTab == 5) {
-      // $.ajax({
-      //   type:method,
-      //   // url:
-      //   success:function(){
-      //   }
-      // })
-      $("#input-pNik").val(localStorage.getItem("nik"));
-      $("#input-pFilesKtp").val(localStorage.getItem("nik_files"));
       localStorage.setItem("address", $("#input-pAddress").val())
+      $("#input-pDateBirth").val(localStorage.getItem("date_of_birth"));
+      $(".text-p").html("<h3 class='center-in' style=''> 5. Next, what's your date of birth? </h3>")
       $(".img-p").css("display","none")
       $(".div-p").css("display","none")
-      $(".text-p").html("<h3 class='center-in' style=''> 5. Great, finally can you tell us your KTP id(NIK)? </h3>")
+      $("#prevBtnBasic").css("display","block");
+      $("#nextBtnBasic").html("Next")
+      $("#input-pDateBirth").css("display","block")
       $("#input-pAddress").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
+      $("#input-pName").css("display","none")
+      $("#input-pNik").css("display","none")
+      $("#input-pFilesKtp").css("display","none");
+      $("#hasJoined").css("display","none")
+      $("#nextBtnBasic").attr("onclick","nextPrevBasic(1)");
+      if ($("#input-pDateBirth").val() != 0) {
+        $("#nextBtnBasic").prop("disabled",false)
+      }else{
+        $("#nextBtnBasic").prop("disabled",true)
+      }
+      $("#input-pDateBirth").change(function(){
+        var textLength = $(this).val();
+        if (textLength.length > 0) {
+          $("#nextBtnBasic").prop("disabled",false)
+        }else{
+          $("#nextBtnBasic").prop("disabled",true)
+        }
+      });
+
+      document.getElementById("input-pDateBirth").placeholder = "2000-04-14";
+    }else if (currentTab == 6) {
+      $("#input-pNik").val(localStorage.getItem("nik"));
+      $("#input-pFilesKtp").val(localStorage.getItem("nik_files"));
+      // localStorage.setItem("address", $("#input-pAddress").val())
+      localStorage.setItem("date_of_birth", $("#input-pDateBirth").val())
+      $(".img-p").css("display","none")
+      $(".div-p").css("display","none")
+      $(".text-p").html("<h3 class='center-in' style=''> 6. Great, finally can you tell us your KTP id(NIK)? </h3>")
+      $("#input-pAddress").css("display","none")
+      $("#input-pPhone").css("display","none")
+      $("#input-pEmail").css("display","none")
+      $("#input-pDateBirth").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pNik").css("display","block")
       $("#input-pFilesKtp").css("display","block");
@@ -841,12 +936,19 @@
       $("#nextBtnBasic").html("Submit")
       $("#nextBtnBasic").attr("onclick","submitBasic()");
       $("#hasJoined").css("display","none")
-      document.getElementById("input-pNik").placeholder = "Your NIK ex: 1605037654999992";
+      document.getElementById("input-pNik").placeholder = "Your NIK must be 16 digit";
       $("#file-inputKtp").change(function() {
         var file = this.files[0];
-        var fileName = file.name;
+        var fileType = file.type;
 
-        console.log(fileName)
+        console.log(fileType);
+        var fileName = file.name;
+        var match = ['image/png','image/jpg','image/jpeg'];
+        if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
+            alert('Sorry, only Images files is allowed to upload.');
+            $("#file-inputKtp").val('');
+            return false;
+        }
 
         if (fileName !== "") {
           $("#nextBtnBasic").prop("disabled",false)
@@ -857,10 +959,22 @@
         }
       })
 
+      $("#file-input").change(function() {
+          var file = this.files[0];
+          var fileType = file.type;
+          var fileName = file.name;
+          var match = ['application/pdf'];
+          if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
+              alert('Sorry, only PDF files is allowed to upload.');
+              $("#file-input").val('');
+              return false;
+          }
+      });
+
       $("#input-pNik").keyup(function(){
         var textLength = $(this).val();
         if (textLength.length > 0 || $("#file-inputKtp").val() !== "") {
-          $("#nextBtnBasic").prop("disabled",false)
+            $("#nextBtnBasic").prop("disabled",false)
         }else{
           $("#nextBtnBasic").prop("disabled",true)
         }
@@ -871,8 +985,14 @@
   function submitBasic(){
     localStorage.setItem("nik", $("#input-pNik").val())
     localStorage.setItem("nik_files", $("#input-pFilesKtp").val())
-    if ($("#file-inputKtp").val() !== "") {
-    Swal.fire({
+    if ($("#input-pNik").val() == "") {
+      alert('Please fill your NIK!')
+    }else if ($("#input-pNik").val().length < 16 ) {
+        alert('your NIk must be 16 digit')
+    }else if ($("#file-inputKtp").val() == "") {
+      alert('Please upload your KTP Scan!')
+    }else{
+      Swal.fire({
         title: 'Are you sure?',
         text: "to submit your form",
         icon: 'warning',
@@ -881,7 +1001,7 @@
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes',
         cancelButtonText: 'No',
-    }).then((result) => {
+      }).then((result) => {
       if (result.value) {
         Swal.fire({
           title: 'Please Wait..!',
@@ -905,6 +1025,7 @@
         fd.append('email',$("#input-pEmail").val());
         fd.append('address',$("#input-pAddress").val());
         fd.append('ktp_nik',$("#input-pNik").val());
+        fd.append('date_of_birth',$("#input-pDateBirth").val());
         fd.append('ktp_files',files);
         fd.append('history_status',1);
         fd.append('history_user',1);
@@ -934,6 +1055,7 @@
                 $("#input-pAddress").css("display","none")
                 $("#input-pPhone").css("display","none")
                 $("#input-pEmail").css("display","none")
+                $("#input-pDateBirth").css("display","none")
                 $("#input-pName").css("display","none")
                 $("#input-pNik").css("display","none")
                 $("#input-pFilesKtp").css("display","none");
@@ -946,18 +1068,13 @@
           }
         })
       }
-    }); 
-      
-      
+      }); 
       // localStorage.clear();
       console.log($("#input-pAddress").val())
       console.log($("#input-pPhone").val())
       console.log($("#input-pEmail").val())
       console.log($("#input-pName").val())
       console.log($("#input-pNik").val())
-
-    }else{
-      alert('Please upload your KTP Scan!')
     }
   }
 
@@ -966,7 +1083,7 @@
     console.log(currentTab)
 
     if (currentTab == 1) {
-      $(".text-p").html("<h2 class='center-in' style=''>1.Ok, Last can you tell us you lastest education?</h2>")
+      $(".text-p").html("<h2 class='center-in' style=''>1.Ok, Can you tell us your latest education?</h2>")
       $("#input-pEducation").val(localStorage.getItem("education"));
       // $("#tabA").css("display","none")
       $(".progressbar li#validation").addClass("active");
@@ -996,7 +1113,7 @@
         }
       });
       
-      document.getElementById("input-pEducation").placeholder = "Type your lastest Education here..";
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
     }else if (currentTab == 2) {
       if (JSON.parse(localStorage.getItem("category")) == null) {
         var localCat = []
@@ -1127,7 +1244,7 @@
       $("#input-pLocation").css("display","none")
       $("#hasJoined").css("display","none")
       $("#input-pFiles").css("display","none");
-      document.getElementById("input-pEducation").placeholder = "Type your lastest Education here..";
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
     }else if (currentTab == 3) {
       $(".progressbar li#validation").addClass("active");
       $(".progressbar li#advanced").addClass("active");
@@ -1196,7 +1313,7 @@
       $("#input-pLocation").css("display","block")
       $("#input-pFiles").css("display","none");
       $("#hasJoined").css("display","none")      
-      document.getElementById("input-pEducation").placeholder = "Type your lastest Education here..";
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
       $("#nextBtnAdvanced").attr("onclick","nextPrevAdvanced(1)");
     }else if (currentTab == 4) {
       $(".progressbar li#validation").addClass("active");
@@ -1221,9 +1338,6 @@
               $("#file-input").val('');
               return false;
           }
-          // var fd = new FormData();
-          // fd.append('invoice',file);
-          // console.log(fileName)
       });
       
       $(".text-p").html("<h2 class='center-in' style=''>4.And, please input your portofolio.</h2>")
