@@ -234,176 +234,139 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        firebase.database().ref('notification/web-notif').orderByChild('timestamp').on('value', function(snapshot) {
-        // firebase.database().ref('notification/web-notif').limitToLast(10).on('child_added', function(snapshot) {
-            snapshot_dump = snapshot.val().reverse()
-            // snapshot_dump = snapshot.val()
-            var notificationCount = 0;
-            var notificationCountAll = 0;
-            var notificationCountReal = [];
-            // $("#notificationContent").empty()
-            for (i = snapshot_dump.length - 1; i > -1; i--) {
-                notificationCountReal.push(i)
-            }
-            snapshot_dump.forEach(function(data,index){
-                if(notificationCountAll < 10){
-                    if(data.to == "{{Auth::user()->email}}"){
-                        if(data.showed == "false"){
-                            sendNotification(data.title,data.message,data.job)
-                            setNotificationShowed(notificationCountReal[index],data)
-                        }
-                        if(data.status == "unread"){
-                            notificationCount = notificationCount + 1
-                            addNotification(data,notificationCount,notificationCountReal[index])
-                        } 
-                        else if(data.status == "read"){
-                            // notificationCount = notificationCount - 1
-                            addNotificationRead(data,notificationCount,notificationCountReal[index])
-                        }
-                    }
-                }
-                notificationCountAll = notificationCountAll + 1
-            })
+        ///////////////////////////////
 
-        });
-
-        function sendNotification(title,message,job_id) {
-
-            if (Notification.permission !== 'granted')
-                Notification.requestPermission();
-            else {
-                var notification = new Notification(title, {
-                    icon: '{{env("API_LINK_CUSTOM_PUBLIC")}}/image/freelance-profile-2.png',
-                    body: message,
-                });
-                notification.onclick = function() {
-                    window.open("{{env('WEB_LINK_CUSTOM_PUBLIC')}}" + job_id);
-                };
-            }
-        }
-
-        function addNotification(data,notificationCount,index){
-            $("#notificationCount").text(notificationCount + ' Notifications')
-            $(".badge.badge-pill.badge-primary").text(notificationCount)
-
+        firebase.database().ref('notification/web-notif').orderByChild('timestamp').limitToLast(10).once('value', function(snapshot) {
+            snapshot_dump = snapshot.val()
             var append = ""
-            // console.log(data.job)
-            if (data.history == "On Progress") {
-                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job  + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
-            }else if(data.history == "OK Basic"){
-                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#advance" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
-            }else if(data.history == "OK Agreement"){
-                append = append + '<a href="' + "{{url('engineer/index')}}/"  + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
-                // append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#interview" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
-            }else if(data.history == "OK Partner"){
-                append = append + '<a href="' + "{{url('partner/detail')}}/" + data.job + "#agreement" + '" class="dropdown-item pointer " onclick="readNotification(' + index + ')">'
-            }else{
-                append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item pointer" onclick="readNotification(' + index + ')">'
+            var count = 0
+            for (const index in snapshot_dump) {
+                
+                // Append notif to list
+                // if(snapshot_dump[index].status == "unread"){
+                //     append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:red;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+                // } else {
+                //     append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:blue;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+                // }
+
+                append = append + makeNotificationHolder(snapshot_dump[index],index)
+
+                // Show notif to Browser Notification
+                if(snapshot_dump[index].showed == "false"){
+                    showNotificationBrowser(snapshot_dump[index],index)
+                }
+
+                count++
             }
-            // append = append + '<a class="dropdown-item" onclick="readNotification(' + index + ')">'
-            append = append + '<i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
-            // append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
-            
-            // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
-            append = append + '</a>'
-            append = append + '<hr>'
-            // append = append + '<div class="padding-footer"><span onclick="btnView()">View All</span><span onclick="btnRead()" class="float-right">Read All</span></div>'
+            console.log(count)
             $("#notificationContent").append(append)
             $(".notificationFooter").css("display","block")
+            // $("#notification").append(append)
+        });
 
-        }
-
-        function addNotificationRead(data,notificationCount,index){
-            // console.log(notificationCount)
-            if(notificationCount == 0){
-                $("#notificationCount").text('Noting Notifications')
-                $(".badge.badge-pill.badge-primary").text("")
-                $(".notificationFooter").css("display","none");
+        firebase.database().ref('notification/web-notif').orderByChild('timestamp').on('value', function(snapshot) {
+            snapshot_dump = snapshot.val()
+            var count = 0
+            for (const index in snapshot_dump) {
+                if(snapshot_dump[index].status == "unread"){
+                    console.log(index)
+                    count++
+                }
             }
 
-            // var append = ""
-            // append = append + '<a href="#" class="dropdown-item text-muted2" onclick="readNotification(' + index + ')">'
-            // append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title
-            // // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
-            // append = append + '</a>'
-            // $("#notificationContent").append(append)
+            if(count != 0){
+                $("#statusNotification").text( count + " Unread notification")
+            } else {
+                $("#statusNotification").text("Nothing new in here")
+            }
+        });
 
+        var start = true;
+
+        firebase.database().ref('notification/web-notif').orderByChild('timestamp').limitToLast(1).on('child_added', function(snapshot) {
+            if(!start){
+                // Remove first notification
+                $("#notificationContent hr:first-child").remove()
+                $("#notificationContent a:first-child").remove()
+
+                // Show latests notification to Browser Notification
+                if(snapshot.val().showed == "false"){
+                    showNotificationBrowser(snapshot.val(),snapshot.key)
+                }
+
+                // Add latests notification
+                $("#notificationContent").append(makeNotificationHolder(snapshot.val(),snapshot.key)) 
+            } else {
+                start = false
+            }
+        })
+
+        function showNotificationBrowser(snapshot,key){
+            var notification = new Notification(snapshot.title, {
+                icon: '{{env("API_LINK_CUSTOM_PUBLIC")}}/image/freelance-profile-2.png',
+                body: snapshot.message,
+            });
+            notification.onclick = function() {
+                window.open("{{env('WEB_LINK_CUSTOM_PUBLIC')}}" + snapshot.job);
+            };
+
+            firebase.database().ref('notification/web-notif/' + key).set({
+                to: snapshot.to,
+                from: snapshot.from,
+                title: snapshot.title,
+                message: snapshot.message,
+                status: snapshot.status,
+                date_time : snapshot.date_time,
+                showed : "true",
+                history : snapshot.history,
+                job : snapshot.job
+            });
         }
 
-        function readNotification(index){
-            if($(".badge.badge-pill.badge-primary").text() === "1"){
-                $("#notificationCount").text('Noting Notifications')
-                $(".badge.badge-pill.badge-primary").text("")
-            }
-            // console.log(index)
+        function readNotification(index,url){
             firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
                 // console.log(snapshot.val())
                 var data = snapshot.val()
                 firebase.database().ref('notification/web-notif/' + index).set({
-                    to: data.to,
-                    from: data.from,
-                    title: data.title,
-                    message: data.message,
+                    to: snapshot_dump[index].to,
+                    from: snapshot_dump[index].from,
+                    title: snapshot_dump[index].title,
+                    message: snapshot_dump[index].message,
                     status: "read",
-                    date_time : data.date_time,
-                    job : data.job,
-                    history : data.history,
+                    date_time : snapshot_dump[index].date_time,
+                    job : snapshot_dump[index].job,
+                    history : snapshot_dump[index].history,
                     showed : "true"
                 });
+                window.location.href = url
             })
-        }
-
-        function setNotificationShowed(key,data){
-            // console.log('updated')
-        // function setNotification(){
-            firebase.database().ref('notification/web-notif/' + key).set({
-                to: data.to,
-                from: data.from,
-                title: data.title,
-                message: data.message,
-                status: data.status,
-                date_time : data.date_time,
-                showed : "true",
-                history : data.history,
-                job : data.job
-            });
 
         }
 
+        function makeNotificationHolder(data,index){
+            var append = ""
+            if (data.history == "On Progress") {
+                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job  + '")">'
+            } else if(data.history == "OK Basic"){
+                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job + "#advance" + '")">'
+            } else if(data.history == "OK Agreement"){
+                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('engineer/index')}}/"  + '")">'
+            } else if(data.history == "OK Partner"){
+                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job + "#agreement" + '")">'
+            } else{
+                append = append + '<span class="dropdown-item pointer" onclick="readNotification(' + index + ',"' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '")">'
+            }
+            append = append + '<i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
+            
+            append = append + '</span>'
+            append = append + '<hr style="margin-bottom:0px;margin-top:0px">'
 
-        function btnRead(){
-            firebase.database().ref('notification/web-notif').on('value', function(snapshot) {
-                snapshot_dump = snapshot.val()
-                // $("#notificationContent").empty()
-                snapshot_dump.forEach(function(data,index){
-                        if(data.to == "{{Auth::user()->email}}"){
-                            if(data.status == "unread"){
-                                    firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
-                                    console.log(snapshot.val())
-                                    var data = snapshot.val()
-                                    firebase.database().ref('notification/web-notif/' + index).set({
-                                        to: data.to,
-                                        from: data.from,
-                                        title: data.title,
-                                        message: data.message,
-                                        status: "read",
-                                        date_time : data.date_time,
-                                        job : data.job,
-                                        history : data.history,
-                                        showed : "true"
-                                    });
-                                })
-                            }                        
-                        }
-                })
-            });
-            // location.reload();
+            return append
         }
 
-        function btnView(){
-             // window.open("{{url('job/notification_all')}}","_blank");
-             location.href = "{{url('job/notification_all')}}";
-        } 
+        ///////////////////////////////
+
+         
 
         // $(".notificationContent").scrollTop($(".notificationContent")[0].scrollHeight); 
 
@@ -413,9 +376,9 @@
         //            function scrollNotification(data,index){
 
         //                 var append = ""
-        //                 // console.log(data.job)
-        //                 append = append + '<a href="' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
-        //                 append = append + '   <i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary"><i class="fas fa-circle"></i></span>'
+        //                 // console.log(snapshot_dump[index].job)
+        //                 append = append + '<a href="' + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + '" class="dropdown-item" onclick="readNotification(' + index + ')">'
+        //                 append = append + '   <i class="fas fa-envelope mr-2"></i>' + snapshot_dump[index].title + '<span class="float-right text-sm text-primary"><i class="fas fa-circle"></i></span>'
         //                 // append = append + '   <span class="float-right text-muted text-sm">3 mins</span>'
         //                 append = append + '</a>'
         //                 append = append + '<hr>'
