@@ -185,18 +185,27 @@
 								<select class="custom-select d-block w-100" id="inputJobRegion" required="" style="width: 100%">
 									<option value="">Choose...</option>
 								</select>
+								<div class="invalid-feedback">
+									Please select a valid Region.
+								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="state">Area</label>
 								<select class="custom-select d-block w-100" id="inputJobArea" required="" style="width: 100%" disabled>
 									<option value="">Choose...</option>
 								</select>
+								<div class="invalid-feedback">
+									Please select a valid Area.
+								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="zip">Location</label>
 								<select class="custom-select d-block w-100" id="inputJobLocation" required="" style="width: 100%" disabled>
 									<option value="">Choose...</option>
 								</select>
+								<div class="invalid-feedback">
+									Please select a valid Location.
+								</div>
 							</div>
 						</div>
 
@@ -217,21 +226,21 @@
 								<label for="jobTitle">PIC Name</label>
 								<input type="text" class="form-control" id="jobTitle" required="">
 								<div class="invalid-feedback">
-									Please enter the Job Title.
+									Please enter the PIC Name.
 								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="jobTitle">Contact Number</label>
 								<input type="text" class="form-control" id="jobTitle" required="">
 								<div class="invalid-feedback">
-									Please enter the Job Title.
+									Please enter the Contact Number.
 								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="jobTitle">Email</label>
 								<input type="text" class="form-control" id="jobTitle" required="">
 								<div class="invalid-feedback">
-									Please enter the Job Title.
+									Please enter valid Email.
 								</div>
 							</div>
 						</div>
@@ -253,7 +262,17 @@
 								<option value="">Choose...</option>
 							</select>
 							<div class="invalid-feedback">
-								Please select a valid Client.
+								Please select a valid Category.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="country">Priority</label>
+							<select class="custom-select d-block w-100" id="inputJobPriority" required="">
+								<option value="">Choose...</option>
+							</select>
+							<div class="invalid-feedback">
+								Please select a valid Priority.
 							</div>
 						</div>
 
@@ -261,7 +280,7 @@
 							<label for="jobTitle">Note (Optional)</label>
 							<input type="text" class="form-control" id="inputJobNote" required="">
 							<div class="invalid-feedback">
-								Please enter the Job Title.
+								Please enter the Notes.
 							</div>
 						</div>
 					</div>
@@ -277,6 +296,9 @@
 						<div class="mb-3">
 							<label for="jobTitle">Range Date</label>
 							<input type="text" class="form-control" id="inputJobRangeDate" required="">
+							<div class="invalid-feedback">
+								Please enter the Range Date.
+							</div>
 						</div>
 
 						<div class="mb-3">
@@ -299,7 +321,7 @@
 							<label for="jobRequirement">Job Address</label>
 							<textarea class="form-control" id="inputJobAddress" rows="3" required=""></textarea>
 							<div class="invalid-feedback">
-								Please enter the Job Requirement.
+								Please enter the Job Adress.
 							</div>
 						</div>
 					</div>
@@ -308,6 +330,9 @@
 							<div class="custom-control custom-radio">
 								<input id="base" value="base" name="paymentMethod" type="radio" class="custom-control-input" required="">
 								<label class="custom-control-label" for="base">Base Payment</label>
+								<div class="invalid-feedback">
+									Please checkin base payment before submit nominal.
+								</div>
 							</div>
 							<!-- <div class="custom-control custom-radio">
 								<input id="range" value="range" name="paymentMethod" type="radio" class="custom-control-input" required="">
@@ -321,7 +346,7 @@
 								<label for="jobRequirement">Base Payment</label>
 								<input type="text" class="form-control" id="inputJobPriceBase" data-type="currency" placeholder="IDR 100.000" required="">	
 								<div class="invalid-feedback">
-									Please enter the Job Requirement.
+									Please enter the Base Payment!.
 								</div>
 							</div>
 						</div>
@@ -333,14 +358,14 @@
 									<!-- <label for="jobTitle">Start Range</label> -->
 									<input type="text" class="form-control" id="jobTitle" data-type="currency" placeholder="Start Range" required="">
 									<div class="invalid-feedback">
-										Please enter the Job Title.
+										Please enter the Range Payment.
 									</div>
 								</div>
 								<div class="col-md-6 mb-3">
 									<!-- <label for="jobTitle">End Range</label> -->
 									<input type="text" class="form-control" id="jobTitle" data-type="currency" placeholder="End Range" required="">
 									<div class="invalid-feedback">
-										Please enter the Job Title.
+										Please enter the Range Payment.
 									</div>
 								</div>
 							</div>
@@ -458,7 +483,11 @@
 					<div class="d-flex d-inline-block align-items-center">
 						<strong class="text-primary" id="jobSumaryHolderCustomer">PT. Sinergy Informasi Pratama</strong>
 						<!-- <span class="ml-auto badge badge-success" id="statusShowSummary">Done</span> -->
-						<div class="ml-auto" id="statusShowSummary"></div>
+						
+						<div class="ml-auto d-inline-block">
+							<span id="statusShowSummary"></span>
+							<span class="d-inline-block" id="priorityShowSummary"></span>
+						</div>
 					</div>
 					<h2 class="mb-2" id="jobSumaryHolderTitle">
 						Create Internal Software
@@ -502,20 +531,7 @@
 
 	$(document).ready(function(){
 
-		getDashboard();
-		// $("#jobSearch").on('change',function(){
-			
-			
-		// })
-		// $("#jobSearch").on('change',function(){
-		// 	if($("#jobSearch").val() != ""){
-		// 		fillDataJobList("dashboard/getJobListAndSumary/search?search=" + $("#jobSearch").val() + "&type=list","POST")
-		// 	} else {
-		// 		// fillDataJobList("dashboard/getJobListAndSumary/paginate?type=list","GET")
-		// 		// $(".resultSearch").hide()
-		// 	}
-		// })
-		
+		getDashboard();		
 		
 		fillDataJob("dashboard/getJobListAndSumary/paginate?type=card","GET")
 
@@ -581,6 +597,21 @@
 				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterCategoryAll",
 				dataType: 'json',
 			}
+		})
+
+		$("#inputJobPriority").select2({
+			multiple: false,
+			theme:'bootstrap4',
+		    data: [{
+		        id: 'critical',
+		        text: 'Critical'
+		    }, {
+		        id: 'major',
+		        text: 'Major'
+		    }, {
+		        id: 'minor',
+		        text: 'Minor'
+		    }]
 		})
 
 		$("#inputJobRangeDate").daterangepicker({
@@ -781,7 +812,7 @@
 				if(method == "POST"){
 					if(result['total'] == 0){
 						$(".resultSearchCount").empty("").text("Not found")
-						$("#paginationJob").hide()
+						// jobPaginateHolder
 					} else {
 						$(".resultSearchCount").empty("").text(result["total"] + " results")
 					}
@@ -976,11 +1007,13 @@
 						$("#paginationJob").hide()
 					} else {
 						$(".resultSearchCount").empty("").text(result["total"] + " results")
+						$("#paginationJob").show()
 					}
 					$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1].split("&")[0])
 					$(".resultSearch").show()
 				} else {
 					$(".resultSearch").hide()
+					$("#paginationJob").show()
 				}
 
 			}
@@ -1074,11 +1107,13 @@
 							$("#paginationJob").hide()
 						} else {
 							$(".resultSearchCount").empty("").text(result["total"] + " results")
+							$("#paginationJob").show()
 						}
 						$(".resultSearchKeyword").empty("").text("Search for : " + url.split("=")[1].split("&")[0])
 						$(".resultSearch").show()
 					} else {
 						$(".resultSearch").hide()
+						$("#paginationJob").show()
 					}
 				},
 			})
@@ -1124,7 +1159,7 @@
 		            },
 		            {
 		            render: function ( data, type, row ) {
-		                return moment(row.latest_history.history.date_time).format("L h:mm:ss a");
+		                return row.latest_history.history.date_time;
 		              }
 		            },
 		            {
@@ -1148,6 +1183,7 @@
 		              }
 		            }, 
 		          ],
+		        // ordering:false,
 				paging: false,
 				searching: false,
 				"bInfo" : false,
@@ -1287,6 +1323,14 @@
 					$("#statusShowSummary").html('<span class="ml-auto badge badge-success">Done</span>')
 				}
 
+				if (result.job.job_priority == "critical") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-danger">Critical</span></h4>')
+				}else if (result.job.job_priority == "major") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-warning">Major</span></h4>')
+				}else if (result.job.job_priority == "minor") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-success">Minor</span></h4>')
+				}
+
 				$("#jobSumaryHolderCustomer").html(result.job.customer.customer_name)
 				$("#jobSumaryHolderTitle").html(result.job.job_name)
 				$("#jobSumaryHolderDescription").html(result.job.job_description.replace(/(?:\r\n|\r|\n)/g, '<br>'))
@@ -1327,7 +1371,8 @@
 				$("#finalisePicEmail").html(result.pic_email)
 				$("#finaliseJobTitle").html($("#inputJobTitle").val())
 				$("#finaliseJobCategory").html('<i class="fas fa-hard-hat"></i> ' + result.category)
-				$("#finaliseJobLevel").html('<i class="fas fa-signal"></i> ' + $("#inputJobLevel").select2('data')[0].text)
+				$("#finaliseJobLevel").html('<i class="fas fa-signal"></i> ' + 
+					$("#inputJobLevel").select2('data')[0].text + '<br>' + '<i class="fas fa-business-time"></i> ' + $("#inputJobPriority").select2('data')[0].text)
 				$("#finaliseJobDuration").html(moment(splited[0],"DD/MM/YYYY").format("DD MMMM") + " - " + moment(splited[1],"DD/MM/YYYY").format("DD MMMM YYYY"))
 				$("#finaliseJobDescription").html("<h4>Job Description</h4>" + $("#inputJobDescription").val())
 				$("#finaliseJobRequirement").html("<h4>Job Requirement</h4>" + $("#inputJobRequirement").val())
@@ -1379,6 +1424,7 @@
 						job_requrement:$("#inputJobRequirement").val(),
 						job_address:$("#inputJobAddress").val(),
 						job_payment_base:$("#inputJobPriceBase").val().replace(',00','').replace(/\D/g, ""),
+						job_priority:$("#inputJobPriority").select2("data")[0].id,
 						id_user:'{{Auth::user()->id}}',
 
 					},
@@ -1403,15 +1449,80 @@
 	// showTab(currentTab); // Display the current tab
 
 	function showTab(n) {
-		var x = document.getElementsByClassName("tab");
-		var y = document.getElementsByClassName("step");
-		x[n].style.display = "inline";
-		y[n].style.display = "inline";
 		if (n == 0) {
 			document.getElementById("prevBtn").style.display = "none";
 		} else {
 			document.getElementById("prevBtn").style.display = "inline";
 		}
+		var x = document.getElementsByClassName("tab");
+		var y = document.getElementsByClassName("step");
+		x[n].style.display = "inline";
+		y[n].style.display = "inline";
+
+		$('#inputJobClient').on('select2:select', function (e) {
+			$("#inputJobClient").removeClass("is-invalid")
+		});
+
+		$('#inputJobRegion').on('select2:select', function (e) {
+			$("#inputJobRegion").removeClass("is-invalid")
+		});
+
+		$('#inputJobArea').on('select2:select', function (e) {
+			$("#inputJobArea").removeClass("is-invalid")
+		});
+
+		$('#inputJobLocation').on('select2:select', function (e) {
+			$("#inputJobLocation").removeClass("is-invalid")
+		});
+
+		$('#inputJobPic').on('select2:select', function (e) {
+			$("#inputJobPic").removeClass("is-invalid")
+		});
+
+		$('#inputJobLevel').on('select2:select', function (e) {
+			$("#inputJobLevel").removeClass("is-invalid")
+		});
+
+		$('#inputJobCategory').on('select2:select', function (e) {
+			$("#inputJobCategory").removeClass("is-invalid")
+		});
+
+		$('#inputJobPriority').on('select2:select', function (e) {
+			$("#inputJobPriority").removeClass("is-invalid")
+		});
+
+		// $('#inputJobNote').on('change', function(){
+		//     $("#inputJobNote").removeClass("is-invalid")
+		// });
+
+		$('#inputJobTitle').on('change', function(){
+		    $("#inputJobTitle").removeClass("is-invalid")
+		});
+
+		$('#inputJobRangeDate').on('change', function(){
+		    $("#inputJobRangeDate").removeClass("is-invalid")
+		});
+
+		$('#inputJobDescription').on('change', function(){
+		    $("#inputJobDescription").removeClass("is-invalid")
+		});
+
+		$('#inputJobRequirement').on('change', function(){
+		    $("#inputJobRequirement").removeClass("is-invalid")
+		});
+
+		$('#inputJobAddress').on('change', function(){
+		    $("#inputJobAddress").removeClass("is-invalid")
+		});
+
+		$('#base').on('change', function(){
+		    $("#base").removeClass("is-invalid")
+		});
+
+		$('#inputJobPriceBase').on('change', function(){
+		    $("#inputJobPriceBase").removeClass("is-invalid")
+		});
+
 		if (n == (x.length - 1)) {
 			finalize()
 			document.getElementById("nextBtn").innerHTML = "Publish";
@@ -1422,23 +1533,130 @@
 			$(".modal-dialog").removeClass("modal-lg");
 			document.getElementById("nextBtn").innerHTML = "Next";
 		}
+		console.log(n);
 	}
 
 	function nextPrev(n) {
-		var x = document.getElementsByClassName("tab");
-		var y = document.getElementsByClassName("step");
-		// if (n == 1 && !validateForm()) return false;
-		x[currentTab].style.display = "none";
-		y[currentTab].style.display = "none";
-		currentTab = currentTab + n;
-		if (currentTab >= x.length) {
-			$("#exampleModalCenter").modal('hide');
-			x[n].style.display = "none";
-			currentTab = 0;
-			// document.getElementById("regForm").submit();
-			// return false;
+		if (currentTab == 0) {
+			if ($("#inputJobClient").select2("data")[0].id == "") {
+				$("#inputJobClient").addClass("is-invalid")
+			}else if($("#inputJobRegion").select2("data")[0].id == ""){
+				$("#inputJobRegion").addClass("is-invalid")
+			}else if($("#inputJobArea").select2("data")[0].id == ""){
+				$("#inputJobArea").addClass("is-invalid")
+			}else if($("#inputJobLocation").select2("data")[0].id == ""){
+				$("#inputJobLocation").addClass("is-invalid")
+			}else if($("#inputJobPic").select2("data")[0].id == ""){
+				$("#inputJobPic").addClass("is-invalid")
+			}else{
+				var x = document.getElementsByClassName("tab");
+				var y = document.getElementsByClassName("step");
+				// if (n == 1 && !validateForm()) return false;
+				x[currentTab].style.display = "none";
+				y[currentTab].style.display = "none";
+				currentTab = currentTab + n;
+				if (currentTab >= x.length) {
+					$("#exampleModalCenter").modal('hide');
+					x[n].style.display = "none";
+					currentTab = 0;
+					// document.getElementById("regForm").submit();
+					// return false;
+				}
+				showTab(currentTab);
+			}
+			
+		}else if (currentTab == 1) {
+			if($("#inputJobLevel").select2("data")[0].id == ""){
+				$("#inputJobLevel").addClass("is-invalid")
+			}else if($("#inputJobCategory").select2("data")[0].id == ""){
+				$("#inputJobCategory").addClass("is-invalid")
+			}else if($("#inputJobPriority").select2("data")[0].id == ""){
+				$("#inputJobPriority").addClass("is-invalid")
+			}
+			// else if($("#inputJobNote").val() == ""){
+			// 	$("#inputJobNote").addClass("is-invalid")
+			// }
+			else{
+				var x = document.getElementsByClassName("tab");
+				var y = document.getElementsByClassName("step");
+				// if (n == 1 && !validateForm()) return false;
+				x[currentTab].style.display = "none";
+				y[currentTab].style.display = "none";
+				currentTab = currentTab + n;
+				if (currentTab >= x.length) {
+					$("#exampleModalCenter").modal('hide');
+					x[n].style.display = "none";
+					currentTab = 0;
+					// document.getElementById("regForm").submit();
+					// return false;
+				}
+				showTab(currentTab);
+			}
+		}else if(currentTab == 2){
+			if($("#inputJobTitle").val() == ""){
+				$("#inputJobTitle").addClass("is-invalid")
+			}else if($("#inputJobRangeDate").val() == ""){
+				$("#inputJobRangeDate").addClass("is-invalid")
+			}else if($("#inputJobDescription").val() == ""){
+				$("#inputJobDescription").addClass("is-invalid")
+			}else if($("#inputJobRequirement").val() == ""){
+				$("#inputJobRequirement").addClass("is-invalid")
+			}else if($("#inputJobAddress").val() == ""){
+				$("#inputJobAddress").addClass("is-invalid")
+			}else{
+				var x = document.getElementsByClassName("tab");
+				var y = document.getElementsByClassName("step");
+				// if (n == 1 && !validateForm()) return false;
+				x[currentTab].style.display = "none";
+				y[currentTab].style.display = "none";
+				currentTab = currentTab + n;
+				if (currentTab >= x.length) {
+					$("#exampleModalCenter").modal('hide');
+					x[n].style.display = "none";
+					currentTab = 0;
+					// document.getElementById("regForm").submit();
+					// return false;
+				}
+				showTab(currentTab);
+			}
+		}else if (currentTab == 3) {
+			if ($('#base').is(':checked') == false) {
+				$("#base").addClass("is-invalid")
+			}else if($("#inputJobPriceBase").val() == ""){
+				$("#inputJobPriceBase").addClass("is-invalid")
+			}else{
+				var x = document.getElementsByClassName("tab");
+				var y = document.getElementsByClassName("step");
+				// if (n == 1 && !validateForm()) return false;
+				x[currentTab].style.display = "none";
+				y[currentTab].style.display = "none";
+				currentTab = currentTab + n;
+				if (currentTab >= x.length) {
+					$("#exampleModalCenter").modal('hide');
+					x[n].style.display = "none";
+					currentTab = 0;
+					// document.getElementById("regForm").submit();
+					// return false;
+				}
+				showTab(currentTab);
+			}
+		}else{
+			var x = document.getElementsByClassName("tab");
+			var y = document.getElementsByClassName("step");
+			// if (n == 1 && !validateForm()) return false;
+			x[currentTab].style.display = "none";
+			y[currentTab].style.display = "none";
+			currentTab = currentTab + n;
+			if (currentTab >= x.length) {
+				$("#exampleModalCenter").modal('hide');
+				x[n].style.display = "none";
+				currentTab = 0;
+				// document.getElementById("regForm").submit();
+				// return false;
+			}
+			showTab(currentTab);
 		}
-		showTab(currentTab);
+		
 	}
 
 	function formatNumber(n) {
