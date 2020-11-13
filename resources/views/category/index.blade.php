@@ -486,6 +486,22 @@
        $("#DetailModal").modal("show");
 	}
 
+	function editImage(input) {
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    
+	    reader.onload = function(e) {
+	      $('#blahEdit').attr('src', e.target.result);
+	    }
+	    
+	    reader.readAsDataURL(input.files[0]); // convert to base64 string
+	  }
+	}
+
+	$("#imgCatEdit").change(function() {
+	  editImage(this);
+	});
+
 	function saveBtn(){
 		if ($("#name_cat").val() == "" || $("#desc_cat").val() == "" || $("#MainCatList").select2().val() == "" || $('#imgCat').val() == "" ) {
 			Swal.fire({
