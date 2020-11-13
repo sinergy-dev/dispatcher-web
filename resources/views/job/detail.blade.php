@@ -218,7 +218,11 @@
 									<h2 class="mb-2" id="jobSumaryDetailTitle">
 										Create Internal Software
 									</h2>
-									<span class="badge badge-secondary">On Progress</span>
+									<div class="d-inline-block">
+										<span id="statusShowSummary"></span>
+										<span class="d-inline-block" id="priorityShowSummary"></span>
+									</div>
+									<!-- <span class="badge badge-secondary" id="statusShowSummary">On Progress</span> -->
 								</div>
 								<div class="col-md-6">
 									<p>
@@ -384,7 +388,7 @@
 						<div class="mb-3">
 							<label for="jobTitle">Invoice Info</label>
 							<div class="custom-file">
-								<input type="" class="custom-file-input" name="id_payment" id="payJobInfoID">
+								<input type="hidden" class="custom-file-input" name="id_payment" id="payJobInfoID">
 								<input type="hidden" class="custom-file-input" name="id_moderator" id="payJobInfoModerator">
 								<input type="file" class="custom-file-input" name="invoice" id="payJobInfoInvoice" required>
 								<label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
@@ -453,10 +457,13 @@
 </div>
 
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">              
-      <div class="modal-body">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"> 
+      <div class="modal-header">
+      	<h5 class="modal-title">Detail Documentation item</h5>
       	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>             
+      <div class="modal-body">
         <img src="" class="imagepreview" style="width: 100%;" >
       </div>
     </div>
@@ -478,16 +485,16 @@
 	var user = "moderator"
 
 	$(document).ready(function(){
-
 		$(document).on("keypress", "#textChat", function(e){
-			if(e.which == 13){
+		if(e.which == 13){
 				var inputVal = $(this).val();
-				updateChat($("#textChat").next().children().attr('onclick').split("(")[1].split(")")[0])
+				if ($("#textChat").val() != "") {
+					updateChat($("#textChat").next().children().attr('onclick').split("(")[1].split(")")[0])
+				}
+				
 				// alert("You've entered: " + inputVal);
 			}
 		});
-
-
 		// var first = true
 		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
 		console.log(id_job)
@@ -500,6 +507,23 @@
 			success: function(result){
 				$("#jobSumaryDetailCustomer").html(result.job.customer.customer_name)
 				$("#jobSumaryDetailTitle").html(result.job.job_name)
+				if(result.job.job_status == "Open"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-danger">Open</span>')
+				} else if(result.job.job_status == "Ready"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-warning">Ready</span>')
+				} else if(result.job.job_status == "Progress"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-primary">Progress</span>')
+				} else if(result.job.job_status == "Done"){
+					$("#statusShowSummary").html('<span class="ml-auto badge badge-success">Done</span>')
+				}
+
+				if (result.job.job_priority == "critical") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-danger">Critical</span></h4>')
+				}else if (result.job.job_priority == "major") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-warning">Major</span></h4>')
+				}else if (result.job.job_priority == "minor") {
+					$("#priorityShowSummary").html('<h4><span class="badge badge-success">Minor</span></h4>')
+				}
 				$("#jobSumaryDetailLocation").html('<i class="fas fa-map-marker"></i> ' + result.job.location.long_location)
 				$("#jobSumaryDetailAddress").html('<i class="fas fa-building"></i> ' + result.job.job_location)
 				$("#jobSumaryDetailLevel").html('<i class="fas fa-signal"></i> ' + result.job.level.level_name + " - " + result.job.level.level_description)
@@ -526,19 +550,19 @@
 									if (value.request_item.status_item == "Requested") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'								
 									}else if (value.request_item.status_item == "Done") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_item.status_item == "Rejected") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Reject)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
 									}
 								}else{
 									if (value.request_support.status == "Open") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Review</button></li>'
 									}else if (value.request_support.status == "Progress") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Approved)" + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
 									}else if (value.request_support.status == "Done") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-success ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-success ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_support.status == "Reject") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-danger ml-auto btn-sm" onclick="reviewRequestSupport(' + valuevalue.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-danger ml-auto btn-sm" onclick="reviewRequestSupport(' + valuevalue.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
 									}
 								}
 								
@@ -559,19 +583,19 @@
 									if (value.request_item.status_item == "Requested") {
 										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
 									}else if (value.request_item.status_item == "Done") {
-										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_item.status_item == "Rejected") {
-										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Rejected <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Rejected <i class="fa fa-times"></i></button></li>'
 									}
 								}else{
 									if (value.request_support.status == "Open") {
 										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Review</button></li>'
 									}else if (value.request_support.status == "Progress") {
-										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
+										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Approved)" + '<button class="btn btn-warning ml-auto btn-sm" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Progress</button></li>'
 									}else if (value.request_support.status == "Done") {
-										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
+										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_support.status == "Reject") {
-										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
 									}
 								}
 							}
@@ -717,6 +741,7 @@
 					var append = ""
 					append = append + '<label><b>Item Request</b></label>'
 					append = append + '<h6 id="item_req"></h6>'
+					append = append + '<label><b>Purpose Item</b></label>'
 					append = append + '<p><i id="item_function"></i></p>'
 					append = append + '<hr>'
 
@@ -734,12 +759,12 @@
 
 					$("#InvoiceTitle").empty("")
 
-					var append2 = ""
-					append2 = append2 + '<label><b>Invoice item</b></label>'
-					append2 = append2 + '<h6 id="alamat_req">Alamat harga beli</h6>'
-					append2 = append2 + '<hr>'
+					// var append2 = ""
+					// append2 = append2 + '<label><b>Invoice item</b></label>'
+					// append2 = append2 + '<h6 id="alamat_req">Alamat harga beli</h6>'
+					// append2 = append2 + '<hr>'
 
-					$("#InvoiceTitle").append(append2)
+					// $("#InvoiceTitle").append(append2)
 
 					$("#priceTitle").empty("")
 
@@ -762,7 +787,18 @@
 					$("#item_function").html(value.function_item);
 					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
 					$("#alamat_req").html(value.invoice_item);
-					$("#price_req").html(value.price_item);
+					var number_string = value.price_item.toString(),
+                    split   = number_string.split(','),
+                    sisa    = split[0].length % 3,
+                    rupiah  = split[0].substr(0, sisa),
+                    ribuan  = split[0].substr(sisa).match(/\d{1,3}/gi);
+                        
+                    if (ribuan) {
+                        separator = sisa ? '.' : '';
+                        rupiah += separator + ribuan.join('.');
+                    }
+                    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+					$("#price_req").html("Rp. " + rupiah);
 					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
 					$("#historyChat").css("display","none")
 					$("#updateChat").css("display","none")
@@ -854,7 +890,6 @@
 					
 					
 				}else if (result.job_support.status == "Progress") {
-
 					$("#headerTitle").empty("")
 					var append7 = ""
 					append7 = append7 + '<div class="row">'
@@ -979,6 +1014,7 @@
 						$("#textChat").val("");
 						$("#textChat").attr("placeholder","Update");
 			        });
+
 					$("#historyChat").addClass("scrolly")
 
 					$("#updateChat").css("display","block")
@@ -987,10 +1023,20 @@
 					updateChat = updateChat + '<div class="input-group">'
 					updateChat = updateChat + '<input id="textChat" type="text" class="form-control" placeholder="Update Message" aria-label="Update Message" aria-describedby="basic-addon2">'
 				    updateChat = updateChat + '<div class="input-group-append">'
-				    updateChat = updateChat + '<button class="btn btn-outline-secondary" onclick="updateChat(' + result.job_support.id + ')" type="button"><i class="fas fa-paper-plane"></i></button>'
+				    updateChat = updateChat + '<button class="btn btn-outline-secondary" onclick="updateChat(' + result.job_support.id + ')" id="submitChat" type="button"><i class="fas fa-paper-plane"></i></button>'
 				    updateChat = updateChat + '</div>'
 				    updateChat = updateChat + '</div>'			    
 					$("#updateChat").append(updateChat)
+
+					$("#submitChat").prop("disabled",true)
+
+			        $("#textChat").keyup(function(){
+			        	if ($("#textChat").val() == "") {
+				        	$("#submitChat").prop("disabled",true)
+				        }else{
+				        	$("#submitChat").prop("disabled",false)
+				        }
+			        })
 
 					var onclickApprove = "onclick=btnAcceptReqSupport('done',"+id+")"
 					var onclickCancel  = "onclick=cancel()"
@@ -1057,6 +1103,7 @@
 					$("#historyTitle").append(append6)
 
 					$("#historyChat").css("display","block")
+					$("#historyChat").empty("")
 
 					var append5 = ""
 					$.each(result.job_support_chat,function(key,value){
@@ -1246,7 +1293,6 @@
 	}
 
 	function btnAcceptReqSupport(status,id_support){
-
 		if (status == 'approve') {
 			console.log('approve ya');
 			Swal.fire({
@@ -1280,6 +1326,7 @@
 						data:{
 							id_support:id_support,
 							status:status,
+							// id_history:id_history,
 						},
 						success:function(){
 							Swal.showLoading()
@@ -1331,6 +1378,7 @@
 						data:{
 							id_support:id_support,
 							status:status,
+							id_history:id_history,
 						},
 						success:function(){
 							Swal.showLoading()
@@ -1382,6 +1430,7 @@
 						data:{
 							id_support:id_support,
 							status:status,
+							// id_history:id_history,x
 						},
 						success:function(){
 							Swal.showLoading()
@@ -1534,6 +1583,7 @@
 			// 	$("#payJobInfoName").val(result.account[0].user.name)
 			// 	$("#payJobInfoBank").val(result.account[0].account_name)
 			// 	$("#payJobInfoAccount").val(result.account[0].account_number)
+				console.log(result.id)
 				$("#payJobInfoID").val(result.id)
 			// 	$("#payJobInfoModerator").val("{{Auth::user()->id}}")
 			}
