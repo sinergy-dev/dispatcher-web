@@ -145,7 +145,7 @@ $("#jobSearch").on('change',function(){
 		console.log($("#jobSearch").val());
 		fillDataPartner("partner/getPartnerList/search?search=" + $("#jobSearch").val(),"GET")
 	} else {
-		fillDataPartner("partner/getEngineerList?","GET")
+		fillDataPartner("partner/getPartnerList?","GET")
 		// $(".resultSearch").hide()
 	}
 })
@@ -179,7 +179,7 @@ function fillDataPartner(url,method){
 	          }else if (value.status == "OK Advance") {
 	          	var badgeStatus = "badge-warning";
 	          }else if (value.status == "OK Interview") {
-	          	var badgeStatus = "badge-default";
+	          	var badgeStatus = "badge-light";
 	          }else if (value.status == "OK Agreement") {
 	          	var badgeStatus = "badge-primary";
 	          }else if (value.status == "OK Partner") {
