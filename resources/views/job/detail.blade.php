@@ -527,7 +527,7 @@
 				$("#jobSumaryDetailLocation").html('<i class="fas fa-map-marker"></i> ' + result.job.location.long_location)
 				$("#jobSumaryDetailAddress").html('<i class="fas fa-building"></i> ' + result.job.job_location)
 				$("#jobSumaryDetailLevel").html('<i class="fas fa-signal"></i> ' + result.job.level.level_name + " - " + result.job.level.level_description)
-				$("#jobSumaryDetailDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end))
+				$("#jobSumaryDetailDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end).format("DD MMMM"))
 				$("#jobSumaryDetailDescription").html(result.job.job_description.replace(/(?:\r\n|\r|\n)/g, '<br>'))
 				$("#jobSumaryDetailRequirement").html(result.job.job_requrment.replace(/(?:\r\n|\r|\n)/g, '<br>'))
 				var append = ""
@@ -782,7 +782,7 @@
 
 					$("#dateTitle").append(append4)
 
-					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.user.name  +"</h6>");
+					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.engineer.name  +"</h6>");
 					$("#item_req").html(value.name_item);
 					$("#item_function").html(value.function_item);
 					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
@@ -1326,7 +1326,7 @@
 						data:{
 							id_support:id_support,
 							status:status,
-							// id_history:id_history,
+							id_moderator:"{{Auth::user()->id}}",
 						},
 						success:function(){
 							Swal.showLoading()
@@ -1378,7 +1378,6 @@
 						data:{
 							id_support:id_support,
 							status:status,
-							id_history:id_history,
 						},
 						success:function(){
 							Swal.showLoading()
