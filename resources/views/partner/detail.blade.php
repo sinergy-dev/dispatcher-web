@@ -75,7 +75,7 @@
 	 list-style-type: circle;
 	}
 
-	.zoom-effect{
+/*	.zoom-effect{
 		position: relative;
 	}
 
@@ -93,10 +93,9 @@
 	  border-color: #3490dc;
 	  border-radius: 3px;
 	  box-shadow: 5px 5px #3490dc;
-	  /* To bring top */
 	  position: relative;
-	  z-index: 9999!important; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-	}
+	  z-index: 9999!important; 
+	}*/
 
 </style>
 @endsection
@@ -106,11 +105,14 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
-				  <li class="nav-item">
+				  <!-- <li class="nav-item">
 				    <a class="nav-link" id="basic-tab" data-toggle="tab" href="#" role="tab" aria-controls="home" aria-selected="false">Basic Information</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link" id="advanced-tab" data-toggle="tab" href="#advance" role="tab" aria-controls="profile" aria-selected="false">Advanced information</a>
+				  </li> -->
+				  <li class="nav-item"> 
+				  	<a class="nav-link" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="profile" aria-selected="false">Candidate information</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link" id="interview-tab" data-toggle="tab" href="#interview" role="tab" aria-controls="contact" aria-selected="false">Interview information</a>
@@ -240,9 +242,135 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js" integrity="sha512-m5kAjE5cCBN5pwlVFi4ABsZgnLuKPEx0fOnzaH5v64Zi3wKnhesNUYq4yKmHQyTa3gmkR6YeSKW1S+siMvgWtQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.js" integrity="sha512-LjDU5V5K+EixYXzTBmWnQPPLZXTUNJOfwB0UPnFqbPeoUl2/N/AKPJAYVuNNmMv9RZeGZXRwu4PDI37GCRuOTQ==" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
+function init_information(id_candidate){
+	$("#controlModerator").show();
+ 	$.ajax({
+		type:"GET",
+		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
+		data:{
+			id_candidate:id_candidate
+		},
+		success: function(result){
+			// $.each(result.partner,function(index,value){
+			$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
+
+			var append = ""
+		  	append = append + '<ul>'
+		  	append = append + '<li> <span>Name</span> '+result.partner.name+'</li>'
+		  	append = append + '<li> <span>Nik</span>'+result.partner.ktp_nik+'</li>'
+		  	append = append + '<li> <span>Birthday</span>'+result.partner.date_of_birth+'</li>'
+		  	append = append + '<li> <span>Phone</span>'+result.partner.phone+'</li>'
+		  	append = append + '<li> <span>Email</span>'+result.partner.email+'</li>'
+		  	append = append + '<li> <span>Address</span>'+result.partner.address+'</li>'
+		  	append = append + '<li> <span>Coverage Area</span>'+result.partner.location[0].location_engineer[0].long_location+'</li>'
+		  	if (result.partner.latest_education == null) {
+		  		append = append + '<li> <span>Lastest Education</span>'+ ' - ' +' </li>'
+		  	}else{
+		  		append = append + '<li> <span>Lastest Education</span>'+ result.partner.latest_education +' </li>'
+		  	}
+		  	append = append + '<li> <span>Job Category picked</span>'
+		  	append = append + '<ul>'
+		  	
+		  	if (result.partner.category.length == 0) {
+		  		append = append + ' - '
+		  	}else{
+		  		$.each(result.partner.category, function(key, value){
+		  			append = append + '<li>' + '<img style="object-fit:cover;width:50px;height:50px" src="'+ value.job_engineer.category_image_url + ' "> ' + value.job_engineer.category_name + '</li>'
+		  		})
+		  	}
+		  
+		  	append = append + '</ul>'
+		  	append = append + '</li>'
+			append = append + '</ul>'
+
+		  	$("#basic-information").html(append)
+
+		  	$("#filesTitleAttach").html('Attachment Files')
+
+		  	var append2 = ""
+		  	append2 = append2 +	'<b>Kartu Tanda Penduduk</b>'
+		  	append2 = append2 + '<div class="zoom-effect">'
+			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
+			append2 = append2 + '<b>Portofolio</b><br>'
+		 	if (result.partner.portofolio_file == null) {
+		  		append2 = append2 + '<span> - </span>'
+		  	}else{
+		  		append2 = append2 +	'<a href="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.portofolio_file +'" target="_blank"><i class="fa fa-file fa-4x" aria-hidden="true"></i>'
+		  	}
+			append2 = append2 + '</a></div>'
+			append2 = append2 + '</div><br>'
+			append2 = append2 + '<span><strong class="d-inline-block text-primary">Set Interview Schedule</strong> <i class="fa fa-chevron-circle-right" id="toggle-schedule"></i></span><br><br>'
+
+			append2 = append2 + '<div id="box-dateTime">'
+
+			append2 = append2 + '<span>Schedule date & time :</span>'
+			append2 = append2 + '<input class="form-control" placeholder"set interview schedule" name="interview_date" type="text" id="datetimepicker1"><p style="color:red;font-family"><i>*note: by setting the interview date, you allowed to accepting the process</i></p><br>'
+
+			$("#previewKtp").attr("onclick","previewKtp()")
+
+			// $("#previewKtp").attr("onclick","previewKtp()")
+
+		  	$("#filesContentAttach").html(append2)
+
+		  	$("#partnerSubmitAccept").attr("disabled",true)
+		  	$("#boxSubmitPartner").empty("")
+		  	$("#DisclaimerEnglish").html("Di dalam tahap Candidate information, calon engineer akan di seleksi berdasarkan backgroud life melalui upload KTP,alamat tempat tinggal,latar belakang pendidikan,kategori pekerjaan dan portofolio yang telah di upload,berserta lokasi area yang dia pilih untuk pekerjaanya. Dengan demikian kita dapat menyeleksi engineer dengan kebutuhan kemampuan yang tepat dan lokasi yang akurat.")
+		  	$("#DisclaimerIndo").html("<i> In the candidate information stage, prospective engineers will be selected based on their background life by uploading their ID card, residential address, educational background, job category and uploaded portfolio, along with the location of the area they have chosen for their work. Thus we can select engineers with the right ability requirements and an accurate location.</i>")
+		  	$.each(result.partner_progress,function(index,value){
+		  		if (index === 0) {
+		  			var button = "";
+					button = button + '<button id="partnerSubmitAccept" disabled class="btn btn-outline-success ml-auto"><span>Accept</span></button>'
+					button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
+					
+					// $("#partnerSubmitAccept").attr("disabled",true)
+					$('#datetimepicker1').daterangepicker({
+				  		"alwaysShowCalendars": true,
+						"singleDatePicker": true,
+						"timePicker": true,
+						// "startDate": new Date(),
+						locale: {
+						    format: 'YYYY-MM-DD HH:mm'
+						  },
+						}, function(start, end, label) {
+						$("#partnerSubmitAccept").attr("disabled",false)
+						console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm:ss') +')');
+
+					});
+
+					$('input[name="interview_date"]').val('');
+   					$('input[name="interview_date"]').attr("placeholder","Set interview schedule");
+					$("#boxSubmitPartner").append(button)
+					$("#boxSubmitPartner > button").css("margin","10px")
+
+		  			if(value.history_status != "1"){
+		  				if (result.partner.interview != null) {
+		  					$('input[name="interview_date"]').val(result.partner.interview.interview_date);
+		  				}else{
+		  					$('input[name="interview_date"]').val('');
+		  				}
+		  				$("#datetimepicker1").attr("disabled",true)
+			  			$("#partnerSubmitAccept").attr("disabled",true)
+						$("#partnerSubmitReject").attr("disabled",true)
+						$("#partnerSubmitAccept").html("Accept");
+						console.log("hilang")
+					}
+
+					$("#partnerSubmitAccept").attr("onclick","submitPartnerProgressAccept("+ result.partner.id + ',' + value.history_status+")")
+			  		$("#partnerSubmitReject").attr("onclick","submitPartnerProgressReject("+ result.partner.id + ',' + value.history_status +")")
+		  		}
+			})
+		
+		  	
+			// });
+		}
+	})
+}
+
 function init_basic(id_candidate){
 	$("#controlModerator").show();
  	$.ajax({
@@ -273,6 +401,8 @@ function init_basic(id_candidate){
 		  	append2 = append2 + '<div class="zoom-effect">'
 			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
 			append2 = append2 + '</div>'
+
+			$('.zoom').zoom({ on:'grab' });
 
 			$("#previewKtp").attr("onclick","previewKtp()")
 
@@ -392,6 +522,7 @@ function init_advanced(id_candidate){
 
 function init_interview(id_candidate){
 	$("#controlModerator").show();
+
 	$.ajax({
 		type:"GET",
 		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
@@ -399,6 +530,7 @@ function init_interview(id_candidate){
 			id_candidate:id_candidate
 		},
 		success: function(result){
+
 				$("#informationTitle").html('<span class="badge badge-success">Interview Information</span>')
 
 			  	var append = ""
@@ -408,32 +540,34 @@ function init_interview(id_candidate){
 				  	append = append + '<li><span> Schedule time</span> Until Finish </li>'
 				  	append = append + '<li><span> Media </span> <a href="#"> - </a></li>'
 			  	}else{
+
 			  		append = append + '<li><span> Schedule date</span>'+ moment(result.partner.interview.interview_date).format('dddd, MMMM Do YYYY')+' </li>'
-				  	append = append + '<li><span> Schedule time</span>'+ moment(result.partner.interview.interview_date).format('h:mm:ss')+' WIB - Finish </li>'
+				  	append = append + '<li><span> Schedule time</span>'+ moment(result.partner.interview.interview_date).format('h:mm:ss a')+' WIB - Finish </li>'
 				  	append = append + '<li><span> Media </span><label style="color:blue">'+ result.partner.interview.interview_link +'<label></li>'
 			  	}
 			  	
-			  	append = append + '<li><span>Interviewer </span> Moderator</li>'
-			  	append = append + '<li> Result'
-			  	append = append + '<ul>'
-			  	append = append + '<li>'
-			  	if (result.partner.interview == null) {
-			  		append = append + ' - '
-			  	}else{
-			  		if (result.partner.interview.interview_result == null) {
-			  			append = append + ' - '
-			  		}else{
-			  			append = append + result.partner.interview.interview_result
-			  		}
-			  	}
-			  	append = append + '</li>'
-			  	append = append + '</ul>'
-			  	append = append + '</li>'
-				append = append + '</ul>'	
+			 //  	append = append + '<li><span>Interviewer </span> Moderator</li>'
+			 //  	append = append + '<li> Result'
+			 //  	append = append + '<ul>'
+			 //  	append = append + '<li>'
+			 //  	if (result.partner.interview == null) {
+			 //  		append = append + ' - '
+			 //  	}else{
+			 //  		if (result.partner.interview.interview_result == null) {
+			 //  			append = append + ' - '
+			 //  		}else{
+
+			 //  			append = append + result.partner.interview.interview_result
+			 //  		}
+			 //  	}
+			 //  	append = append + '</li>'
+			 //  	append = append + '</ul>'
+			 //  	append = append + '</li>'
+				// append = append + '</ul>'	
 
 				$("#basic-information").html(append)
 
-				$("#filesTitleAttach").html("<span>Set Schedule Interview Partner </span>");
+				$("#filesTitleAttach").html("<span>Result Interview Partner </span>");
 
 				$("#filesContentAttach").empty("")
 				var appends = ""
@@ -455,12 +589,12 @@ function init_interview(id_candidate){
 
 				appends = appends + '<br>'
 
-				appends = appends + '<span><strong class="d-inline-block text-primary">Set Interview Schedule</strong> <i class="fa fa-chevron-circle-right" id="toggle-schedule"></i></span><br><br>'
+				// appends = appends + '<span><strong class="d-inline-block text-primary">Set Interview Schedule</strong> <i class="fa fa-chevron-circle-right" id="toggle-schedule"></i></span><br><br>'
 
-				appends = appends + '<div id="box-dateTime">'
+				// appends = appends + '<div id="box-dateTime">'
 
-				appends = appends + '<span>Schedule date & time :</span>'
-				appends = appends + '<input class="form-control" type="text" id="datetimepicker1"><br>'
+				// appends = appends + '<span>Schedule date & time :</span>'
+				// appends = appends + '<input class="form-control" type="text" id="datetimepicker1"><br>'
 
 				// appends = appends + '<span>Media Interview</span>'
 				// appends = appends + '<input class="form-control type="text" id="input-Media"/><br>'
@@ -468,15 +602,15 @@ function init_interview(id_candidate){
 				// appends = appends + '<span>Media link</span>'
 				// appends = appends + '<input class="form-control type="text" id="input-Interviewer"/>'
 
-				appends = appends + '</div>'
+				// appends = appends + '</div>'
 
-				appends = appends + '<br><span><strong class="d-inline-block text-primary">Set Interview Result</strong> <i class="fa fa-chevron-circle-right" id="toggle-result"></i></span><br><br>'
+				// appends = appends + '<br><span><strong class="d-inline-block text-primary">Set Interview Result</strong> <i class="fa fa-chevron-circle-right" id="toggle-result"></i></span><br><br>'
 
-				appends = appends + '<div id="box-result" class="hided">'
+				appends = appends + '<div id="box-result">'
 
 				appends = appends + '<span>Interview Result</span>'
-				appends = appends + '<textarea id="textAreaResult" class="form-control type="text></textarea>'
-
+				appends = appends + '<textarea id="textAreaResult" disabled class="form-control type="text></textarea>'
+				appends = appends + '<i>*note: send result for agreement stage</i>'
 				appends = appends + '</div>'
 
 				$("#filesContentAttach").append(appends);
@@ -493,23 +627,23 @@ function init_interview(id_candidate){
 					console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm:ss') +')');
 				});
 
-			  	$( "#toggle-schedule" ).click(function() {
-			  		console.log("clicked")
-			  		$( "#box-dateTime" ).toggle(function() {
-					    $( this ).addClass( "hided" );
-					}, function() {
-					    $( this ).removeClass( "showed" );
-					});
-			  	})
+			 //  	$( "#toggle-schedule" ).click(function() {
+			 //  		console.log("clicked")
+			 //  		$( "#box-dateTime" ).toggle(function() {
+				// 	    $( this ).addClass( "hided" );
+				// 	}, function() {
+				// 	    $( this ).removeClass( "showed" );
+				// 	});
+			 //  	})
 				
-				$( "#toggle-result" ).click(function() {
-			  		console.log("clicked")
-			  		$( "#box-result" ).toggle(function() {
-					    $( this ).addClass( "hided" );
-					}, function() {
-					    $( this ).removeClass( "showed" );
-					});
-			  	})
+				// $( "#toggle-result" ).click(function() {
+			 //  		console.log("clicked")
+			 //  		$( "#box-result" ).toggle(function() {
+				// 	    $( this ).addClass( "hided" );
+				// 	}, function() {
+				// 	    $( this ).removeClass( "showed" );
+				// 	});
+			 //  	})
 				
 
 			  	$("#boxSubmitPartner").empty("")
@@ -518,35 +652,40 @@ function init_interview(id_candidate){
 			  	$.each(result.partner_progress,function(index,value){
 			  		if (index === 0) {
 			  			var button = "";
-						button = button + '<button id="partnerSetSchedule" class="btn btn-outline-success ml-auto"><span>Set Schedule</span></button>'
+						button = button + '<button id="partnerSetSchedule" class="btn btn-outline-success ml-auto"><span>Start Room</span></button>'
 						button = button + '<button id="partnerSetResult" class="btn btn-outline-warning ml-auto"><span>Result</span></button>'
-						button = button + '<button id="partnerSetAgree" class="btn btn-outline-secondary ml-auto"><span>Agreement</span></button>'
+						// button = button + '<button id="partnerSetAgree" class="btn btn-outline-secondary ml-auto"><span>Agreement</span></button>'
 						button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
 						
 						$("#boxSubmitPartner").append(button)
 						$("#boxSubmitPartner > button").css("margin","10px")
-
+						$("#textAreaResult").attr("disabled",true);
 			  			if(value.history_status == "4"){
+			  				$("#textAreaResult").attr("disabled",true);
 				  			$("#partnerSetSchedule").attr("disabled",false);
 							$("#partnerSubmitReject").attr("disabled",true);
 							$("#partnerSetSchedule").attr("onclick","submitPartnerSetSchedule("+ result.partner.id + ")")
 							$("#partnerSetAgree").attr("disabled",true);
 							$("#partnerSetResult").attr("disabled",true);
 						}else if(value.history_status == "5"){
+							$("#partnerSubmitReject").attr("disabled",true);
+							$("#textAreaResult").attr("disabled",true);
 							$("#partnerSetResult").attr("disabled",true);
 							$("#partnerSetSchedule").html("Start Room");
 							$("#partnerSetSchedule").attr("onclick","submitPartnerStartRoom("+ result.partner.id + ',' + '"' +result.partner.interview.interview_link + '"' + ")");
 				  			$("#partnerSetAgree").attr("disabled",true);
 						}else if(value.history_status == "6"){
+								$("#textAreaResult").attr("disabled",true);
 								$("#partnerSetAgree").attr("disabled",false);
 								$("#partnerSetSchedule").attr("disabled",true);
 								$("#partnerSubmitReject").attr("disabled",false);
 							if (result.partner.interview.interview_result == null) {
-								$("#box-result").addClass("showed");
+								$("#partnerSubmitReject").attr("disabled",false);
+								$("#textAreaResult").attr("disabled",false);
 					  			$("#partnerSetResult").attr("disabled",false);
 								$("#partnerSetResult").attr("onclick","submitPartnerSetResult("+ result.partner.id +")");
 							}else{
-								$("#box-result").addClass("hided");
+								$("#textAreaResult").attr("disabled",false);
 					  			$("#partnerSetResult").attr("disabled",true);
 							}
 						}else{
@@ -577,6 +716,10 @@ function init_interview(id_candidate){
 					$("#box-dateTime").addClass( "hided");
 				}
 			})
+
+			if (result.partner.interview.interview_result != "") {
+				$("#textAreaResult").val(result.partner.interview.interview_result);
+			}
 		}
 	})
 }
@@ -599,8 +742,6 @@ function init_agreement(id_candidate){
 				var appends = ""
 				appends = appends + '<div class="ul-basic">'
 				appends = appends + '<ul>'
-				// appends = appends +	'<li><span id="partnerName"><i class="fas fa-user"></i> Name </span>'+ result.partner.name +'</li>'	
-				// appends = appends + '<li><span id="partnerPhone"><i class="fas fa-phone"></i> Phone</span>'+ result.partner.phone +'</li>'
 				if (result.partner.candidate_account_name == null) {
 					appends = appends + '<li><span id="partnerAddress"><i class="fa fa-credit-card" aria-hidden="true"></i> Bank Name</span> - </li>'
 					appends = appends + '<li><span id="partnerAccName"><i class="fa fa-university" aria-hidden="true"></i> Account Number</span> - </li>'
@@ -631,14 +772,15 @@ function init_agreement(id_candidate){
 function submitPartnerProgressAccept(id,status){
 	if (status == 1) {
 		Swal.fire({
-	        title: 'Are you sure?',
-	        text: "to Accept Join Partner Basic Step!",
+	        title: 'Accept ',
+	        text: "to accept candidate information!",
 	        icon: 'warning',
 	        showCancelButton: true,
 	        confirmButtonColor: '#3085d6',
 	        cancelButtonColor: '#d33',
 	        confirmButtonText: 'Yes',
 	        cancelButtonText: 'No',
+
 	      }).then((result) => {
 	        if (result.value) {
 	          Swal.fire({
@@ -656,10 +798,13 @@ function submitPartnerProgressAccept(id,status){
 	          })
 
 	          var fd = new FormData();
-	          fd.append('status','OK Basic');
+	          fd.append('status','OK Advance');
 	          fd.append('id_candidate',id);
 	          fd.append('history_user',0);
-	          fd.append('history_status',2);
+	          fd.append('history_status',4);
+	          fd.append('history_status_5',5);
+	          fd.append('interview_date',$("#datetimepicker1").val());
+          	  fd.append('status_interview',"not started");
 
 	          $.ajax({
 	            type:"POST",
@@ -671,8 +816,8 @@ function submitPartnerProgressAccept(id,status){
 	              Swal.showLoading()
 	              localStorage.clear();
 	              Swal.fire(
-	                'Thank You!',
-	                'You`ve Accepted Join Partner Basic Step!.',
+	                'Success!',
+	                'Accepting Candidate information!.',
 	                'success'
 	              ).then((result) => {
 	                if (result.value) {
@@ -742,115 +887,117 @@ function submitPartnerProgressAccept(id,status){
 }
 
 function submitPartnerProgressReject(id,status){
-	if (status == 1) {
-		Swal.fire({
-	        title: 'Are you sure?',
-	        text: "to Reject Next Step!",
-	        icon: 'warning',
-	        showCancelButton: true,
-	        confirmButtonColor: '#3085d6',
-	        cancelButtonColor: '#d33',
-	        confirmButtonText: 'Yes',
-	        cancelButtonText: 'No',
-	      }).then((result) => {
-	        if (result.value) {
-	          Swal.fire({
-	            title: 'Please Wait..!',
-	            text: "It's sending..",
-	            allowOutsideClick: false,
-	            allowEscapeKey: false,
-	            allowEnterKey: false,
-	            customClass: {
-	              popup: 'border-radius-0',
-	            },
-	            onOpen: () => {
-	              Swal.showLoading()
-	            }
-	          })
+	// if (status == 1) {
+		
+	// }
+	// else if (status == 3) {
+	// 	Swal.fire({
+	//         title: 'Are you sure?',
+	//         text: "to Reject Next Step!",
+	//         icon: 'warning',
+	//         showCancelButton: true,
+	//         confirmButtonColor: '#3085d6',
+	//         cancelButtonColor: '#d33',
+	//         confirmButtonText: 'Yes',
+	//         cancelButtonText: 'No',
+	//       }).then((result) => {
+	//         if (result.value) {
+	//           Swal.fire({
+	//             title: 'Please Wait..!',
+	//             text: "It's sending..",
+	//             allowOutsideClick: false,
+	//             allowEscapeKey: false,
+	//             allowEnterKey: false,
+	//             customClass: {
+	//               popup: 'border-radius-0',
+	//             },
+	//             onOpen: () => {
+	//               Swal.showLoading()
+	//             }
+	//           })
 
-	          var fd = new FormData();
-	          fd.append('status','Reject');
-	          fd.append('id_candidate',id);
-	          fd.append('history_user',0);
-	          fd.append('history_status',2);
+	//           var fd = new FormData();
+	//           fd.append('status','Reject');
+	//           fd.append('id_candidate',id);
+	//           fd.append('history_user',0);
+	//           fd.append('history_status',10);
 
-	          $.ajax({
-	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
-	            data:fd,
-	            contentType: false,
-	            processData: false,
-	            success: function (result){
-	              Swal.showLoading()
-	              localStorage.clear();
-	              Swal.fire(
-	                'Thank You!',
-	                'You`ve Rejected Join Partner Next Step!.',
-	                'error'
-	              ).then((result) => {
-	                if (result.value) {
-	                  location.reload()
-	                }
-	              })
-	            }
-	          })
-	        }
-	      });
-	}else if (status == 3) {
-		Swal.fire({
-	        title: 'Are you sure?',
-	        text: "to Reject Next Step!",
-	        icon: 'warning',
-	        showCancelButton: true,
-	        confirmButtonColor: '#3085d6',
-	        cancelButtonColor: '#d33',
-	        confirmButtonText: 'Yes',
-	        cancelButtonText: 'No',
-	      }).then((result) => {
-	        if (result.value) {
-	          Swal.fire({
-	            title: 'Please Wait..!',
-	            text: "It's sending..",
-	            allowOutsideClick: false,
-	            allowEscapeKey: false,
-	            allowEnterKey: false,
-	            customClass: {
-	              popup: 'border-radius-0',
-	            },
-	            onOpen: () => {
-	              Swal.showLoading()
-	            }
-	          })
+	//           $.ajax({
+	//             type:"POST",
+	//             url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
+	//             data:fd,
+	//             contentType: false,
+	//             processData: false,
+	//             success: function (result){
+	//               Swal.showLoading()
+	//               localStorage.clear();
+	//               Swal.fire(
+	//                 'Thank You!',
+	//                 'You`ve Rejected Join Partner Next Step!.',
+	//                 'error'
+	//               ).then((result) => {
+	//                 if (result.value) {
+	//                   location.reload()
+	//                 }
+	//               })
+	//             }
+	//           })
+	//         }
+	//       });
+	// }
+	Swal.fire({
+        title: 'Are you sure?',
+        text: "reject this stage!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.value) {
+          Swal.fire({
+            title: 'Please Wait..!',
+            text: "It's sending..",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            customClass: {
+              popup: 'border-radius-0',
+            },
+            onOpen: () => {
+              Swal.showLoading()
+            }
+          })
 
-	          var fd = new FormData();
-	          fd.append('status','Reject');
-	          fd.append('id_candidate',id);
-	          fd.append('history_user',0);
-	          fd.append('history_status',2);
+          var fd = new FormData();
+          fd.append('status','Reject');
+          fd.append('id_candidate',id);
+          fd.append('history_user',0);
+          fd.append('history_status',10);
 
-	          $.ajax({
-	            type:"POST",
-	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
-	            data:fd,
-	            contentType: false,
-	            processData: false,
-	            success: function (result){
-	              Swal.showLoading()
-	              localStorage.clear();
-	              Swal.fire(
-	                'Thank You!',
-	                'You`ve Rejected Join Partner Next Step!.',
-	                'error'
-	              ).then((result) => {
-	                if (result.value) {
-	                  location.reload()
-	                }
-	              })
-	            }
-	          })
-	        }
-	      });
-	}
+          $.ajax({
+            type:"POST",
+            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postSubmitPartner",
+            data:fd,
+            contentType: false,
+            processData: false,
+            success: function (result){
+              Swal.showLoading()
+              localStorage.clear();
+              Swal.fire(
+                'Success!',
+                'You`ve Rejected Candidate Engineer.',
+                'error'
+              ).then((result) => {
+                if (result.value) {
+                  location.reload()
+                }
+              })
+            }
+          })
+        }
+      });
 }
 
 function submitPartnerSetSchedule(id){
@@ -887,9 +1034,10 @@ function submitPartnerSetSchedule(id){
           fd.append('history_user',0);
           fd.append('history_status',5);
           fd.append('interview_date',$("#datetimepicker1").val())
+          fd.append('status_interview',"not started")
           fd.append('interview_media',$("#input-Media").val())
           fd.append('interview_link',$("#input-Interviewer").val())
-          fd.append('status_interview',"not started")
+          
 
           $.ajax({
             type:"POST",
@@ -967,7 +1115,7 @@ function submitPartnerStartRoom(id,link){
 function submitPartnerSetResult(id){
 	Swal.fire({
         title: 'Are You Sure?',
-        text: "Submit the result of interview!",
+        text: "submit the result of interview and ask agreement policy of candidate engineer!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -993,6 +1141,8 @@ function submitPartnerSetResult(id){
           var fd = new FormData();
           fd.append('id_candidate',id);
           fd.append('interview_result', $("#textAreaResult").val());
+          fd.append('history_user',0);
+          fd.append('history_status',7);
 
           $.ajax({
             type:"POST",
@@ -1101,8 +1251,10 @@ $(document).ready(function(){
 	var positionTab = "";
 
 	if (window.location.href.split("/")[5].split("#")[1] === undefined) {
-		init_basic(window.location.href.split("/")[5].replace('#','').split("h")[0])
-		$("#basic-tab").addClass("active")
+		// init_basic(window.location.href.split("/")[5].replace('#','').split("h")[0])
+		init_information(window.location.href.split("/")[5].replace('#','').split("h")[0])
+		// $("#basic-tab").addClass("active")
+		$("#information-tab").addClass("active")
 	} else if (window.location.href.split("/")[5].split("#")[1] == "advance") {
 		init_advanced(id_candidate)
 		init_advanced(window.location.href.split("/")[5].replace('#','').split("h")[0])
@@ -1136,6 +1288,9 @@ $(document).ready(function(){
 	  }else if (currId == "agreement-tab") {
 	  	init_agreement(id_candidate)
 	  	init_agreement(window.location.href.split("/")[5].replace('#','').split("h")[0])
+	  }else if (currId == "information-tab") {
+	  	init_information(id_candidate)
+	  	init_information(window.location.href.split("/")[5].replace('#','').split("h")[0])
 	  }
 
 	  // localStorage.setItem('activeTab', $(e.target).attr('href'));
