@@ -23,6 +23,7 @@ Route::get('guestState','GuestController@guestState');
 // })->name('partner_advanced');
 
 Route::get('testExcelRead','GuestController@testExcelRead');
+Route::get('testFirebase','GuestController@testFirebase');
 
 Route::get('/job/detail/createLetterAndQR', 'JobController@createLetterAndQR')->name('job.createLetterAndQR');
 Route::get('testPDF', 'JobController@createLetterAndQR')->name('testPDF');
