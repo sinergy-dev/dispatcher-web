@@ -35,17 +35,13 @@
   .showed{
     display: block;
   }
-/*
-  .container2{
-    width: 600px;
-      margin: 100px auto; 
-  }*/
+
   .progressbar {
     counter-reset: step;
   }
   .progressbar li {
       list-style-type: none;
-      width: 20%;
+      width: 25%;
       float: left;
       font-size: 12px;
       position: relative;
@@ -322,6 +318,12 @@
     }
   }
 
+  .input-center{
+    display: inline-block;
+    float: none;
+    margin: 0 auto;
+  }
+
   .ui-datepicker{ left: 50% !important; margin-left: -25.5em !important;}
 
 </style>
@@ -339,54 +341,123 @@
           <p>Download Application</p>
       </div> -->
       <ul class="progressbar">
-        <li class="active">Basic Information</li>
+        <li class="active">Candidate Information</li>
         <li id="validation">Validation</li>
-        <li id="advanced">Advanced Information</li>
+        <!-- <li id="advanced">Advanced Information</li> -->
         <li id="interview">Interview schedule</li>
         <li id="result">Result</li>
       </ul>
     </div>
   <!-- </div> -->
 
-  <div id="tabB" style="padding-top: 100px;display: none">
+  <div id="tabB" class="row" style="padding-top:50px;display: none"> 
       <div class="col-md-12">
-         <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
-        <div style="text-align: center;color: #b3a7db;font-size: 20px" class="center-in div-p">Sinergy Freelance</div>
+          <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
+          <div style="text-align: center;color: #b3a7db;font-size: 20px" class="center-in div-p">Engineer On Demand</div>
 
-        <p class="center-in text-p" style="width: 600px;text-align: center;">Sinergy Freelance is a mobile app that can be used to freelancer for searching the job, do the job, and get payment. But first, you have to join partner to become a Sinergy Freelancer.</p>
+          <p class="center-in text-p" style="width: 500px;text-align: center;">Engineer On Demand (EOD) is a mobile app that can be used by the freelancer to search job, do the job, and get paid. But first, you have to join to become a Partner.</p> 
+        
+          <div class="form-group">
+            <input id="input-pName" class="center-in" placeholder="Type your name here...." style="display: none;width: 400px">
 
-        <input id="input-pName" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
+            <input id="input-pEmail" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
-        <input id="input-pEmail" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
+            <input id="input-pDateBirth" type="text" placeholder="Input your date of birth...." class="center-in" style="display: none;width: 300px">
 
-        <input id="input-pDateBirth" type="text" placeholder="Input your date of birth...." class="center-in" style="display: none;width: 300px">
+            <input id="input-pPhone" type="number" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
-        <input id="input-pPhone" type="number" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
+            <textarea id="input-pAddress" class="center-in textArea-pAdress" style="display: none;width: 400px;"></textarea>
 
-        <textarea id="input-pAddress" class="center-in textArea-pAdress" style="display: none;width: 400px;"></textarea>
+         <!--    <input id="input-pEducation" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px"> -->
+          </div>
 
-        <input id="input-pNik" type="text" pattern="[a-zA-Z0-9]+" maxlength="16" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px;margin-top: 10px">
+          <div class="row btnCenter" id="input-pEducation" style="display: none;">
+            <div class="col-md-4 mb-3">
+              <div style="border: 2px solid blue;padding: 5px;height: : 30px;border-radius: 10px; border: 2px solid #6c757d;">
+                <select class="custom-select d-block w-100" id="inputEducation" required="" style="width: 100%;">
+                  <option value="">Choose...</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-        <div class="invalid-feedback">
-           Max input is 16 digit number!
+          <div id="input-pLocation" style="display: none;">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="country">Region</label>
+                  <div style="border: 2px solid blue;padding: 5px;height: : 30px;border-radius: 10px; border: 2px solid #6c757d;">
+                    <select class="custom-select d-block w-100" id="inputJobRegion" required="" style="width: 100%;">
+                      <option value="">Choose...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="state">Area</label>
+                  <div style="border: 2px solid blue;padding: 5px;height: : 30px;border-radius: 10px;border: 2px solid #6c757d;">
+                    <select class="custom-select d-block w-100" id="inputJobArea" required="" style="width: 100%" disabled>
+                      <option value="">Choose...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="zip">Location</label>
+                  <div style="border: 2px solid blue;padding: 5px;height: : 30px;border-radius: 10px;border: 2px solid #6c757d;">
+                    <select class="custom-select d-block w-100" id="inputJobLocation" required="" style="width: 100%" disabled>
+                      <option value="">Choose...</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+       <!--    <div class="image-upload" id="input-pFiles" style="display: none;">
+            <label for="file-input" class="btnCenter">
+              <img id="imgFiles" class="imgFiles" src="https://cdn.onlinewebfonts.com/svg/img_106837.png"/>
+              <div style="display: none;border: 2px solid black;width: 500px;height: 50px" id="outputFiles"></div>
+              
+            </label>
+            <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo" class="form-group">
+              <input class="btnCenter" name="file_input" id="file-input" alt="Engineer On Demand" type="file" />
+              <small id="emailHelp" class="form-text text-muted">Just allow pdf format file.</small>
+            </form>
+          </div> -->
+          <div class="image-upload" id="input-pFiles" style="display: none;">
+            <label for="file-input" class="btnCenter">
+              <img id="imgFiles" class="imgFiles" src="https://cdn.onlinewebfonts.com/svg/img_106837.png"/>
+              <div style="display: none;border: 2px solid black;width: 500px;height: 50px" id="outputFiles"></div>
+              
+            </label>
+            <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo" class="form-group">
+              <input name="file_input" class="btnCenter" id="file-input" alt="Engineer On Demand" type="file" />          
+            </form>
+            <small id="emailHelp" class="form-text-file text-muted btnCenter">PDF file Only (up to 2MB).</small>
+          </div>
+      </div>
+      <div id="input-pjobCategory" style="display: none;">
+        <div class="btnCenter radio-group" id="jobCategoryList">
+          
+        </div>       
+      </div>
+      <div class="btnCenter">
+        <div class="form-group col-md-4">
+          <input id="input-pNik" type="text"  maxlength="16" placeholder="Type your name here...." style="margin-right:50px;display: none">
+          <small id="emailHelp" class="form-text text-muted" style="display: none">input NIK (must 16 digit).</small>
         </div>
-
-        <div class="image-upload btnCenter" id="input-pFilesKtp" style="display: none;margin-top: 10px">
-          <label for="file-input" class="btnCenter">
-            Upload Scan KTP
-          </label>
-          <input class="btnCenter" name="file_inputKtp" id="file-inputKtp" alt="Engineer On Demand" type="file" style="width: 400px" />
+        <div class="form-group col-md-6">
+            <input name="file_inputKtp" id="file-inputKtp" alt="Engineer On Demand" type="file" style="display: none;" />
+            <small id="emailHelp" class="form-text text-muted" style="display: none">Scan KTP. Image file Only (up to 2MB).</small>
         </div>
-
+      </div>
+      <div class="col-md-12">
         <div class="btnCenter">
           <button id="prevBtnBasic" style="margin: 10px;display: none" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(-1)">Prev</button>
-          <button id="nextBtnBasic" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(1)">Join Us</button>
+          <button id="nextBtnBasic" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevBasic(1)">Registration</button>
         </div>
         <div class="btnCenter">
-            <a onclick="hasJoined()" id="hasJoined" style="margin-top: -10px;color:#216bff">Have been join?</a>  
+            <a onclick="hasJoined()" id="hasJoined" style="margin-top: -10px;color:#216bff">Already registered?</a>  
         </div>
-
       </div>
+      
   </div>
 
   <div id="tabC" style="padding-top: 100px;display: none;">
@@ -409,7 +480,7 @@
 
       <input id="input-pEducation" placeholder="Type your name here...." class="center-in" style="display: none;width: 400px">
 
-      <div id="input-pjobCategory" style="display: none;margin-top: 10px">
+      <div id="input-pjobCategory" style="display: none;">
         <div class="row btnCenter radio-group" id="jobCategoryList">
           
         </div>       
@@ -444,17 +515,6 @@
        </div>
       </div>
 
-      <div class="image-upload" id="input-pFiles" style="display: none;">
-        <label for="file-input" class="btnCenter">
-          <img id="imgFiles" class="imgFiles" src="https://cdn.onlinewebfonts.com/svg/img_106837.png"/>
-          <div style="display: none;border: 2px solid black;width: 500px;height: 50px" id="outputFiles"></div>
-        </label>
-        <form id="fileinfo" enctype="multipart/form-data" method="post" name="fileinfo">
-          <input class="btnCenter" name="file_input" id="file-input" alt="Engineer On Demand" type="file" />
-        </form>
-      </div>
-      
-
       <div class="btnCenter">
         <button id="prevBtnAdvanced" style="margin: 10px;display: none" class="btn btn-primary btn-secondary" onclick="nextPrevAdvanced(-1)">Prev</button>
         <button id="nextBtnAdvanced" style="margin: 10px" class="btn btn-primary btn-secondary" onclick="nextPrevAdvanced(1)">Next Step</button>
@@ -464,7 +524,7 @@
 
   <div id="tabE" style="padding-top: 100px;display: none;">
     <div class="col-md-12">
-      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">Hi (Engineer's name), Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. So prepare yourself and good luck!</h4>
+      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">Hi Dicky Kopral, Thank you for your passion. We have reviewed your portfolio and we will have an interview session with the following information. Please prepare yourself and good luck!</h4>
       <br><br>
       <table class="table" style="width: 280px;" id="table-partner">
         
@@ -474,10 +534,12 @@
 
   <div id="tabF" style="padding-top: 100px;display: none">
     <div class="col-md-12">
-      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">By checking this checkbox, you are agree to join the Comany Partner Agreement, Privacy Policy, and Cookie policy</h4><br>
+      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">By checking this checkbox, you are accepting the Company Partner Agreement and Privacy Policy.</h4><br>
       <div class="radio" id="input-radio-a" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
         <label><input type="checkbox" name="optradio" class="optradio" value="accept"><i> I accept the terms and conditions </i></label>
+        
       </div>
+      
       <div style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;" id="input-account">
         <div class="row" style="display: none;background-color: white!important;padding: 10px!important" id="box-account">
           <div class="col-md-4">
@@ -492,11 +554,14 @@
             <label><b>Your Alias</b></label>
             <input type="text" class="form-control" id="account_alias" style="width: 200px" name="" placeholder="ex: Emilia Winan">
           </div>
-        </div>        
+          <div class="col-md-12">
+            <small>*Please input your banking account information for the job payment transactions</small>
+          </div>
+        </div>      
       </div>
-      <div class="radio"  id="input-radio-b" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
+   <!--    <div class="radio"  id="input-radio-b" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
         <label><input type="checkbox" value="reject" class="optradio" name="optradio"><i> I am totally disagree </i></label>
-      </div>
+      </div> -->
       <div class="btnCenter">
         <button style="margin: 10px" id="agreeBtnPartner" class="btn btn-primary btn-secondary" disabled>Submit</button>
       </div>
@@ -520,6 +585,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
 
 <script type="text/javascript">
+
+  $( document ).ready(function() {
+    $("#tabA").hide();
+  });
+
+  document.querySelector("#input-pNik").addEventListener("keypress", function (evt) {
+      if (evt.which < 48 || evt.which > 57)
+      {
+          evt.preventDefault();
+      }
+  });
 
   $('#input-pDateBirth').datepicker({
     autoclose: true,
@@ -556,7 +632,7 @@
               $("#input-pEmail").css("display","none")
               $("#input-pName").css("display","none")
               $("#input-pNik").css("display","none")
-              $("#input-pFilesKtp").css("display","none");
+              $("#file-inputKtp").css("display","none");
               $("#hasJoined").css("display","none")
               $("#prevBtnBasic").css("display","none")
               $("#nextBtnBasic").css("display","none")
@@ -578,7 +654,7 @@
                 $("#input-pEmail").css("display","none")
                 $("#input-pName").css("display","none")
                 $("#input-pNik").css("display","none")
-                $("#input-pFilesKtp").css("display","none");
+                $("#file-inputKtp").css("display","none");
                 $("#hasJoined").css("display","none")
                 $("#prevBtnAdvanced").css("display","none")
                 $("#nextBtnAdvanced").css("display","none")
@@ -588,7 +664,7 @@
             }else if (result.status == "OK Advance") {
               if (result.interview == null) {
                 $(".progressbar li#validation").addClass("active");
-                $(".progressbar li#advanced").addClass("active");
+                // $(".progressbar li#advanced").addClass("active");
                 $("#tabA").show();
                 $("#tabC").hide();
                 $("#tabD").show();
@@ -598,7 +674,7 @@
                 $("#input-pEmail").css("display","none")
                 $("#input-pName").css("display","none")
                 $("#input-pNik").css("display","none")
-                $("#input-pFilesKtp").css("display","none");
+                $("#file-inputKtp").css("display","none");
                 $("#hasJoined").css("display","none")
                 $("#prevBtnAdvanced").css("display","none")
                 $("#nextBtnAdvanced").css("display","none")
@@ -607,7 +683,7 @@
               }else{
                 console.log(result.interview.interview_media)
                 console.log(result.interview.interview_link)
-                $(".text-p").html("<h4>Hi "+ result.name +", Thank you for your passion. We have reviewed your portofolio and we have some interview session. the following below is more information of your interview. Please prepare yourself and good luck!</h4>")
+                $(".text-p").html("<h4>Hi "+ result.name +",Thank you for your passion. We have reviewed your portfolio and we will have an interview session with the following information. Please prepare yourself and good luck!</h4>")
                 var append = ""
                 append = append + '<tr>'
                 append = append + '<th>Date</th>'
@@ -639,7 +715,7 @@
               $("#tabC").hide();
               $("#tabF").show();
               $(".progressbar li#validation").addClass("active");
-              $(".progressbar li#advanced").addClass("active");
+              // $(".progressbar li#advanced").addClass("active");
               $(".progressbar li#interview").addClass("active");
               $(".progressbar li#result").addClass("active");
               $("input:checkbox").on('click', function() {
@@ -656,11 +732,7 @@
                   $box.prop("checked", true);
                   console.log($('.optradio:checked').val())
                   if ($('.optradio:checked').val() == "accept") {
-                    $( "#box-account" ).toggle(function() {
-                        $( this ).addClass( "hided" );
-                    }, function() {
-                        $( this ).removeClass( "showed" );
-                    });
+                    $( "#box-account" ).show("slow")
                     $("#account_name").change(function(){
                       localStorage.setItem("account_name", $("#account_name").val());
                       localStorage.getItem("account_name");
@@ -686,13 +758,13 @@
               }); 
             }else if (result.status == "OK Agreement") {
               $(".progressbar li#validation").addClass("active");
-              $(".progressbar li#advanced").addClass("active");
+              // $(".progressbar li#advanced").addClass("active");
               $(".progressbar li#interview").addClass("active");
               $(".progressbar li#result").addClass("active");
               $("#tabA").show();
               $("#tabC").hide();
               $("#tabF").show();
-              $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep Follow up on our website for your new account user information! </h2>")
+              $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep updated on your email for the user account information. </h2>")
               $(".img-p").css("display","none")
               $(".div-p").css("display","none")
               $("#input-radio-a").css("display","none")
@@ -700,7 +772,7 @@
               $("#input-account").css("display","none")
               $("#agreeBtnPartner").css("display","none")
             }else if (result.status == "OK Partner") {
-              $(".text-p").html("<h4>Hi <b>" +result.name +"</b>, You`re now a partner of the company.<br><br>You can pick the job based on your job category and get paid.<br><br>But you can only pick the job from Sinergy Freelance App.<br><br>So please download our mobile app in the play store or app store.<br><br> And the following bellow is your username and password for your Sinergy Freelance App.<br>Thank you and good luck!</h4>")
+              $(".text-p").html("<h4>Hi <b>" +result.name +"</b>, You`re now an EOD partner. You can pick the job based on your job category only from the EOD Mobile App and get paid. So, please download our mobile app in the Play Store or App Store. And the following information is your username and password for your EOD Mobile App.Thank you and good luck!</h4>")
                 var append = ""
                 append = append + '<tr>'
                 append = append + '<th>Username</th>'
@@ -720,7 +792,7 @@
                 append = append + '</tr>'
                 $("#table-partner").append(append)                
                 $(".progressbar li#validation").addClass("active");
-                $(".progressbar li#advanced").addClass("active");
+                // $(".progressbar li#advanced").addClass("active");
                 $(".progressbar li#interview").addClass("active");
                 $(".progressbar li#result").addClass("active");
                 $("#tabA").show();
@@ -749,6 +821,7 @@
     currentTab = currentTab + n;
     console.log(currentTab)
     if (currentTab == 1) {
+      $("#tabA").show()
       $("#prevBtnBasic").css("display","none")
       $("#nextBtnBasic").css("display","block")
       $("#nextBtnBasic").html("Next")
@@ -757,12 +830,14 @@
       $(".img-p").css("display","none")
       $(".div-p").css("display","none")
       $("#input-pName").css("display","block")
+      $("#input-pEducation").css("display","none")
       $("#input-pAddress").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
       $("#input-pDateBirth").css("display","none")
       $("#input-pNik").css("display","none")
-      $("#input-pFilesKtp").css("display","none");
+      $("#file-inputKtp").css("display","none");
+      $(".form-text").css("display","none");
       $("#hasJoined").css("display","none")
       document.getElementById("input-pName").placeholder = "Your First Name Last Name ex: Amanda Rawless";
       if ($("#input-pName").val().length > 0) {
@@ -784,17 +859,19 @@
       // $("#input-p").attr("class","center-in input-pEmail")
       $("#prevBtnBasic").css("display","block");
       $("#input-pEmail").val(localStorage.getItem("email"));
-      $(".text-p").html("<h3 class='center-in' style=''> 2. Nice, Now what's your Email? </h3>")
+      $(".text-p").html("<h3 class='center-in' style=''> 2. Nice, what's your Email? </h3>")
       $(".img-p").css("display","none")
       $(".div-p").css("display","none")
       $("#nextBtnBasic").html("Next")
       $("#input-pEmail").css("display","block")
+      $("#input-pEducation").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pDateBirth").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pAddress").css("display","none")
       $("#input-pNik").css("display","none")
-      $("#input-pFilesKtp").css("display","none");
+      $("#file-inputKtp").css("display","none");
+      $(".form-text").css("display","none");
       $("#hasJoined").css("display","none")
       if ($("#input-pEmail").val().length > 0) {
         $("#nextBtnBasic").prop("disabled",false)
@@ -821,18 +898,20 @@
       }
       if (validateEmail(email)) {
         $("#input-pPhone").val(localStorage.getItem("phone"));
-        $(".text-p").html("<h3 class='center-in' style=''> 3. And, your phone number please </h3>")
+        $(".text-p").html("<h3 class='center-in' style=''> 3. And, your phone number, please </h3>")
         $(".img-p").css("display","none")
         $(".div-p").css("display","none")
         $("#prevBtnBasic").css("display","block");
         $("#nextBtnBasic").html("Next")
         $("#input-pPhone").css("display","block")
+        $("#input-pEducation").css("display","none")
         $("#input-pEmail").css("display","none")
         $("#input-pDateBirth").css("display","none")
         $("#input-pName").css("display","none")
         $("#input-pAddress").css("display","none")
         $("#input-pNik").css("display","none")
-        $("#input-pFilesKtp").css("display","none");
+        $("#file-inputKtp").css("display","none");
+        $(".form-text").css("display","none");
         $("#hasJoined").css("display","none")
         if ($("#input-pPhone").val().length > 0) {
           $("#nextBtnBasic").prop("disabled",false)
@@ -862,12 +941,14 @@
       $("#prevBtnBasic").css("display","block");
       $("#nextBtnBasic").html("Next")
       $("#input-pAddress").css("display","block")
+      $("#input-pEducation").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
       $("#input-pDateBirth").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pNik").css("display","none")
-      $("#input-pFilesKtp").css("display","none");
+      $("#file-inputKtp").css("display","none");
+      $(".form-text").css("display","none");
       $("#hasJoined").css("display","none")
       $("#nextBtnBasic").attr("onclick","nextPrevBasic(1)");
       if ($("#input-pAddress").val().length > 0) {
@@ -893,13 +974,16 @@
       $(".div-p").css("display","none")
       $("#prevBtnBasic").css("display","block");
       $("#nextBtnBasic").html("Next")
+
       $("#input-pDateBirth").css("display","block")
+      $("#input-pEducation").css("display","none")
       $("#input-pAddress").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pNik").css("display","none")
-      $("#input-pFilesKtp").css("display","none");
+      $("#file-inputKtp").css("display","none");
+      $(".form-text").css("display","none");
       $("#hasJoined").css("display","none")
       $("#nextBtnBasic").attr("onclick","nextPrevBasic(1)");
       if ($("#input-pDateBirth").val() != 0) {
@@ -920,34 +1004,46 @@
     }else if (currentTab == 6) {
       $("#input-pNik").val(localStorage.getItem("nik"));
       $("#input-pFilesKtp").val(localStorage.getItem("nik_files"));
-      // localStorage.setItem("address", $("#input-pAddress").val())
       localStorage.setItem("date_of_birth", $("#input-pDateBirth").val())
       $(".img-p").css("display","none")
       $(".div-p").css("display","none")
-      $(".text-p").html("<h3 class='center-in' style=''> 6. Great, finally can you tell us your KTP id(NIK)? </h3>")
+      $(".text-p").html("<h3 class='center-in' style=''> 6. Finally, can you tell us your KTP data?</h3>")
       $("#input-pAddress").css("display","none")
+      $("#input-pEducation").css("display","none")
       $("#input-pPhone").css("display","none")
       $("#input-pEmail").css("display","none")
       $("#input-pDateBirth").css("display","none")
       $("#input-pName").css("display","none")
       $("#input-pNik").css("display","block")
-      $("#input-pFilesKtp").css("display","block");
+      $("#file-inputKtp").css("display","block");
+      $(".form-text").css("display","block");
       $("#prevBtnBasic").css("display","block");
-      $("#nextBtnBasic").html("Submit")
-      $("#nextBtnBasic").attr("onclick","submitBasic()");
+      
+      // $("#nextBtnBasic").html("Submit")
+      // $("#nextBtnBasic").attr("onclick","submitBasic()");
       $("#hasJoined").css("display","none")
       document.getElementById("input-pNik").placeholder = "Your NIK must be 16 digit";
+
+      if ($("#file-inputKtp").val() == "") {
+        $("#nextBtnBasic").prop("disabled",true)
+      }else{
+        $("#nextBtnBasic").prop("disabled",false)
+      }
+
       $("#file-inputKtp").change(function() {
         var file = this.files[0];
         var fileType = file.type;
-
-        console.log(fileType);
         var fileName = file.name;
+        var fileSize = file.size;
+        
         var match = ['image/png','image/jpg','image/jpeg'];
         if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
-            alert('Sorry, only Images files is allowed to upload.');
+            alert('Sorry, only Images files are allowed to upload.');
             $("#file-inputKtp").val('');
             return false;
+        }else if (fileSize > 2000000) {
+          alert('Sorry, the file size is up to 2MB');
+          $("#file-inputKtp").val('');
         }
 
         if (fileName !== "") {
@@ -959,18 +1055,6 @@
         }
       })
 
-      $("#file-input").change(function() {
-          var file = this.files[0];
-          var fileType = file.type;
-          var fileName = file.name;
-          var match = ['application/pdf'];
-          if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
-              alert('Sorry, only PDF files is allowed to upload.');
-              $("#file-input").val('');
-              return false;
-          }
-      });
-
       $("#input-pNik").keyup(function(){
         var textLength = $(this).val();
         if (textLength.length > 0 || $("#file-inputKtp").val() !== "") {
@@ -979,7 +1063,302 @@
           $("#nextBtnBasic").prop("disabled",true)
         }
       });
+    }else if (currentTab == 7) {
+      localStorage.setItem("nik_files", $("#input-pFilesKtp").val())
+      localStorage.setItem("nik", $("#input-pNik").val())
+      $(".text-p").html("<h2 class='center-in' style=''>7. Ok, please tell us about your latest education?</h2>")
+      // $("#inputEducation").val(localStorage.getItem("education"));
+      $("#input-pNik").css("display","none")
+      $("#file-inputKtp").css("display","none");
+      $(".form-text").css("display","none");
+      $("#tabC").css("display","none")
+      $("#input-pEducation").show()
+      $("#input-pjobCategory").css("display","none")
+      $("#input-pLocation").css("display","none")
+      // $("#nextBtnAdvanced").css("display","block")
+      $("#input-pFiles").css("display","none");
+      // $("#nextBtnAdvanced").html("Next")
+      $("#hasJoined").css("display","none")
+
+      var edu = [{
+          id: 'S-3',
+          text: 'S-3'
+      },{
+          id: 'S-2',
+          text: 'S-2'
+      },{
+          id: 'Diploma 4',
+          text: 'Diploma 4/S-1'
+      },{
+          id: 'Diploma 3',
+          text: 'Diploma 3'
+      },{
+          id: 'Diploma 2',
+          text: 'Diploma 2'
+      }, {
+          id: 'Diploma 1',
+          text: 'Diploma 1'
+      }, {
+          id: 'SMA/SMK',
+          text: 'SMA/SMK'
+      }];      
+
+      if ($("#inputEducation").val() != "") {
+        $("#nextBtnBasic").prop("disabled",false)
+      }else{
+        $("#nextBtnBasic").prop("disabled",true)
+      }
+
+      var selval = localStorage.getItem("education");
+       if(selval){
+          $("#inputEducation").val(selval);
+      }
+      $("#inputEducation").select2({
+        placeholder: "Choose...",
+        theme:'bootstrap4',
+        data: edu 
+      })
+      $("#inputEducation").on("change", function (evt) {
+          var selval = $(evt.target).val();
+          localStorage.setItem("education", selval);
+          $("#nextBtnBasic").prop("disabled",false)
+      })
+
+      // var OldValue = localStorage.getItem("education");
+      // if (OldValue !== "" && OldValue !== null) {
+      //   $('#inputEducation').select2({
+      //     placeholder: "Choose...",
+      //     data: edu
+      //   }).select2('val', OldValue);
+      // }
+
+      // $("#inputEducation").on("change", function() {
+      //   var selected = $(this).val();
+      //   localStorage.setItem("education", selected);
+      //   $("#nextBtnBasic").prop("disabled",false)
+      //   // if (textLength.length > 0) {
+      //   //   $("#nextBtnBasic").prop("disabled",false)
+      //   // }else{
+      //   //   $("#nextBtnBasic").prop("disabled",true)
+      //   // }
+      // });
+      
+      // $("#inputEducation").change(function(evt){
+      //   var selval = $(evt.target).val();
+      //   localStorage.setItem("education", selval);
+      //   var textLength = $(this).val();
+      //   if (textLength.length > 0) {
+      //     $("#nextBtnBasic").prop("disabled",false)
+      //   }else{
+      //     $("#nextBtnBasic").prop("disabled",true)
+      //   }
+      // });
+      
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
+    }else if (currentTab == 8) {
+      localStorage.setItem("education", selval);
+      if (JSON.parse(localStorage.getItem("category")) == null) {
+        var localCat = []
+      }else{
+        var localCat = JSON.parse(localStorage.getItem("category"))
+      }
+      initialJobCategory();
+      function initialJobCategory(){
+        $.ajax({
+          type:"GET",
+          url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/dashboard/getJobCategory",
+          success:function(result){
+            $("#jobCategoryList").empty("")
+            $.each(result.job_category, function( index, value ) {
+              var append = "";
+              append = append + '<div class="img__wrap radio-custom" data-value="'+ value.id +'">'
+              append = append +   '<img class="img__img" src="'+ value.category_image_url +'"/>'
+              append = append +   '<div class="img__description_layer">'
+              append = append +     '<p class="img__description">'+ value.category_name +'</p>'
+              append = append +   '</div>'
+              append = append + '</div>'
+
+              $("#jobCategoryList").append(append)
+
+              $(".radio-group").on("click",".radio-custom[data-value='"+value.id+"']",function(){
+                  console.log(value.id+""+"data-value")
+                  var val = $(this).attr('data-value')
+                  $(this).toggleClass('active')
+                  if ($(this).hasClass("active")) {
+                    if (localCat.length == 0) {
+                      console.log(localCat.length)
+                      localCat.push(val)
+                      localStorage.setItem("category", JSON.stringify(localCat));
+                    }else if(localCat.indexOf("'"+ val +"'") == -1){
+                      localCat.push(val)
+                      localStorage.setItem("category", JSON.stringify(localCat));
+                    }
+                    Swal.fire({
+                      title: value.category_name,
+                      text: value.category_description,
+                      imageUrl: value.category_image_url,
+                      imageWidth: 200,
+                      imageHeight: 200,
+                      imageAlt: 'Custom image',
+                    })  
+                  }
+                  else{
+                    localCat.splice(localCat.indexOf(val),1)
+                    localStorage.setItem("category", JSON.stringify(localCat));
+                  }
+                  
+                  //kalau sudah di next terus prev kalau nomor awal udah di pilih brrti udah aktive mangkanya nilainya true terus jadi double
+                  
+                  $("#nextBtnBasic").prop("disabled",false)                        
+              })
+
+            })
+
+            $.each(JSON.parse(localStorage.getItem('category')),function(index,value){
+              $(".radio-custom[data-value='"+ value +"']").addClass('active')
+
+            })
+          }
+        })
+
+        if (JSON.parse(localStorage.getItem('category')) !== null) {
+          $("#nextBtnBasic").prop("disabled",false)
+        }else{
+          $("#nextBtnBasic").prop("disabled",true)
+        }
+      }
+      // localStorage.setItem("education", $("#inputEducation").val())
+      // var locationSelect  = $('#inputEducation');
+      // var option = new Option(localStorage.setItem("education", $("#inputEducation").val()), localStorage.setItem("education", $("#inputEducation").val()), true, true);
+      // locationSelect.append(option).trigger('change');
+
+      $(".text-p").html("<h2 class='center-in' style=''>8. Now, select your job category?</h2><br><p></p>")
+      // $("#tabB").css("display","none")
+      $("#tabC").css("display","none")
+      $("#nextBtnBasic").html("Next")
+      $("#prevBtnBasic").css("display","block")
+      $("#input-pEducation").css("display","none")
+      $("#input-pjobCategory").css("display","block")
+      $("#input-pLocation").css("display","none")
+      $("#hasJoined").css("display","none")
+      $("#input-pFiles").css("display","none");
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
+    }else if (currentTab == 9) {
+      if(localStorage.getItem('jobLocation')){
+          $('#inputJobLocation').val(localStorage.getItem('jobLocation'));
+      }
+      if (localStorage.getItem('jobRegion')) {
+        $('#inputJobRegion').val(localStorage.getItem('jobRegion'));
+      }
+      if (localStorage.getItem('jobArea')) {
+          $('#inputJobArea').val(localStorage.getItem('jobArea'));
+      }
+
+
+      $("#inputJobRegion").select2({
+        theme: 'bootstrap4',
+        ajax: {
+          url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll",
+          dataType: 'json',
+        }
+      });
+
+      $("#inputJobRegion").on('select2:select', function (e) {
+        if ($("#inputJobRegion").val() !== "") {
+          $("#nextBtnBasic").prop("disabled",false)
+        }else{
+          $("#nextBtnBasic").prop("disabled",true)
+        }
+        var id_region = e.params.data.id;
+        $("#inputJobArea").prop("disabled", false)
+        $("#inputJobArea").select2({
+          theme: 'bootstrap4',
+          ajax: {
+            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=2&region=" + id_region,
+            dataType: 'json',
+          }
+        });
+      })
+
+      $("#inputJobArea").on('select2:select', function (e) {
+        var id_area = e.params.data.id;
+        $("#inputJobLocation").prop("disabled", false)
+        $("#inputJobLocation").select2({
+          theme: 'bootstrap4',
+          ajax: {
+            url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterLocationAll?level=3&area=" + id_area,
+            dataType: 'json',
+          }
+        });
+      })
+
+      if ($("#inputJobRegion").val() !== "") {
+        $("#nextBtnBasic").prop("disabled",false)
+      }else{
+        $("#nextBtnBasic").prop("disabled",true)
+      }
+
+      $(".text-p").html("<h2 class='center-in' style=''>9. Now, please choose your current Coverage Area?</h2>")
+      // $("#tabA").css("display","none")
+      // $("#tabB").css("display","none")
+      $("#tabC").css("display","none")
+      $("#nextBtnBasic").html("Next")
+      $("#prevBtnBasic").css("display","block")
+      $("#input-pEducation").css("display","none")
+      $("#input-pjobCategory").css("display","none")
+      $("#input-pLocation").css("display","block")
+      $("#input-pFiles").css("display","none");
+      $("#hasJoined").css("display","none")      
+      document.getElementById("input-pEducation").placeholder = "Type your latest Education here..";
+      $("#nextBtnBasic").attr("onclick","nextPrevBasic(1)");
+    }else if (currentTab == 10) {
+      $('#inputJobLocation').change(function() {
+        localStorage.setItem('jobLocation', this.value);
+      });
+      $('#inputJobRegion').change(function() {
+        localStorage.setItem('jobRegion', this.value);
+      });
+      $('#inputJobArea').change(function() {
+        localStorage.setItem('jobArea', this.value);
+      });
+
+      $(".form-text-file").show()
+
+      $("#file-input").change(function() {
+          var file = this.files[0];
+          var fileType = file.type;
+          var fileName = file.name;
+          var fileSize = file.size;
+          var match = ['application/pdf'];
+          if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
+              alert('Sorry, only PDF files are allowed to upload.');
+              $("#file-input").val('');
+              return false;
+          }else if (fileSize > 2000000) {
+            alert('Sorry, the file size is up to 2MB');
+            $("#file-input").val('');
+          }
+          $("#nextBtnBasic").prop("disabled",false)
+          
+      });
+
+      if ($("#file-input").val() == "") {
+        $("#nextBtnBasic").prop("disabled",true)
+      }else{
+        $("#nextBtnBasic").prop("disabled",false)
+      }
+      
+      $(".text-p").html("<h2 class='center-in' style=''>10. And, please input your portofolio.</h2>")
+      $("#input-pFiles").css("display","block");
+      $("#input-pEducation").css("display","none")
+      $("#input-pjobCategory").css("display","none")
+      $("#input-pLocation").css("display","none")
+      // $("#nextBtnAdvanced").html("Submit")
+      $("#nextBtnBasic").html("Submit")
+      $("#nextBtnBasic").attr("onclick","submitBasic()");
+      $("#prevBtnAdvanced").css("display","block")
     }
+
   }
 
   function submitBasic(){
@@ -1018,7 +1397,8 @@
         })
 
         var fd = new FormData();
-        var files = $('#file-inputKtp')[0].files[0];
+        var filesKtp = $('#file-inputKtp')[0].files[0];
+        var files = $('#file-input')[0].files[0];
         // fd.append('file',files);
         fd.append('name',$("#input-pName").val());
         fd.append('phone',$("#input-pPhone").val());
@@ -1026,7 +1406,14 @@
         fd.append('address',$("#input-pAddress").val());
         fd.append('ktp_nik',$("#input-pNik").val());
         fd.append('date_of_birth',$("#input-pDateBirth").val());
-        fd.append('ktp_files',files);
+        fd.append('ktp_files',filesKtp);
+        // fd.append('history_status',1);
+        // fd.append('history_user',1);
+
+        fd.append('latest_education',$("#input-pEducation").val());
+        fd.append('portofolio_file',files);
+        fd.append('id_area',$("#inputJobLocation").val());
+        fd.append('id_category',[JSON.parse(localStorage.getItem("category"))]);
         fd.append('history_status',1);
         fd.append('history_user',1);
 
@@ -1049,7 +1436,6 @@
             ).then((result) => {
               if (result.value) {
                 $(".progressbar li#validation").addClass("active");
-                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
                 $(".img-p").css("display","none")
                 $(".div-p").css("display","none")
                 $("#input-pAddress").css("display","none")
@@ -1063,6 +1449,14 @@
                 $("#prevBtnBasic").css("display","none")
                 $("#nextBtnBasic").css("display","none")
                 // location.reload()
+                
+                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank You for joining partner with us. </h2>")
+                $(".img-p").css("display","none")
+                $(".div-p").css("display","none")
+                $("#input-pEducation").css("display","none")
+                $("#input-pjobCategory").css("display","none")
+                $("#input-pLocation").css("display","none")
+                $("#input-pFiles").css("display","none");
               }
             })
           }
@@ -1348,17 +1742,11 @@
       $("#nextBtnAdvanced").html("Submit")
       $("#prevBtnAdvanced").css("display","block")
       $("#nextBtnAdvanced").attr("onclick","submitAdvanced()");
-
     }
   }
 
   function submitAdvanced(){
     if ($("#file-input").val() !== "") {
-        // console.log($("#input-pFiles").val())
-      console.log($("#input-pEducation").val())
-      console.log(JSON.parse(localStorage.getItem("category")));
-      console.log($("#inputJobLocation").val())
-
       Swal.fire({
         title: 'Are you sure?',
         text: "to submit your form",
@@ -1614,7 +2002,7 @@
                 var append = ""
                 append = append + '<tr>'
                 append = append + '<th>Username</th>'
-                append = append + '<td>haloengineer</td>'
+                append = append + '<td>'+ result.email +'</td>'
                 append = append + '</tr>'
                 append = append + '<tr>'
                 append = append + '<th>Password</th>'
@@ -1650,7 +2038,7 @@
     if (status == "accept") {
       Swal.fire({
           title: 'Are you sure?',
-          text: "to Agree this policy!",
+          text: "complete this!",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -1693,11 +2081,11 @@
                 localStorage.clear();
                 Swal.fire(
                   'Thank You!',
-                  'Please waiting for your user account!.',
+                  'Please wait for your user account!.',
                   'success'
                 ).then((result) => {
                   if (result.value) {
-                    $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep Follow up on our website for your new account user information!. </h2>")
+                    $(".text-p").html("<h2 class='center-in' style=''> Congratulation! Keep updated on your email for the user account information.</h2>")
                     $(".img-p").css("display","none")
                     $(".div-p").css("display","none")
                     $("#input-radio-a").css("display","none")
