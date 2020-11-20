@@ -31,12 +31,6 @@
       list-style-type: none;
       background: #eee;
       transition: 0.2s;
-      
-      /* make the list items unselectable */
-   /*   -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;*/
     }
 
     .ul-basic ul{ 
@@ -73,6 +67,33 @@
 
 	.ul-basic ul li ul.listCategory{
 	 list-style-type: circle;
+	}
+
+	#overlay{
+	  position: fixed;
+	  top:0;
+	  left:0;
+	  width:100%;
+	  height:100%;
+	  background: rgba(0,0,0,0.8) none 50% / contain no-repeat;
+	  cursor: pointer;
+	  transition: 0.3s;
+	  
+	  visibility: hidden;
+	  opacity: 0;
+	}
+	#overlay.open {
+	  visibility: visible;
+	  opacity: 1;
+	}
+
+	#overlay:after { /* X button icon */
+	  content: "\2715";
+	  position: absolute;
+	  color:#fff;
+	  top: 10px;
+	  right:20px;
+	  font-size: 2em;
 	}
 
 /*	.zoom-effect{
@@ -205,27 +226,10 @@
 				</button>
 			</div>
 			<div class="modal-body card-body d-flex flex-column">
-				<!-- <div class="ml-1">
-					<div class="ul-basic" id="setScheduleForm">
-						<div class="form-group">
-					        <div class="row">
-					            <div class="col-md-8">
-					                <div class="input-group date" id="datetimepicker12">
-					                	<input type="text" class="form-control">
-					                </div>
-					            </div>
-					        </div>
-					    </div>
-					</div>
-				</div> -->
 				<div class="row">
 			        <div class='col-sm-6'>
 			            <div class="form-group">
 			                <div class='input-group date''>
-			                    <!-- <input type='text' class="form-control" />
-			                    <span class="input-group-addon">
-			                        <span class="glyphicon glyphicon-calendar"></span>
-			                    </span> -->
 			                    <input type="text" id="datetimepicker1">
 			                    <div id="z"></div>
 			                </div>
@@ -239,14 +243,27 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"> 
+      <div class="modal-header">
+      	<h5 class="modal-title"><b>Kartu Tanda Penduduk</b></h5>
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>             
+      <div class="modal-body">
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js" integrity="sha512-m5kAjE5cCBN5pwlVFi4ABsZgnLuKPEx0fOnzaH5v64Zi3wKnhesNUYq4yKmHQyTa3gmkR6YeSKW1S+siMvgWtQ==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.js" integrity="sha512-LjDU5V5K+EixYXzTBmWnQPPLZXTUNJOfwB0UPnFqbPeoUl2/N/AKPJAYVuNNmMv9RZeGZXRwu4PDI37GCRuOTQ==" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
+
 function init_information(id_candidate){
 	$("#controlModerator").show();
  	$.ajax({
@@ -292,11 +309,15 @@ function init_information(id_candidate){
 
 		  	$("#filesTitleAttach").html('Attachment Files')
 
+		  	var onclickImg = "{{env('API_LINK_CUSTOM_PUBLIC')}}/" + result.partner.ktp_files.replace(/ /g, "%20");
+
 		  	var append2 = ""
 		  	append2 = append2 +	'<b>Kartu Tanda Penduduk</b>'
 		  	append2 = append2 + '<div class="zoom-effect">'
-			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
+			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;cursor:zoom-in" id="zoom" class="zoom" onclick=imgClick(' +  "'" + onclickImg + "'" +')><p style="color:red;font-family"><i>*note: Click the image for zoom</i></p>'
 			append2 = append2 + '<b>Portofolio</b><br>'
+
+			// $("#zoom").attr("onclick","imgClick("+ result.partner.ktp_files +")")
 		 	if (result.partner.portofolio_file == null) {
 		  		append2 = append2 + '<span> - </span>'
 		  	}else{
@@ -312,8 +333,17 @@ function init_information(id_candidate){
 			append2 = append2 + '<input class="form-control" placeholder"set interview schedule" name="interview_date" type="text" id="datetimepicker1"><p style="color:red;font-family"><i>*note: by setting the interview date, you allowed to accepting the process</i></p><br>'
 
 			$("#previewKtp").attr("onclick","previewKtp()")
+			// $('.zoom').zoom({ on:'grab' });
 
 			// $("#previewKtp").attr("onclick","previewKtp()")
+
+			// $('.zoom').on('click', function() {
+			// 	console.log("test")
+			// 	// $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			// 	// $('#imagemodal').modal('show');   
+			// });	
+
+			
 
 		  	$("#filesContentAttach").html(append2)
 
@@ -371,154 +401,166 @@ function init_information(id_candidate){
 	})
 }
 
-function init_basic(id_candidate){
-	$("#controlModerator").show();
- 	$.ajax({
-		type:"GET",
-		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
-		data:{
-			id_candidate:id_candidate
-		},
-		success: function(result){
-			// $.each(result.partner,function(index,value){
-			$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
+function imgClick(files){
+	$('.imagepreview').attr('src', files);
+	$('#imagemodal').modal('show'); 
+}
 
-			var append = ""
-		  	append = append + '<ul>'
-		  	append = append + '<li> <span>Name</span> '+result.partner.name+'</li>'
-		  	append = append + '<li> <span>Nik</span>'+result.partner.ktp_nik+'</li>'
-		  	append = append + '<li> <span>Phone</span>'+result.partner.phone+'</li>'
-		  	append = append + '<li> <span>Email</span>'+result.partner.email+'</li>'
-		  	append = append + '<li> <span>Address</span>'+result.partner.address+'</li>'
-			append = append + '</ul>'		
+// function init_basic(id_candidate){
+// 	$("#controlModerator").show();
+//  	$.ajax({
+// 		type:"GET",
+// 		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
+// 		data:{
+// 			id_candidate:id_candidate
+// 		},
+// 		success: function(result){
+// 			// $.each(result.partner,function(index,value){
+// 			$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
 
-		  	$("#basic-information").html(append)
+// 			var append = ""
+// 		  	append = append + '<ul>'
+// 		  	append = append + '<li> <span>Name</span> '+result.partner.name+'</li>'
+// 		  	append = append + '<li> <span>Nik</span>'+result.partner.ktp_nik+'</li>'
+// 		  	append = append + '<li> <span>Phone</span>'+result.partner.phone+'</li>'
+// 		  	append = append + '<li> <span>Email</span>'+result.partner.email+'</li>'
+// 		  	append = append + '<li> <span>Address</span>'+result.partner.address+'</li>'
+// 			append = append + '</ul>'		
 
-		  	$("#filesTitleAttach").html('Attachment Files')
+// 		  	$("#basic-information").html(append)
 
-		  	var append2 = ""
-		  	append2 = append2 +	'<b>Kartu Tanda Penduduk</b>'
-		  	append2 = append2 + '<div class="zoom-effect">'
-			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" class="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
-			append2 = append2 + '</div>'
+// 		  	$("#filesTitleAttach").html('Attachment Files')
 
-			$('.zoom').zoom({ on:'grab' });
+// 		  	var append2 = ""
+// 		  	append2 = append2 +	'<b>Kartu Tanda</b>'
+// 		  	append2 = append2 + '<div id="overlay">Tess</div>'
+// 		  	// append2 = append2 + '<div class="zoom-effect">'
+// 			append2 = append2 + '<img src="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.ktp_files +'" style="width:323px;height:204px;object-fit: cover;" id="zoom"><p style="color:red;font-family"><i>*note: tahan gambar lama untuk zoom</i></p>'
+// 			// append2 = append2 + '</div>'
 
-			$("#previewKtp").attr("onclick","previewKtp()")
+// 			// $('.zoom').zoom({ on:'grab' });
 
-		  	$("#filesContentAttach").html(append2)
+// 			$("#overlay").click(function() {
+// 				console.log("satu")
+// 				$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+ result.partner.ktp_files);
+// 				$('#imagemodal').modal('show');  
+// 			})
 
-		  	$("#boxSubmitPartner").empty("")
-		  	$("#DisclaimerEnglish").html("Di dalam tahap basic information, calon engineer akan di seleksi berdasarkan backgroud life melalui upload KTP dan alamat tempat tinggal. Dengan ini kita bisa mengetahui domisili dari engineer tersebut dan area dimana dia akan bekerja.")
-		  	$("#DisclaimerIndo").html("<i> In the basic information stage, prospective engineers will be selected based on backgroud life through uploaded KTP and residential addresses. With this we can find out the domicile of the engineer and the area where he will work.</i>")
-		  	$.each(result.partner_progress,function(index,value){
-		  		if (index === 0) {
-		  			var button = "";
-					button = button + '<button id="partnerSubmitAccept" class="btn btn-outline-success ml-auto"><span>Accept</span></button>'
-					button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
+// 			$("#previewKtp").attr("onclick","previewKtp()")
+
+// 		  	$("#filesContentAttach").html(append2)
+
+// 		  	$("#boxSubmitPartner").empty("")
+// 		  	$("#DisclaimerEnglish").html("Di dalam tahap basic information, calon engineer akan di seleksi berdasarkan backgroud life melalui upload KTP dan alamat tempat tinggal. Dengan ini kita bisa mengetahui domisili dari engineer tersebut dan area dimana dia akan bekerja.")
+// 		  	$("#DisclaimerIndo").html("<i> In the basic information stage, prospective engineers will be selected based on backgroud life through uploaded KTP and residential addresses. With this we can find out the domicile of the engineer and the area where he will work.</i>")
+// 		  	$.each(result.partner_progress,function(index,value){
+// 		  		if (index === 0) {
+// 		  			var button = "";
+// 					button = button + '<button id="partnerSubmitAccept" class="btn btn-outline-success ml-auto"><span>Accept</span></button>'
+// 					button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
 					
-					$("#boxSubmitPartner").append(button)
-					$("#boxSubmitPartner > button").css("margin","10px")
+// 					$("#boxSubmitPartner").append(button)
+// 					$("#boxSubmitPartner > button").css("margin","10px")
 
-		  			if(value.history_status != "1"){
-			  			$("#partnerSubmitAccept").attr("disabled",true);
-						$("#partnerSubmitReject").attr("disabled",true);
-						$("#partnerSubmitAccept").html("Accept");
-						console.log("hilang")
-					}
+// 		  			if(value.history_status != "1"){
+// 			  			$("#partnerSubmitAccept").attr("disabled",true);
+// 						$("#partnerSubmitReject").attr("disabled",true);
+// 						$("#partnerSubmitAccept").html("Accept");
+// 						console.log("hilang")
+// 					}
 
-					$("#partnerSubmitAccept").attr("onclick","submitPartnerProgressAccept("+ result.partner.id + ',' + value.history_status+")")
-			  		$("#partnerSubmitReject").attr("onclick","submitPartnerProgressReject("+ result.partner.id + ',' + value.history_status +")")
-		  		}
-			})
+// 					$("#partnerSubmitAccept").attr("onclick","submitPartnerProgressAccept("+ result.partner.id + ',' + value.history_status+")")
+// 			  		$("#partnerSubmitReject").attr("onclick","submitPartnerProgressReject("+ result.partner.id + ',' + value.history_status +")")
+// 		  		}
+// 			})
 		
 		  	
-			// });
-		}
-	})
-}
+// 			// });
+// 		}
+// 	})
+// }
 
-function init_advanced(id_candidate){
-	$("#controlModerator").show();
-	$.ajax({
-		type:"GET",
-		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
-		data:{
-			id_candidate:id_candidate
-		},
-		success: function(result){
-			// $.each(result.partner,function(index,value){
-				$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
+// function init_advanced(id_candidate){
+// 	$("#controlModerator").show();
+// 	$.ajax({
+// 		type:"GET",
+// 		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getDetailPartnerList",
+// 		data:{
+// 			id_candidate:id_candidate
+// 		},
+// 		success: function(result){
+// 			// $.each(result.partner,function(index,value){
+// 				$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
 
-				var append = ""
-			  	append = append + '<ul>'
-			  	if (result.partner.latest_education == null) {
-			  		append = append + '<li> <span>Lastest Education</span>'+ ' - ' +' </li>'
-			  	}else{
-			  		append = append + '<li> <span>Lastest Education</span>'+ result.partner.latest_education +' </li>'
-			  	}
-			  	append = append + '<li> <span>Job Category picked</span>'
-			  	append = append + '<ul>'
+// 				var append = ""
+// 			  	append = append + '<ul>'
+// 			  	if (result.partner.latest_education == null) {
+// 			  		append = append + '<li> <span>Lastest Education</span>'+ ' - ' +' </li>'
+// 			  	}else{
+// 			  		append = append + '<li> <span>Lastest Education</span>'+ result.partner.latest_education +' </li>'
+// 			  	}
+// 			  	append = append + '<li> <span>Job Category picked</span>'
+// 			  	append = append + '<ul>'
 			  	
-			  	if (result.partner.category.length == 0) {
-			  		append = append + ' - '
-			  	}else{
-			  		$.each(result.partner.category, function(key, value){
-			  			append = append + '<li>' + value.job_engineer.category_name + '</li>'
-			  		})
-			  	}
+// 			  	if (result.partner.category.length == 0) {
+// 			  		append = append + ' - '
+// 			  	}else{
+// 			  		$.each(result.partner.category, function(key, value){
+// 			  			append = append + '<li>' + value.job_engineer.category_name + '</li>'
+// 			  		})
+// 			  	}
 			  
-			  	append = append + '</ul>'
-			  	append = append + '</li>'
-				append = append + '</ul>'		
+// 			  	append = append + '</ul>'
+// 			  	append = append + '</li>'
+// 				append = append + '</ul>'		
 
-			  	$("#basic-information").html(append)
+// 			  	$("#basic-information").html(append)
 
-			  	$("#filesTitleAttach").html('Attachment Portofolio')
+// 			  	$("#filesTitleAttach").html('Attachment Portofolio')
 
-			  	var append2 = ""
-			  	append2 = append2 + '<div>'
-			  	if (result.partner.portofolio_file == null) {
-			  		append2 = append2 + '<span> - </span>'
-			  	}else{
-			  		append2 = append2 +	'<a href="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.portofolio_file +'" target="_blank"><i class="fa fa-file fa-4x" aria-hidden="true"></i>'
-			  	}
-				append2 = append2 + '</a></div>'
+// 			  	var append2 = ""
+// 			  	append2 = append2 + '<div>'
+// 			  	if (result.partner.portofolio_file == null) {
+// 			  		append2 = append2 + '<span> - </span>'
+// 			  	}else{
+// 			  		append2 = append2 +	'<a href="{{env("API_LINK_CUSTOM_PUBLIC")}}/'+ result.partner.portofolio_file +'" target="_blank"><i class="fa fa-file fa-4x" aria-hidden="true"></i>'
+// 			  	}
+// 				append2 = append2 + '</a></div>'
 
-				$("#previewKtp").attr("onclick","previewKtp()")
+// 				$("#previewKtp").attr("onclick","previewKtp()")
 
-			  	$("#filesContentAttach").html(append2)
+// 			  	$("#filesContentAttach").html(append2)
 
-			  	$("#boxSubmitPartner").empty("")
-			  	$("#DisclaimerEnglish").html("Selanjutnya dalam tahap advance information, calon engineer akan di saring melalui latar belakang pendidikan, kategori pekerjaan dan portofolio yang telah di upload, berserta lokasi area yang dia pilih untuk pekerjaanya. Dengan demikian kita dapat menyeleksi engineer dengan kebutuhan kemampuan yang tepat dan lokasi yang akurat.")
-		  		$("#DisclaimerIndo").html("<i> Furthermore, in the advanced information stage, the prospective engineer will be filtered through his educational background, job categories and uploaded portfolios, along with the location of the area he has chosen for his work. Thus we can select engineers with the need for the right capabilities and accurate location.</i>")
-			  	$.each(result.partner_progress,function(index,value){
-			  		if (index === 0) {
-			  			var button = "";
-						button = button + '<button id="partnerSubmitAccept" class="btn btn-outline-success ml-auto"><span>Accept</span></button>'
-						button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
+// 			  	$("#boxSubmitPartner").empty("")
+// 			  	$("#DisclaimerEnglish").html("Selanjutnya dalam tahap advance information, calon engineer akan di saring melalui latar belakang pendidikan, kategori pekerjaan dan portofolio yang telah di upload, berserta lokasi area yang dia pilih untuk pekerjaanya. Dengan demikian kita dapat menyeleksi engineer dengan kebutuhan kemampuan yang tepat dan lokasi yang akurat.")
+// 		  		$("#DisclaimerIndo").html("<i> Furthermore, in the advanced information stage, the prospective engineer will be filtered through his educational background, job categories and uploaded portfolios, along with the location of the area he has chosen for his work. Thus we can select engineers with the need for the right capabilities and accurate location.</i>")
+// 			  	$.each(result.partner_progress,function(index,value){
+// 			  		if (index === 0) {
+// 			  			var button = "";
+// 						button = button + '<button id="partnerSubmitAccept" class="btn btn-outline-success ml-auto"><span>Accept</span></button>'
+// 						button = button + '<button id="partnerSubmitReject" class="btn btn-danger btn-outline-danger ml-auto"><span>Reject</span></button>'
 						
-						$("#boxSubmitPartner").append(button)
-						$("#boxSubmitPartner > button").css("margin","10px")
+// 						$("#boxSubmitPartner").append(button)
+// 						$("#boxSubmitPartner > button").css("margin","10px")
 
-			  			if(value.history_status == "3"){
-				  			$("#partnerSubmitAccept").attr("disabled",false);
-							$("#partnerSubmitReject").attr("disabled",false);
-							$("#partnerSubmitAccept").html("Accept");
-							console.log("hilang")
-						}else{
-							$("#partnerSubmitAccept").attr("disabled",true);
-							$("#partnerSubmitReject").attr("disabled",true);
-						}
+// 			  			if(value.history_status == "3"){
+// 				  			$("#partnerSubmitAccept").attr("disabled",false);
+// 							$("#partnerSubmitReject").attr("disabled",false);
+// 							$("#partnerSubmitAccept").html("Accept");
+// 							console.log("hilang")
+// 						}else{
+// 							$("#partnerSubmitAccept").attr("disabled",true);
+// 							$("#partnerSubmitReject").attr("disabled",true);
+// 						}
 
-						$("#partnerSubmitAccept").attr("onclick","submitPartnerProgressAccept("+ result.partner.id + ',' + value.history_status+")")
-		  				$("#partnerSubmitReject").attr("onclick","submitPartnerProgressReject("+ result.partner.id + ',' + value.history_status +")")
-			  		}
-				})
-			// });
-		}
-	})
-}
+// 						$("#partnerSubmitAccept").attr("onclick","submitPartnerProgressAccept("+ result.partner.id + ',' + value.history_status+")")
+// 		  				$("#partnerSubmitReject").attr("onclick","submitPartnerProgressReject("+ result.partner.id + ',' + value.history_status +")")
+// 			  		}
+// 				})
+// 			// });
+// 		}
+// 	})
+// }
 
 function init_interview(id_candidate){
 	$("#controlModerator").show();
@@ -711,15 +753,18 @@ function init_interview(id_candidate){
 
 					
 				})
-			$.each(result.partner_progress,function(index,value){
-				if (value.history_status == 5) {
-					$("#box-dateTime").addClass( "hided");
-				}
-			})
+				$.each(result.partner_progress,function(index,value){
+					if (value.history_status == 5) {
+						$("#box-dateTime").addClass( "hided");
+					}
+				})
 
-			if (result.partner.interview.interview_result != "") {
-				$("#textAreaResult").val(result.partner.interview.interview_result);
-			}
+				if (result.partner.interview != null) {
+					if (result.partner.interview.interview_result != "") {
+						$("#textAreaResult").val(result.partner.interview.interview_result);
+					}
+				}
+				
 		}
 	})
 }
@@ -876,7 +921,7 @@ function submitPartnerProgressAccept(id,status){
 	              ).then((result) => {
 	                if (result.value) {
 	                  // location.reload()
-	                  window.location.reload("{{env('WEB_LINK_CUSTOM_PUBLIC')}}/partner/detail/"+ id +"#interview")
+	                  window.location.reload("{{env('WEB_LINK_CUSTOM_PUBLIC')}}/candidate/detail/"+ id +"#interview")
 	                }
 	              })
 	            }
@@ -1245,6 +1290,9 @@ function fillProgress(id_candidate){
 }
 
 $(document).ready(function(){
+	// $("#zoom").click(function(){
+	// 			console.log("test")
+	// 		})
 	var id_candidate = window.location.href.split("/")[5].replace('#','').split("h")[0];
 	// console.log(id_candidate)
 
