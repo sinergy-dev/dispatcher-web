@@ -118,7 +118,7 @@
 					  		<td>Dodot@gmail.com</td>
 					  		<td>Jl. Cempaka RT.2/RW.6, Kb. Jeruk, Kec. Kb. Jeruk, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11530</td>
 					  		<td><span class="badge badge-warning">Advanced</span></td>
-					  		<td><a href="{{url('partner/detail/')}}"><button class="btn btn-secondary btn-primary">Show</button></a></td>
+					  		<td><a href="{{url('candidate/detail/')}}"><button class="btn btn-secondary btn-primary">Show</button></a></td>
 					  	</tr>
 					  </tbody>
 					</table>
@@ -197,7 +197,7 @@ function fillDataPartner(url,method){
 	          } else {
 	          	var statusPartner = "#interview"
 	          }
-	          table = table + '<td>' + '<a class="partnerDetail" href="{{url("/partner/detail")}}/'+ value.id + statusPartner + '"><button class="btn btn-secondary ml-auto">Show' + '</button></a></td>';
+	          table = table + '<td>' + '<a class="partnerDetail" href="{{url("/candidate/detail")}}/'+ value.id + statusPartner + '"><button class="btn btn-secondary ml-auto">Show' + '</button></a></td>';
               table = table + '</tr>';              
             });
             
