@@ -117,7 +117,7 @@
                             <a class="nav-link" href="{{url('region/index')}}">Region</a>
                         </li> -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url('partner/index')}}">New Partner</a>
+                            <a class="nav-link" href="{{url('candidate/index')}}">New Partner</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Setting<span class="caret"></span>
@@ -181,10 +181,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right notificationContent" style="min-width: 15rem" aria-labelledby="navbarDropdown">
                                     <span class="dropdown-item dropdown-header" id="notificationCount"></span>
-                                    <div class="dropdown-divider"></div>
+                                    <div class="dropdown-divider" style="margin-bottom: .25rem !important"></div>
                                     <div id="notificationContent"></div>
                                     
-                                    <div class="notificationFooter padding-footer" style="display: none;">
+                                    <div class="notificationFooter padding-footer" style="display: none;margin-top: .5rem;margin-bottom: .5rem;">
                                         <span class="btn-view" onclick="btnView()">View All</span>
                                         <span class="float-right btn-read" onclick="btnRead()">
                                             Read All
@@ -243,13 +243,14 @@
             for (const index in snapshot_dump) {
                 
                 // Append notif to list
-                // if(snapshot_dump[index].status == "unread"){
-                //     append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:red;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
-                // } else {
-                //     append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:blue;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
-                // }
+                if(snapshot_dump[index].status == "unread"){
+                    // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:red;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+                    append = append + makeNotificationHolder(snapshot_dump[index],index,"unread")
+                } else {
+                    // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:blue;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+                    append = append + makeNotificationHolder(snapshot_dump[index],index,"read")
+                }
 
-                append = append + makeNotificationHolder(snapshot_dump[index],index)
 
                 // Show notif to Browser Notification
                 if(snapshot_dump[index].showed == "false"){
@@ -258,7 +259,7 @@
 
                 count++
             }
-            console.log(count)
+            // console.log(count)
             $("#notificationContent").append(append)
             $(".notificationFooter").css("display","block")
             // $("#notification").append(append)
@@ -269,15 +270,15 @@
             var count = 0
             for (const index in snapshot_dump) {
                 if(snapshot_dump[index].status == "unread"){
-                    console.log(index)
+                    // console.log(index)
                     count++
                 }
             }
 
             if(count != 0){
-                $("#statusNotification").text( count + " Unread notification")
+                $("#notificationCount").text( count + " Unread notification")
             } else {
-                $("#statusNotification").text("Nothing new in here")
+                $("#notificationCount").text("Nothing new in here")
             }
         });
 
@@ -295,7 +296,7 @@
                 }
 
                 // Add latests notification
-                $("#notificationContent").append(makeNotificationHolder(snapshot.val(),snapshot.key)) 
+                $("#notificationContent").append(makeNotificationHolder(snapshot.val(),snapshot.key,"unread")) 
             } else {
                 start = false
             }
@@ -328,40 +329,97 @@
                 // console.log(snapshot.val())
                 var data = snapshot.val()
                 firebase.database().ref('notification/web-notif/' + index).set({
-                    to: snapshot_dump[index].to,
-                    from: snapshot_dump[index].from,
-                    title: snapshot_dump[index].title,
-                    message: snapshot_dump[index].message,
+                    to: data.to,
+                    from: data.from,
+                    title: data.title,
+                    message: data.message,
                     status: "read",
-                    date_time : snapshot_dump[index].date_time,
-                    job : snapshot_dump[index].job,
-                    history : snapshot_dump[index].history,
+                    date_time : data.date_time,
+                    job : data.job,
+                    history : data.history,
                     showed : "true"
                 });
-                window.location.href = url
+                // window.location.href = "{{url('job/detail')}}/" + data.job + "#history" + data.history
+                // window.location.href = "{{url('job/detail')}}/" + data.job + "#history" + data.history
+                // window.open("{{url('job/detail')}}/" + data.job + "#history" + data.history)
+                window.open(url)
             })
+            // firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
+            //     // console.log(snapshot.val())
+            //     var data = snapshot.val()
+            //     firebase.database().ref('notification/web-notif/' + index).set({
+            //         to: snapshot_dump[index].to,
+            //         from: snapshot_dump[index].from,
+            //         title: snapshot_dump[index].title,
+            //         message: snapshot_dump[index].message,
+            //         status: "read",
+            //         date_time : snapshot_dump[index].date_time,
+            //         job : snapshot_dump[index].job,
+            //         history : snapshot_dump[index].history,
+            //         showed : "true"
+            //     });
+            //     window.location.href = url
+            // })
 
         }
 
-        function makeNotificationHolder(data,index){
+        function makeNotificationHolder(data,index,status){
             var append = ""
             if (data.history == "On Progress") {
-                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job  + '")">'
-            } else if(data.history == "OK Basic"){
-                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job + "#advance" + '")">'
+                append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('candidate/detail')}}/" + data.job + "'" + ')">'
+            } else if(data.history == "OK Advance"){
+                append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('candidate/detail')}}/" + data.job + "#interview" + "'" + ')">'
+            } else if(data.history == "OK interview"){
+                append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('candidate/detail')}}/" + data.job + "#interview" + "'" + ')">'
             } else if(data.history == "OK Agreement"){
-                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('engineer/index')}}/"  + '")">'
+                append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('engineer/index')}}/" + "'" + ')">'
             } else if(data.history == "OK Partner"){
-                append = append + '<span class="dropdown-item pointer " onclick="readNotification(' + index + ',"' + "{{url('partner/detail')}}/" + data.job + "#agreement" + '")">'
+                append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('candidate/detail')}}/" + data.job + "#agreement" + "'" + ')">'
             } else{
-                append = append + '<span class="dropdown-item pointer" onclick="readNotification(' + index + ',"' + "{{url('job/detail')}}/" + data.job + "#history" + data.history + '")">'
+                append = append + '<span class="dropdown-item pointer" style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('job/detail')}}/" + data.job + "#history" + data.history + "'" + ')">'
             }
-            append = append + '<i class="fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
+
+            if(status == "unread"){
+                append = append + '<i class="text-primary fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
+            } else {
+                append = append + '<i class="text-muted fas fa-envelope mr-2"></i>' + data.title + '<span class="float-right text-sm text-primary""></span>'
+            }
             
             append = append + '</span>'
-            append = append + '<hr style="margin-bottom:0px;margin-top:0px">'
+            append = append + '<hr style="margin-bottom:.25rem;margin-top:.25rem">'
 
             return append
+        }
+
+        function btnView(){
+             // window.open("{{url('job/notification_all')}}","_blank");
+             window.open("{{url('job/notification_all')}}");
+        }
+
+        function btnRead(){
+            firebase.database().ref('notification/web-notif').on('value', function(snapshot) {
+                snapshot_dump = snapshot.val()
+                // $("#notificationContent").empty()
+                snapshot_dump.forEach(function(data,index){
+                    if(data.status == "unread"){
+                            firebase.database().ref('notification/web-notif/' + index).once('value').then(function(snapshot) {
+                            // console.log(snapshot.val())
+                            var data = snapshot.val()
+                            firebase.database().ref('notification/web-notif/' + index).set({
+                                to: data.to,
+                                from: data.from,
+                                title: data.title,
+                                message: data.message,
+                                status: "read",
+                                date_time : data.date_time,
+                                job : data.job,
+                                history : data.history,
+                                showed : "true"
+                            });
+                        })
+                    }                        
+                })
+            });
         }
 
         ///////////////////////////////
