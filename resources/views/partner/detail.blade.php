@@ -176,7 +176,7 @@
 								</div>
 								<div class="col-md-6">
 									<p>
-										<span id="jobSumaryDetailAddress" style="float: right;">Jakarta, 16 Juli 2020 </span><br>
+										<span id="jobSumaryLatestUpdate" style="float: right;">Jakarta, 16 Juli 2020 </span><br>
 									</p>
 									<h5 id="filesTitleAttach">Attachment Files</h5>
 									<div class="" id="filesContentAttach">
@@ -275,7 +275,7 @@ function init_information(id_candidate){
 		success: function(result){
 			// $.each(result.partner,function(index,value){
 			$("#informationTitle").html('<span class="badge badge-info">'+result.partner.status+'</span>')
-
+			$("#jobSumaryLatestUpdate").html(moment(result.partner.last_history).format('MMM Do YYYY'))
 			var append = ""
 		  	append = append + '<ul>'
 		  	append = append + '<li> <span>Name</span> '+result.partner.name+'</li>'
@@ -330,7 +330,7 @@ function init_information(id_candidate){
 			append2 = append2 + '<div id="box-dateTime">'
 
 			append2 = append2 + '<span>Schedule date & time :</span>'
-			append2 = append2 + '<input class="form-control" placeholder"set interview schedule" name="interview_date" type="text" id="datetimepicker1"><p style="color:red;font-family"><i>*note: by setting the interview date, you allowed to accepting the process</i></p><br>'
+			append2 = append2 + '<input class="form-control" placeholder"set interview schedule" name="interview_date" type="text" id="datetimepicker1" autocomplete="off"><p style="color:red;font-family"><i>*note: by setting the interview date, you allowed to accepting the process</i></p><br>'
 
 			$("#previewKtp").attr("onclick","previewKtp()")
 			// $('.zoom').zoom({ on:'grab' });
@@ -346,8 +346,7 @@ function init_information(id_candidate){
 			
 
 		  	$("#filesContentAttach").html(append2)
-
-		  	$("#partnerSubmitAccept").attr("disabled",true)
+		  	
 		  	$("#boxSubmitPartner").empty("")
 		  	$("#DisclaimerEnglish").html("Di dalam tahap Candidate information, calon engineer akan di seleksi berdasarkan backgroud life melalui upload KTP,alamat tempat tinggal,latar belakang pendidikan,kategori pekerjaan dan portofolio yang telah di upload,berserta lokasi area yang dia pilih untuk pekerjaanya. Dengan demikian kita dapat menyeleksi engineer dengan kebutuhan kemampuan yang tepat dan lokasi yang akurat.")
 		  	$("#DisclaimerIndo").html("<i> In the candidate information stage, prospective engineers will be selected based on their background life by uploading their ID card, residential address, educational background, job category and uploaded portfolio, along with the location of the area they have chosen for their work. Thus we can select engineers with the right ability requirements and an accurate location.</i>")
@@ -367,10 +366,17 @@ function init_information(id_candidate){
 						    format: 'YYYY-MM-DD HH:mm'
 						  },
 						}, function(start, end, label) {
+						console.log(start)
 						$("#partnerSubmitAccept").attr("disabled",false)
 						console.log('New date range selected: ' + start.format('YYYY-MM-DD HH:mm:ss') +')');
 
 					});
+
+					if ($('#datetimepicker1').val() != "") {
+						$("#partnerSubmitAccept").attr("disabled",false)
+					}else{
+						$("#partnerSubmitAccept").attr("disabled",true)
+					}
 
 					$('input[name="interview_date"]').val('');
    					$('input[name="interview_date"]').attr("placeholder","Set interview schedule");
@@ -572,8 +578,8 @@ function init_interview(id_candidate){
 			id_candidate:id_candidate
 		},
 		success: function(result){
-
-				$("#informationTitle").html('<span class="badge badge-success">Interview Information</span>')
+				$("#informationTitle").html('<span class="badge badge-warning">Interview Information</span>')
+				$("#jobSumaryLatestUpdate").html(moment(result.partner.last_history).format('MMM Do YYYY'))
 
 			  	var append = ""
 			  	append = append + '<ul>'
@@ -651,7 +657,7 @@ function init_interview(id_candidate){
 				appends = appends + '<div id="box-result">'
 
 				appends = appends + '<span>Interview Result</span>'
-				appends = appends + '<textarea id="textAreaResult" disabled class="form-control type="text></textarea>'
+				appends = appends + '<textarea id="textAreaResult" placeholder="input the interview result.." disabled class="form-control type="text></textarea>'
 				appends = appends + '<i>*note: send result for agreement stage</i>'
 				appends = appends + '</div>'
 
@@ -725,7 +731,9 @@ function init_interview(id_candidate){
 								$("#partnerSubmitReject").attr("disabled",false);
 								$("#textAreaResult").attr("disabled",false);
 					  			$("#partnerSetResult").attr("disabled",false);
-								$("#partnerSetResult").attr("onclick","submitPartnerSetResult("+ result.partner.id +")");
+					  			$("#partnerSetResult").attr("onclick","submitPartnerSetResult("+ result.partner.id +")");
+					  			
+								// $("#partnerSetResult").attr("onclick","submitPartnerSetResult("+ result.partner.id +")");
 							}else{
 								$("#textAreaResult").attr("disabled",false);
 					  			$("#partnerSetResult").attr("disabled",true);
@@ -778,6 +786,7 @@ function init_agreement(id_candidate){
 		},
 		success: function(result){
 				$("#informationTitle").html('<span class="badge badge-success">Agreement Information</span>')
+				$("#jobSumaryLatestUpdate").html(moment(result.partner.last_history).format('MMM Do YYYY'))
 
 				$("#basic-information").empty("")
 
@@ -828,6 +837,7 @@ function submitPartnerProgressAccept(id,status){
 
 	      }).then((result) => {
 	        if (result.value) {
+
 	          Swal.fire({
 	            title: 'Please Wait..!',
 	            text: "It's sending..",
@@ -866,6 +876,7 @@ function submitPartnerProgressAccept(id,status){
 	                'success'
 	              ).then((result) => {
 	                if (result.value) {
+	                  window.location.replace("https://development-web.sifoma.id/candidate/detail/"+id+"#interview");
 	                  location.reload()
 	                }
 	              })
@@ -1158,49 +1169,53 @@ function submitPartnerStartRoom(id,link){
 }
 
 function submitPartnerSetResult(id){
-	Swal.fire({
-        title: 'Are You Sure?',
-        text: "submit the result of interview and ask agreement policy of candidate engineer!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-      }).then((result) => {
-        if (result.value) {
-          Swal.fire({
-            title: 'Please Wait..!',
-            text: "It's sending..",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            customClass: {
-              popup: 'border-radius-0',
-            },
-            onOpen: () => {
-              Swal.showLoading()
-            }
-          })
+	if ($("#textAreaResult").val() == "") {
+		$("#textAreaResult").focus()
+	}else{
+		Swal.fire({
+	        title: 'Are You Sure?',
+	        text: "submit the result of interview and ask agreement policy of candidate engineer!",
+	        icon: 'warning',
+	        showCancelButton: true,
+	        confirmButtonColor: '#3085d6',
+	        cancelButtonColor: '#d33',
+	        confirmButtonText: 'Yes',
+	        cancelButtonText: 'No',
+	      }).then((result) => {
+	        if (result.value) {
+	          Swal.fire({
+	            title: 'Please Wait..!',
+	            text: "It's sending..",
+	            allowOutsideClick: false,
+	            allowEscapeKey: false,
+	            allowEnterKey: false,
+	            customClass: {
+	              popup: 'border-radius-0',
+	            },
+	            onOpen: () => {
+	              Swal.showLoading()
+	            }
+	          })
 
-          var fd = new FormData();
-          fd.append('id_candidate',id);
-          fd.append('interview_result', $("#textAreaResult").val());
-          fd.append('history_user',0);
-          fd.append('history_status',7);
+	          var fd = new FormData();
+	          fd.append('id_candidate',id);
+	          fd.append('interview_result', $("#textAreaResult").val());
+	          fd.append('history_user',0);
+	          fd.append('history_status',7);
 
-          $.ajax({
-            type:"POST",
-            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postResultInterview",
-            data:fd,
-            contentType: false,
-            processData: false,
-            success: function (result){
-            	location.reload();
-            }
-          })
-        }
-      });
+	          $.ajax({
+	            type:"POST",
+	            url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postResultInterview",
+	            data:fd,
+	            contentType: false,
+	            processData: false,
+	            success: function (result){
+	            	location.reload();
+	            }
+	          })
+	        }
+	      });
+		}
 }
 
 function submitPartnerAgreement(id){
