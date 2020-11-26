@@ -27,7 +27,7 @@
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-    <link rel="icon" href="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\eod_logo_2.png" sizes="32x32" type="image/png">
     <!-- <link rel="icon" href="https://getbootstrap.com/docs/4.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png"> -->
     
 
@@ -89,7 +89,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm header">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                    <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\eod_logo_2.png" width="30" height="30" class="d-inline-block align-top" alt="">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -235,30 +235,54 @@
         firebase.initializeApp(firebaseConfig);
 
         ///////////////////////////////
-
         firebase.database().ref('notification/web-notif').orderByChild('timestamp').limitToLast(10).once('value', function(snapshot) {
             snapshot_dump = snapshot.val()
+            // snapshot_dump = snapshot_dump
             var append = ""
             var count = 0
-            for (const index in snapshot_dump) {
-                
-                // Append notif to list
-                if(snapshot_dump[index].status == "unread"){
+
+            // console.log(typeof(snapshot.val()));
+
+            var keys = Object.keys(snapshot_dump);
+            keys = keys.reverse()
+            for (var i = 0; i < keys.length; i++) {
+                // console.log(snapshot_dump[keys[i]])
+                if(snapshot_dump[keys[i]].status == "unread"){
                     // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:red;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
-                    append = append + makeNotificationHolder(snapshot_dump[index],index,"unread")
+                    append = append + makeNotificationHolder(snapshot_dump[keys[i]],keys[i],"unread")
                 } else {
                     // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:blue;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
-                    append = append + makeNotificationHolder(snapshot_dump[index],index,"read")
+                    append = append + makeNotificationHolder(snapshot_dump[keys[i]],keys[i],"read")
                 }
 
 
                 // Show notif to Browser Notification
-                if(snapshot_dump[index].showed == "false"){
-                    showNotificationBrowser(snapshot_dump[index],index)
+                if(snapshot_dump[keys[i]].showed == "false"){
+                    showNotificationBrowser(snapshot_dump[keys[i]],keys[i])
                 }
 
                 count++
             }
+            
+            // for (const index in snapshot_dump) {
+                
+            //     // Append notif to list
+            //     if(snapshot_dump[index].status == "unread"){
+            //         // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:red;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+            //         append = append + makeNotificationHolder(snapshot_dump[index],index,"unread")
+            //     } else {
+            //         // append = append + "<li>" + index + " <span href='" + "{{url('job/detail')}}/" + snapshot_dump[index].job + "#history" + snapshot_dump[index].history + "' style='cursor: pointer;color:blue;' onclick='readNotification(" + index + ")'>" + snapshot_dump[index].status + "</span> - " + snapshot_dump[index].showed + "</li>"
+            //         append = append + makeNotificationHolder(snapshot_dump[index],index,"read")
+            //     }
+
+
+            //     // Show notif to Browser Notification
+            //     if(snapshot_dump[index].showed == "false"){
+            //         showNotificationBrowser(snapshot_dump[index],index)
+            //     }
+
+            //     count++
+            // }
             // console.log(count)
             $("#notificationContent").append(append)
             $(".notificationFooter").css("display","block")
@@ -287,8 +311,13 @@
         firebase.database().ref('notification/web-notif').orderByChild('timestamp').limitToLast(1).on('child_added', function(snapshot) {
             if(!start){
                 // Remove first notification
-                $("#notificationContent hr:first-child").remove()
-                $("#notificationContent a:first-child").remove()
+                // $("#notificationContent hr:last-child").remove()
+                // $("#notificationContent a:last-child").remove()
+
+                $("#notificationContent").children().last().remove()
+                $("#notificationContent").children().last().remove()
+
+
 
                 // Show latests notification to Browser Notification
                 if(snapshot.val().showed == "false"){
@@ -296,31 +325,50 @@
                 }
 
                 // Add latests notification
-                $("#notificationContent").append(makeNotificationHolder(snapshot.val(),snapshot.key,"unread")) 
+                $("#notificationContent").prepend(makeNotificationHolder(snapshot.val(),snapshot.key,"unread")) 
             } else {
                 start = false
             }
         })
 
-        function showNotificationBrowser(snapshot,key){
-            var notification = new Notification(snapshot.title, {
-                icon: '{{env("API_LINK_CUSTOM_PUBLIC")}}/image/freelance-profile-2.png',
-                body: snapshot.message,
+        function showNotificationBrowser(data,index){
+            var url = ""
+            if (data.history == "On Progress") {
+                url =  "{{url('candidate/detail')}}/" + data.job 
+            } else if(data.history == "OK Advance"){
+                url = "{{url('candidate/detail')}}/" + data.job + "#interview"
+            } else if(data.history == "OK interview"){
+                url = "{{url('candidate/detail')}}/" + data.job + "#interview"
+            } else if(data.history == "OK Agreement"){
+                url = "{{url('engineer/index')}}/"
+                // append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('engineer/index')}}/" + "'" + ')">'
+            } else if(data.history == "OK Partner"){
+                url = "{{url('engineer/index')}}/"
+                // append = append + '<span class="dropdown-item pointer " style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('candidate/detail')}}/" + data.job + "#agreement" + "'" + ')">'
+            } else{
+                url = "{{url('job/detail')}}/" + data.job + "#history" + data.history
+                // append = append + '<span class="dropdown-item pointer" style="padding-bottom:0px !important" onclick="readNotification(' + index + ',' + "'" + "{{url('job/detail')}}/" + data.job + "#history" + data.history + "'" + ')">'
+            }
+
+            var notification = new Notification(data.title, {
+                icon: '{{env("API_LINK_CUSTOM_PUBLIC")}}/image/eod_logo_2.png',
+                body: data.message,
             });
             notification.onclick = function() {
-                window.open("{{env('WEB_LINK_CUSTOM_PUBLIC')}}" + snapshot.job);
+                window.open(url);
+                // window.open("{{env('WEB_LINK_CUSTOM_PUBLIC')}}" + data.job);
             };
 
-            firebase.database().ref('notification/web-notif/' + key).set({
-                to: snapshot.to,
-                from: snapshot.from,
-                title: snapshot.title,
-                message: snapshot.message,
-                status: snapshot.status,
-                date_time : snapshot.date_time,
+            firebase.database().ref('notification/web-notif/' + index).set({
+                to: data.to,
+                from: data.from,
+                title: data.title,
+                message: data.message,
+                status: data.status,
+                date_time : data.date_time,
                 showed : "true",
-                history : snapshot.history,
-                job : snapshot.job
+                history : data.history,
+                job : data.job
             });
         }
 
