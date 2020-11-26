@@ -179,20 +179,27 @@
 			</td>
 		</tr>
 	</table>
+	<hr>
 	<table style="width: 100%" >
 		<tr >
-			<td style="width: 50%"><b>Customer</b></td>
-			<td style="width: 50%"><b>PIC (Person In Charge)</b></td>
+			<td style="width: 35%;"><b>Customer</b></td>
+			<td style="width: 35%"><b>PIC (Person In Charge)</b></td>
+			<td style="width: 30%"><b>Moderator</b></td>
 		</tr>
 		<tr>
-			<td style="padding-left: 10px">
+			<td style="padding-right: 10px">
 				<b>{{$data['job_customer']}}</b>
 				<br>{{$data['job_customer_address']}}
 			</td>
-			<td style="padding-left: 10px">
+			<td style="padding-right: 10px">
 				<b>{{$data['job_pic']}}</b>
 				<br>{{$data['job_pic_phone']}}
 				<br>{{$data['job_pic_email']}}
+			</td>
+			<td>
+				<b>{{$data['moderator']}}</b>
+				<br>{{$data['job_moderator_phone']}}
+				<br>{{$data['job_moderator_email']}}
 			</td>
 		</tr>
 	</table>
