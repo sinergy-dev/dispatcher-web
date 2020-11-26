@@ -327,6 +327,7 @@
   .ui-datepicker{ left: 50% !important; margin-left: -25.5em !important;}
 
 </style>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 @endsection
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -346,8 +347,8 @@
 
   <div id="tabB" style="display: none"> 
       <div class="col-md-12 mt-5 mb-0">
-          <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" class="center-in img-p">
-          <div style="text-align: center;color: #b3a7db;font-size: 20px" class="center-in div-p">Engineer On Demand</div>
+          <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\eod_logo_2.png" width="150px" height="150px" class="center-in img-p">
+          <div style="text-align: center;color: #373435;font-size: 20px" class="center-in div-p"><b>EOD</b></div>
 
           <p class="center-in text-p pt-3" style="width: 100%;text-align: center;">Engineer On Demand (EOD) is a mobile app<br> that can be used by the freelancer to search job, do the job, and get paid.<br> But first, you have to join to become a Partner.</p> 
 
@@ -357,7 +358,7 @@
 
           <input id="input-pPhone" type="number" placeholder="Type your name here...." class="center-in mt-4" style="display: none;width: 300px;max-width: 100%">
 
-          <textarea id="input-pAddress" class="center-in mt-4 textArea-pAdress" style="display: none;width: 300px;max-width: 100%"></textarea>
+          <textarea id="input-pAddress" class="center-in mt-4 textArea-pAdress" style="display: none;width: 400px;max-width: 100%"></textarea>
         
           <div class="row btnCenter mt-4" id="input-pEducation" style="display: none;">
             <div class="col-md-4 mb-3">
@@ -626,7 +627,7 @@
               $(".progressbar li#validation").addClass("active");
               $("#tabA").show();
               $("#tabB").show();
-              $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+              $(".text-p").html("<h2 class='center-in mt-4 pt-5' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
               $("#input-pAddress").hide()
               $("#input-pPhone").hide()
               $("#input-pEmail").hide()
@@ -649,7 +650,7 @@
               $("#tabC").hide();
               $("#tabD").show();
               // if (result.latest_education != null) {
-                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                $(".text-p").html("<h2 class='center-in mt-4 pt-5' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
                 $("#input-pAddress").hide()
                 $("#input-pPhone").hide()
                 $("#input-pEmail").hide()
@@ -669,7 +670,7 @@
                 $("#tabA").show();
                 $("#tabC").hide();
                 $("#tabD").show();
-                $(".text-p").html("<h2 class='center-in' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
+                $(".text-p").html("<h2 class='center-in mt-4 pt-5' style=''> Now you can relax, we'll be in touch soon! Thank you for joining partner with us. </h2>")
                 $("#input-pAddress").css("display","none")
                 $("#input-pPhone").css("display","none")
                 $("#input-pEmail").css("display","none")
