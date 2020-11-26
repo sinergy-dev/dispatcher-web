@@ -217,28 +217,28 @@
 							<div class="invalid-feedback">
 								Please select a valid PIC.
 							</div>
-							<small class="text-primary" style="cursor: pointer;" onclick="showAddPIC()">
+							<small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPIC()">
 								+ Add here if PIC Not Exist
 							</small>
 						</div>
 						<div class="row" id="addPICField" style="display: none;">
 							<div class="col-md-4 mb-3">
 								<label for="jobTitle">PIC Name</label>
-								<input type="text" class="form-control" id="jobTitle" required="">
+								<input type="text" class="form-control" id="jobPicName" required="">
 								<div class="invalid-feedback">
 									Please enter the PIC Name.
 								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="jobTitle">Contact Number</label>
-								<input type="text" class="form-control" id="jobTitle" required="">
+								<input type="text" class="form-control" id="jobPicContact" required="">
 								<div class="invalid-feedback">
 									Please enter the Contact Number.
 								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="jobTitle">Email</label>
-								<input type="text" class="form-control" id="jobTitle" required="">
+								<input type="text" class="form-control" id="jobPicEmail" required="">
 								<div class="invalid-feedback">
 									Please enter valid Email.
 								</div>
@@ -473,7 +473,7 @@
 	<div class="modal-dialog modal-dialog-centered " role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Job Sumary</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Job Summary</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -512,6 +512,77 @@
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn btn-primary ml-auto" id="jobSumaryHolderButton">Show More</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="editJob" tabindex="-1" role="dialog" aria-labelledby="editjob" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit Job <span id="editJobLongTitle"></span></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="needs-validation" novalidate="">
+					<div class="mb-3">
+						<label for="jobTitle">Range Date</label>
+						<input type="text" class="form-control" id="inputJobRangeDateEdit" required="">
+						<div class="invalid-feedback">
+							Please enter the Range Date.
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="country">Person In Charge</label>
+						<select class="custom-select d-block w-100" id="inputJobPicEdit" required="">
+							<option value="">Choose...</option>
+						</select>
+						<div class="invalid-feedback">
+							Please select a valid PIC.
+						</div>
+						<small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPICEdit()">
+							+ Add here if PIC Not Exist
+						</small>
+					</div>
+					<div class="row" id="addPICFieldEdit" style="display: none;">
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">PIC Name</label>
+								<input type="text" class="form-control" id="jobPicNameEdit" required="">
+								<div class="invalid-feedback">
+									Please enter the PIC Name.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">Contact Number</label>
+								<input type="text" class="form-control" id="jobPicContactEdit" required="">
+								<div class="invalid-feedback">
+									Please enter the Contact Number.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">Email</label>
+								<input type="text" class="form-control" id="jobPicEmailEdit" required="">
+								<div class="invalid-feedback">
+									Please enter valid Email.
+								</div>
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="jobRequirement">Job Address</label>
+							<textarea class="form-control" id="inputJobAddressEdit" rows="3" required=""></textarea>
+							<div class="invalid-feedback">
+								Please enter the Job Adress.
+							</div>
+						</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" id="updateJob" >Update</button>
 			</div>
 		</div>
 	</div>
@@ -893,14 +964,22 @@
 					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
 					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm"  border-radius:.25rem;">'
-					// prepend = prepend + '		<div style="width:160px;height: 148px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-position: center;">'
 					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;">'
 					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
 					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
 					prepend = prepend + '			</div>'
 					prepend = prepend + '		</div>'
-					prepend = prepend + '		<div class="card-body d-flex flex-column align-items-start">'
-					prepend = prepend + '			<strong class="d-inline-block mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
+					prepend = prepend + '		<div class="card-body d-flex flex-column">'
+					prepend = prepend + '	<div class="ml-0">'
+					prepend = prepend + '		<div class="d-flex d-inline-block">'
+					prepend = prepend + '			<strong class="mb-2 text-primary">' + value['customer']['customer_name'] + '</strong>'
+					if (value.apply_engineer == "") {
+						prepend = prepend + '			<div class="ml-auto d-inline-block">'
+						prepend = prepend + '				<span class="ml-auto"><i class="text-danger fa fa-edit" style="cursor:pointer" onclick="showEditJob(' + value['id'] + ')"></i></span>'
+						prepend = prepend + '			</div>'
+					}					
+					prepend = prepend + '		</div>'
+					prepend = prepend + '	</div>'
 					prepend = prepend + '			<h4 class="mb-0">'
 					prepend = prepend + '				<a class="text-dark" href="#">' + jobName + '</a>'
 					prepend = prepend + '			</h4>'
@@ -1338,7 +1417,7 @@
 				$("#jobSumaryHolderAddress").html('<i class="fas fa-building"></i> ' + result.job.job_location)
 				$("#jobSumaryHolderLocation").html('<i class="fas fa-map-marker"></i> ' + result.job.location.long_location)
 				$("#jobSumaryHolderLevel").html('<i class="fas fa-signal"></i> ' + result.job.level.level_name + " - " + result.job.level.level_description)
-				$("#jobSumaryHolderDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end))
+				$("#jobSumaryHolderDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end).format("DD MMMM"))
 				
 				$("#jobSumaryHolderButton").attr('href','{{url("job/detail/")}}/' + result.job.id)
 				$("#jobSumaryHolderLatest").html('<b>Latest Update</b><br>' + moment(result.job.latest_history.history.date_time).format('DD MMMM - HH:mm') + ' [' + result.job.latest_history.user_name + '] <br>' + result.job.latest_history.history_activity + ' - ' + result.job.latest_history.history.detail_activity + '</p>')
@@ -1347,6 +1426,118 @@
 				$("#showSummaryModal").modal('toggle')
 			}
 		});
+	}
+
+	$("#inputJobPicEdit").select2({
+		theme: 'bootstrap4',
+		ajax: {
+			url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
+			dataType: 'json',
+		}
+	})
+
+	$("#inputJobPicEdit").change(function(){
+		$("#addPICFieldEdit").hide()
+		$("#jobPicNameEdit").val("")
+		$("#jobPicContactEdit").val("")
+		$("#jobPicEmailEdit").val("")
+	})
+
+	function showAddPICEdit(){
+		var picSelect 	= $('#inputJobPicEdit');
+
+		var option = new Option('', '', true, true);
+			picSelect.append(option).trigger('change');
+		$("#pic").attr("disabled","true")
+		$("#addPICFieldEdit").show()
+	}
+
+	function showEditJob(id){
+		$.ajax({
+			type:"GET",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobOpen",
+			data:{
+				id_job:id
+			},
+			success: function(result){
+				$("#editJobLongTitle").html('- <span class="text-primary">'+ result.job.job_name +'</span>')
+				$("#inputJobAddressEdit").val(result.job.job_location)
+				var picSelect 	= $('#inputJobPicEdit');
+
+				var option = new Option(result.job.pic.pic_name + ' ('+ result.job.pic.pic_phone +')', result.job.pic.id, true, true);
+					picSelect.append(option).trigger('change');
+
+				$("#inputJobRangeDateEdit").daterangepicker({
+					"locale": {
+						"format": "DD/MM/YYYY"
+					}
+				})
+
+				$("#inputJobRangeDateEdit").data('daterangepicker').setStartDate(moment(result.job.date_start).format("DD/MM/YYYY"));
+				$("#inputJobRangeDateEdit").data('daterangepicker').setEndDate(moment(result.job.date_end).format("DD/MM/YYYY"));				
+			}
+		});
+		$("#updateJob").attr('onclick','updateJob('+id+')')
+
+		$("#editJob").modal('toggle')	
+	}
+
+	function updateJob(id){
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "to update this job data",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes',
+			cancelButtonText: 'No',
+		}).then((result) => {
+			if (result.value) {
+				Swal.fire({
+					title: 'Please Wait..!',
+					text: "It's updating..",
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					customClass: {
+						popup: 'border-radius-0',
+					},
+					onOpen: () => {
+						Swal.showLoading()
+					}
+				})
+				var splited = $("#inputJobRangeDateEdit").val().split(' - ');
+				$.ajax({
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/updateJob/postPublishJobsEdit",
+					type:"POST",
+					data:{
+						id_job:id,
+						id_pic:$("#inputJobPicEdit").select2("data")[0].id,
+						job_duration_start:moment(splited[0],"DD/MM/YYYY").format("YYYY-MM-DD"),
+						job_duration_end:moment(splited[1],"DD/MM/YYYY").format("YYYY-MM-DD"),
+						job_address:$("#inputJobAddressEdit").val(),
+						job_pic_Name:$("#jobPicNameEdit").val(),
+						job_pic_Contact:$("#jobPicContactEdit").val(),
+						job_pic_Email:$("#jobPicEmailEdit").val(),
+
+					},
+					success: function(result){
+						Swal.showLoading()
+						Swal.fire(
+							'Published!',
+							'Job has been Published.',
+							'success'
+						).then((result) => {
+							if (result.value) {
+								location.reload()
+								$("#editJob").modal('toggle')
+							}
+						})
+					}
+				})
+			}
+		})
 	}
 
 	function showAddPIC(){
@@ -1367,8 +1558,13 @@
 			success: function(result){
 				$("#finaliseClient").html($("#inputJobClient").select2("data")[0].text)
 				$("#finaliseLocation").html(result.location)
-				$("#finalisePic").html(result.pic)
-				$("#finalisePicEmail").html(result.pic_email)
+				if ($("#inputJobPic").select2("data")[0].id == "") {
+					$("#finalisePic").html($("#jobPicName").val() + " [" + $("#jobPicContact").val() + "] ")
+					$("#finalisePicEmail").html($("#jobPicEmail").val())
+				}else{
+					$("#finalisePic").html(result.pic)
+					$("#finalisePicEmail").html(result.pic_email)
+				}
 				$("#finaliseJobTitle").html($("#inputJobTitle").val())
 				$("#finaliseJobCategory").html('<i class="fas fa-hard-hat"></i> ' + result.category)
 				$("#finaliseJobLevel").html('<i class="fas fa-signal"></i> ' + 
@@ -1426,6 +1622,9 @@
 						job_payment_base:$("#inputJobPriceBase").val().replace(',00','').replace(/\D/g, ""),
 						job_priority:$("#inputJobPriority").select2("data")[0].id,
 						id_user:'{{Auth::user()->id}}',
+						job_pic_Name:$("#jobPicName").val(),
+						job_pic_Contact:$("#jobPicContact").val(),
+						job_pic_Email:$("#jobPicEmail").val(),
 
 					},
 					success: function(result){
@@ -1436,6 +1635,7 @@
 							'success'
 						).then((result) => {
 							if (result.value) {
+								location.reload()
 								$("#exampleModalCenter").modal('toggle')
 							}
 						})
@@ -1475,9 +1675,9 @@
 			$("#inputJobLocation").removeClass("is-invalid")
 		});
 
-		$('#inputJobPic').on('select2:select', function (e) {
-			$("#inputJobPic").removeClass("is-invalid")
-		});
+		// $('#inputJobPic').on('select2:select', function (e) {
+		// 	$("#inputJobPic").removeClass("is-invalid")
+		// });
 
 		$('#inputJobLevel').on('select2:select', function (e) {
 			$("#inputJobLevel").removeClass("is-invalid")
@@ -1546,8 +1746,6 @@
 				$("#inputJobArea").addClass("is-invalid")
 			}else if($("#inputJobLocation").select2("data")[0].id == ""){
 				$("#inputJobLocation").addClass("is-invalid")
-			}else if($("#inputJobPic").select2("data")[0].id == ""){
-				$("#inputJobPic").addClass("is-invalid")
 			}else{
 				var x = document.getElementsByClassName("tab");
 				var y = document.getElementsByClassName("step");
