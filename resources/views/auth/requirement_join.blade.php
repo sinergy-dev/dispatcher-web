@@ -331,6 +331,8 @@
 @endsection
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
 
@@ -414,7 +416,7 @@
                 <input name="file_input" class="btnCenter" id="file-input" alt="Engineer On Demand" type="file" />          
               </form>
               <small id="emailHelp" class="form-text-file text-muted btnCenter">PDF file Only (up to 2MB).</small>
-            </div>
+          </div>
       </div>
       
       <div class="row mt-4">
@@ -515,36 +517,49 @@
 
   <div id="tabF" style="padding-top: 100px;display: none">
     <div class="col-md-12">
-      <h4 class="text-p center-in" style="width: 1000px;text-align: center;">By checking this checkbox, you are accepting the Company Partner Agreement and Privacy Policy.</h4><br>
-      <div class="radio" id="input-radio-a" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
-        <label><input type="checkbox" name="optradio" class="optradio" value="accept"><i> I accept the terms and conditions </i></label>
-        
+      <div class="row" id="checking-div">
+        <h4 class="text-p center-in" style="width: 100%;text-align: center;">By checking this checkbox, you are accepting the Company Partner Agreement and Privacy Policy.</h4><br>
+        <div class="radio" id="input-radio-a" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
+          <label><input type="checkbox" name="optradio" class="optradio" value="accept"><i> I accept the terms and conditions </i></label>
+        </div>
       </div>
       
       <div style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;" id="input-account">
         <div class="row" style="display: none;background-color: white!important;padding: 10px!important" id="box-account">
           <div class="col-md-4">
             <label><b>Bank Name</b></label>
-            <input type="text" class="form-control" id="account_name" style="width: 200px" name="" placeholder="ex: BANK NEGARA INDONESIA">
+            <select id="account_name" class="form-control" style="width: 100%"></select>
+            <!-- <input type="text" class="form-control" id="account_name" style="width: 200px" name="" placeholder="ex: Bank Rakyat Indonesia"> -->
           </div>
           <div class="col-md-4">
             <label><b>Account Number</b></label>
-            <input type="number" class="form-control" id="account_number" style="width: 200px" name="" placeholder="ex: 34567521XXX">
+            <input type="number" class="form-control" id="account_number" style="width: 100%" name="" placeholder="ex: 34567521XXX">
           </div>
           <div class="col-md-4">
             <label><b>Your Alias</b></label>
-            <input type="text" class="form-control" id="account_alias" style="width: 200px" name="" placeholder="ex: Emilia Winan">
+            <input type="text" class="form-control" id="account_alias" style="width: 100%" name="" placeholder="ex: Emilia Winan">
           </div>
           <div class="col-md-12">
             <small>*Please input your banking account information for the job payment transactions</small>
           </div>
-        </div>      
+        </div>  
+        <div class="imageScanBook" id="imageScanBook" style="display: none;">
+          <label for="scanBookAccount" class="btnCenter">
+            <img id="imgFilesAccount" class="imgFiles" src="https://cdn.onlinewebfonts.com/svg/img_106837.png"/>
+            <div style="display: none;border: 2px solid black;width: 500px;height: 50px" id="outputFiles"></div>
+            
+          </label>
+            <input name="scanBookAccount" class="w-100" id="scanBookAccount" alt="Engineer On Demand" type="file" style="display: none;position: absolute;left: 0;max-width: 100%" />
+            <small id="emailHelp" class="form-text text-muted btnCenter" style="display: none;">*<b>Upload scan buku tabungan</b>(Image file Only up to 2MB).</small>
+        </div>    
       </div>
    <!--    <div class="radio"  id="input-radio-b" style="display: flex;justify-content: center;flex-wrap: wrap;margin: 10px auto;position: relative;">
         <label><input type="checkbox" value="reject" class="optradio" name="optradio"><i> I am totally disagree </i></label>
       </div> -->
       <div class="btnCenter">
-        <button style="margin: 10px" id="agreeBtnPartner" class="btn btn-primary btn-secondary" disabled>Submit</button>
+        <button id="prevBtnAccount" style="margin: 10px;display: none" class="btn btn-primary btn-secondary" onclick="nextPrevAccount(-1)">Prev</button>
+        <button id="nextBtnAccount" style="margin: 10px" class="btn btn-primary btn-secondary" disabled onclick="nextPrevAccount(1)">Next</button>
+        <!-- <button style="margin: 10px" id="agreeBtnPartner" class="btn btn-primary btn-secondary" disabled>Submit</button> -->
       </div>
     </div>
   </div> 
@@ -564,6 +579,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script type="text/javascript">
 
@@ -598,6 +614,66 @@
         theme:'bootstrap4',
         data: edu 
       })  
+
+      var banking = [{
+          id: 'BCA',
+          text: 'BCA'
+      },{
+          id: 'Bank Jateng',
+          text: 'Bank Jateng'
+      },{
+          id: 'BNI',
+          text: 'BNI'
+      },{
+          id: 'BRI',
+          text: 'BRI'
+      },{
+          id: 'BTN',
+          text: 'BTN'
+      },{
+          id: 'BJB',
+          text: 'BJB'
+      },{
+          id: 'BTPN',
+          text: 'BTPN'
+      }, {
+          id: 'Danamon',
+          text: 'Danamon'
+      }, {
+          id: 'Mandiri',
+          text: 'Mandiri'
+      }, {
+          id: 'Jatim',
+          text: 'Jatim'
+      }, {
+          id: 'CIMB Niaga',
+          text: 'CIMB Niaga'
+      }, {
+          id: 'Mayapada',
+          text: 'Mayapada'
+      }, {
+          id: 'Nobu',
+          text: 'Nobu'
+      }, {
+          id: 'OCBC NISP',
+          text: 'OCBC NISP'
+      }, {
+          id: 'Panin',
+          text: 'Panin'
+      }, {
+          id: 'DKI',
+          text: 'DKI'
+      }, {
+          id: 'DBS',
+          text: 'DBS'
+      }];  
+
+      $("#account_name").select2({
+        placeholder: "Choose...",
+        theme:'bootstrap4',
+        data: banking 
+      })  
+
   });
 
   document.querySelector("#input-pNik").addEventListener("keypress", function (evt) {
@@ -614,6 +690,8 @@
     language: "id",
     orientation:"bottom",
   });
+
+  var currentTab = 0;
 
   if (window.location.href.split("/")[4] != null) {
     $.ajax({
@@ -750,11 +828,13 @@
                     $("#agreeBtnPartner").attr("onclick","submitAgreePartner("+ result.id + ',' + '"reject"' + ")")
                     $("#box-account").hide("slow");
                   }
+
                   $("#agreeBtnPartner").attr("disabled",false);
+                  $("#nextBtnAccount").attr("disabled",false);                  
                 } else {
                   $box.prop("checked", false);
                   $( "#box-account" ).hide("slow");
-                  $("#agreeBtnPartner").attr("disabled",true);
+                  $("#nextBtnAccount").attr("disabled",true);
                 }
                 
               }); 
@@ -773,6 +853,11 @@
               $("#input-radio-b").css("display","none")
               $("#input-account").css("display","none")
               $("#agreeBtnPartner").css("display","none")
+              $("#prevBtnAccount").hide()
+              $("#box-account").hide()
+              $("#imageScanBook").hide()
+              $(".text-muted").hide()
+              $("#nextBtnAccount").hide()
             }else if (result.status == "OK Partner") {
               $(".text-p").html("<h4>Hi <b>" +result.name +"</b>, You`re now an EOD partner. You can pick the job based on your job category only from the EOD Mobile App and get paid. So, please download our mobile app in the Play Store or App Store. And the following information is your username and password for your EOD Mobile App. <br>Thank you and good luck!</h4>")
                 var append = ""
@@ -809,9 +894,6 @@
   }else{
     $("#tabB").show();
   }
-
-  var currentTab = 0;
-  
   // $.ajax({
   //     url: "{{url('guestState')}}",
   //     type:"GET",
@@ -1982,7 +2064,82 @@
       })
     }    
   
-  }  
+  } 
+
+  // function editImage(input) {
+  //   if (input.files && input.files[0]) {
+  //     var reader = new FileReader();
+      
+  //     reader.onload = function(e) {
+  //       $('#imgFilesAccount').attr('src', e.target.result);
+  //     }
+      
+  //     reader.readAsDataURL(input.files[0]); // convert to base64 string
+  //   }
+  // }
+
+  function nextPrevAccount(n){
+    currentTab = currentTab + n;
+    console.log(currentTab)
+    if (currentTab == 0) {
+      if ($("input:checkbox").is(":checked")) {
+        $("#nextBtnAccount").prop("disabled",false)
+      }else{
+        $("#nextBtnAccount").prop("disabled",true)
+      }
+      $("#prevBtnAccount").hide()
+      $("#checking-div").show()
+      $("#box-account").show()
+      $("#imageScanBook").hide()
+      $(".text-muted").hide()
+      $("#nextBtnAccount").text("Next")
+      $("#nextBtnAccount").attr("onclick","nextPrevAccount(1)")
+    }else if (currentTab == 1) {
+      $("#prevBtnAccount").show()
+      $("#checking-div").hide()
+      $("#box-account").hide()
+      $("#imageScanBook").show()
+      $(".text-muted").show()
+      $("#nextBtnAccount").prop("disabled",true)
+      $("#nextBtnAccount").text("Submit")
+
+      $("#scanBookAccount").change(function() {
+        var file = this.files[0];
+        var fileType = file.type;
+        var fileName = file.name;
+        var fileSize = file.size;
+        
+        var match = ['image/png','image/jpg','image/jpeg'];
+        if(!((fileType == match[0]) || (fileType == match[1]) || (fileType == match[2]) || (fileType == match[3]) || (fileType == match[4]) || (fileType == match[5]))){
+            alert('Sorry, only Images files are allowed to upload.');
+            $("#scanBookAccount").val('');
+            return false;
+        }else if (fileSize > 2000000) {
+          alert('Sorry, the file size is up to 2MB');
+          $("#scanBookAccount").val('');
+        }
+
+        if (fileName !== "") {
+          $("#nextBtnAccount").prop("disabled",false)
+        }else{
+          $("#nextBtnAccount").prop("disabled",true)
+        }
+
+        // editImage(this);
+      })
+
+      $.ajax({
+        url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/partner/getNewPartnerIdentifier",
+        type:"POST",
+        data:{
+          identifier:window.location.href.split("/")[4],
+        },
+        success: function(result){
+            $("#nextBtnAccount").attr("onclick","submitAgreePartner("+ result.id + ',' + '"accept"' + ")")
+        },
+      })
+    }
+  }
 
   function submitAgreePartner(id,status){
     var fd = new FormData();
@@ -2013,6 +2170,7 @@
             }
           })
 
+          var files = $('#scanBookAccount')[0].files[0];
           fd.append('status','OK Agreement');
           fd.append('id_candidate',id);
           fd.append('history_user',1);
@@ -2020,6 +2178,7 @@
           fd.append('account_name',$("#account_name").val());
           fd.append('account_number',$("#account_number").val());
           fd.append('account_alias',$("#account_alias").val());
+          fd.append('imageScanBook',files);
 
           $.ajax({
               url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/join/postPartnerAgreement",
@@ -2044,6 +2203,12 @@
                     $("#input-radio-b").css("display","none")
                     $("#input-account").css("display","none")
                     $("#agreeBtnPartner").css("display","none")
+                    $("#prevBtnAccount").hide()
+                    $("#checking-div").show()
+                    $("#box-account").hide()
+                    $("#imageScanBook").hide()
+                    $(".text-muted").hide()
+                    $("#nextBtnAccount").hide()
                   }
                 })
               }
@@ -2069,5 +2234,7 @@
     }
     
   }
+
+
 </script>
 @endsection
