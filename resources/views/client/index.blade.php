@@ -192,42 +192,27 @@
 								<select class="custom-select d-block w-100" id="inputJobRegion" required="" style="width: 100%">
 									<option value="">Choose...</option>
 								</select>
+								<div class="invalid-feedback">
+									Please Select a Region.
+								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="state">Area</label>
 								<select class="custom-select d-block w-100" id="inputJobArea" required="" style="width: 100%" disabled>
 									<option value="">Choose...</option>
 								</select>
+								<div class="invalid-feedback">
+									Please Select an Area.
+								</div>
 							</div>
 							<div class="col-md-4 mb-3">
 								<label for="zip">Location</label>
 								<select class="custom-select d-block w-100" id="inputJobLocation" required="" style="width: 100%" disabled>
 									<option value="">Choose...</option>
 								</select>
-							</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="client">PIC Name</label>
-							<input type="text" class="form-control" name="pic_name_client" id="pic_name_client" required>
-							<div class="invalid-feedback">
-								Please Fill a PIC Name Client.
-							</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="client">PIC Contact</label>
-							<input type="Number" class="form-control" name="pic_contact_client" id="pic_contact_client" required>
-							<div class="invalid-feedback">
-								Please Fill a Number PIC Client.
-							</div>
-						</div>
-
-						<div class="mb-3">
-							<label for="client">PIC Email</label>
-							<input type="text" class="form-control" name="pic_email_client" id="pic_email_client" required>
-							<div class="invalid-feedback">
-								Please Fill a PIC Email Client.
+								<div class="invalid-feedback">
+									Please Select a Location.
+								</div>
 							</div>
 						</div>
 
@@ -240,6 +225,33 @@
 								Please Fill an Address Client.
 							</div>
 						</div>
+						
+						<strong>Person In Charge(PIC) Data</strong>
+						<hr style="border: solid grey 1px;">
+
+						<div class="mb-3">
+							<label for="client">PIC Name</label>
+							<input type="text" class="form-control" name="pic_name_client" id="pic_name_client" required>
+							<div class="invalid-feedback">
+								Please Fill a PIC Name Client.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">PIC Contact</label>
+							<input type="text" class="form-control" name="pic_contact_client" id="pic_contact_client" required>
+							<div class="invalid-feedback">
+								Please Fill a Number contact PIC Client.
+							</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="client">PIC Email</label>
+							<input type="text" class="form-control" name="pic_email_client" id="pic_email_client" required>
+							<div class="invalid-feedback">
+								Please Fill a PIC Email Client.
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -249,6 +261,114 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="detailModalClient" tabindex="-1" role="dialog" aria-labelledby="detailModalClient" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered " role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Detail Client</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form class="needs-validation" novalidate="">
+					<div>
+						<!-- <input type="" name="id_type" id="id_type" value="1" hidden> -->
+						<div class="mb-3">
+							<label for="client">Client Legal Name</label>
+							<input type="text" class="form-control" name="name_client_detail" id="name_client_detail" required>
+							<div class="invalid-feedback">
+								Please Fill a Name Client.
+							</div>
+						</div>
+
+						<!-- <div class="row">
+							<div class="col-md-4 mb-3">
+								<label for="country">Region</label>
+								<select class="custom-select d-block w-100" id="inputJobRegionDetail" required="" style="width: 100%">
+									<option value="">Choose...</option>
+								</select>
+								<div class="invalid-feedback">
+									Please Select a Region.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="state">Area</label>
+								<select class="custom-select d-block w-100" id="inputJobAreaDetail" required="" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
+								<div class="invalid-feedback">
+									Please Select an Area.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="zip">Location</label>
+								<select class="custom-select d-block w-100" id="inputJobLocationDetail" required="" style="width: 100%" disabled>
+									<option value="">Choose...</option>
+								</select>
+								<div class="invalid-feedback">
+									Please Select a Location.
+								</div>
+							</div>
+						</div> -->
+
+						<div class="mb-3">
+							<label for="client">Address</label>
+							<textarea class="form-control" id="adress_client_detail" name="adress_client_detail">
+								
+							</textarea>
+							<div class="invalid-feedback">
+								Please Fill an Address Client.
+							</div>
+						</div>
+						
+						<strong>Person In Charge(PIC) Data</strong>
+						<hr style="border: solid grey 1px;">
+
+						<div id="tbPIC">
+							
+						</div>
+
+						<small class="text-primary" id="pic" style="cursor: pointer;" onclick="addPIC()">
+							+ Add PIC here
+						</small>
+
+						<div class="row" id="addPIC" style="display: none;">
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">PIC Name</label>
+								<input type="text" class="form-control" id="pic_name_client_detail" required="">
+								<div class="invalid-feedback">
+									Please enter the PIC Name.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">Contact Number</label>
+								<input type="text" class="form-control" id="pic_contact_client_detail" required="">
+								<div class="invalid-feedback">
+									Please enter the Contact Number.
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="jobTitle">Email</label>
+								<input type="text" class="form-control" id="pic_email_client_detail" required="">
+								<div class="invalid-feedback">
+									Please enter valid Email.
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning btn-save" id="updateBtn" onclick="updateBtn()">Update</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 <!--datatable-->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -369,7 +489,48 @@
 			}
 		});
 
+		$('#name_client').on('keyup', function(){
+			$("#name_client").removeClass("is-invalid")
+		})
+
+		$('#pic_name_client').on('keyup', function(){
+			$("#pic_name_client").removeClass("is-invalid")
+		})
+
+		$('#pic_email_client').on('keyup', function(){
+			$("#pic_email_client").removeClass("is-invalid")
+		})
+
+		$('#pic_contact_client').on('keyup', function(){
+			// console.log(e)
+			if (!/^[0-9]+$/.test(this.value)) {
+			   this.value = this.value.substring(0,this.value.length-1);
+			}
+			$("#pic_contact_client").removeClass("is-invalid")
+		})
+
+		$('#adress_client').on('keyup', function(){
+			// console.log(e)
+			$("#adress_client").removeClass("is-invalid")
+		})
+
+		$('#inputJobRegion').on('select2:select', function (e) {
+			$("#inputJobRegion").removeClass("is-invalid")
+		});
+
+		$('#inputJobArea').on('select2:select', function (e) {
+			$("#inputJobArea").removeClass("is-invalid")
+		});
+
+		$('#inputJobLocation').on('select2:select', function (e) {
+			$("#inputJobLocation").removeClass("is-invalid")
+		});
+
 	})
+
+	function addPIC(){
+		$("#addPIC").show()
+	}
 
 	function fillDataClient(url,method){
 		$.ajax({
@@ -392,14 +553,13 @@
 		          }else{
 		          	table = table + '<td>' + value.customer_name + '</td>';
 		          }
-		          table = table + '<td>' + value.customer_name + '</td>';
 		          if (value.location_client ==  null) {
 		          	table = table + '<td>' + '' + '</td>';
 		          }else{
-		          	table = table + '<td>' + value.location_client.location_name + '</td>';
+		          	table = table + '<td>' + value.location_client.long_location + '</td>';
 		          }
 		          table = table + '<td>' + value.address + '</td>';
-		          table = table + '<td>' + '<button class="btn btn-sm btn-primary">Detail</button>' + '</td>';
+		          table = table + '<td>' + '<button class="btn btn-sm btn-primary" onclick="btnDetail('+value.id+')">Detail</button>' + '</td>';
 	              table = table + '</tr>';
 	            });
 
@@ -486,119 +646,196 @@
 		})
 	}
 
-	function showSumary(id){
-		$.ajax({
-			type:"GET",
-			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobOpen",
-			data:{
-				id_job:id
-			},
-			success: function(result){
-				console.log(result.job.customer.customer_name)
-
-				$("#jobSumaryHolderCustomer").html(result.job.customer.customer_name)
-				$("#jobSumaryHolderTitle").html(result.job.job_name)
-				$("#jobSumaryHolderDescription").html(result.job.job_description.replace(/(?:\r\n|\r|\n)/g, '<br>'))
-				$("#jobSumaryHolderRequirement").html(result.job.job_requrment.replace(/(?:\r\n|\r|\n)/g, '<br>'))
-				$("#jobSumaryHolderAddress").html('<i class="fas fa-building"></i> ' + result.job.job_location)
-				$("#jobSumaryHolderLocation").html('<i class="fas fa-map-marker"></i> ' + result.job.location.long_location)
-				$("#jobSumaryHolderLevel").html('<i class="fas fa-signal"></i> ' + result.job.level.level_name + " - " + result.job.level.level_description)
-				$("#jobSumaryHolderDuration").html('<i class="fas fa-calendar-alt"></i> ' + moment(result.job.date_start).format("DD MMMM") + " - " + moment(result.job.date_end))
-				
-				$("#jobSumaryHolderButton").attr('href','{{url("job/detail/")}}/' + result.job.id)
-
-				$("#jobSumaryHolder").show()
-			}
-		});
-	}
-
-	function showAddPIC(){
-		$("#pic").attr("disabled","true")
-		$("#addPICField").show()
-
-	}
-
-	function finalize(){
-		var splited = $("#inputJobRangeDate").val().split(' - ');
-		$.ajax({
-			url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterFinalize",
-			data: {
-				id_location:$("#inputJobLocation").select2("data")[0].id,
-				id_pic:$("#inputJobPic").select2("data")[0].id,
-				id_category:$("#inputJobCategory").select2("data")[0].id
-			},
-			success: function(result){
-				$("#finaliseClient").html($("#inputJobClient").select2("data")[0].text)
-				$("#finaliseLocation").html(result.location)
-				$("#finalisePic").html(result.pic)
-				$("#finalisePicEmail").html(result.pic_email)
-				$("#finaliseJobTitle").html($("#inputJobTitle").val())
-				$("#finaliseJobCategory").html('<i class="fas fa-hard-hat"></i> ' + result.category)
-				$("#finaliseJobLevel").html('<i class="fas fa-signal"></i> ' + $("#inputJobLevel").select2('data')[0].text)
-				$("#finaliseJobDuration").html(moment(splited[0],"DD/MM/YYYY").format("DD MMMM") + " - " + moment(splited[1],"DD/MM/YYYY").format("DD MMMM YYYY"))
-				$("#finaliseJobDescription").html("<h4>Job Description</h4>" + $("#inputJobDescription").val())
-				$("#finaliseJobRequirement").html("<h4>Job Requirement</h4>" + $("#inputJobRequirement").val())
-				$("#finaliseJobAddress").html('<h4>Job Address</h4>' + $("#inputJobAddress").val())
-				$("#finaliseJobPrice").html($("#inputJobPriceBase").val())
-			}
-		})
-	}
-
 	function saveBtn(){
-		Swal.fire({
-			title: 'Are you sure?',
-			text: "to publish this job",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes',
-			cancelButtonText: 'No',
-		}).then((result) => {
-			if (result.value) {
-				Swal.fire({
-					title: 'Please Wait..!',
-					text: "It's sending..",
-					allowOutsideClick: false,
-					allowEscapeKey: false,
-					allowEnterKey: false,
-					customClass: {
-						popup: 'border-radius-0',
-					},
-					onOpen: () => {
-						Swal.showLoading()
-					}
-				})
-				$.ajax({
-					headers: {
-					    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/client/postNewClient",
-					type:"POST",
-					data:{
-						_token: "{{ csrf_token() }}",
-						customer_name:$("#name_client").val(),
-						id_location:$("#inputJobLocation").select2("data")[0].id,
-						pic_name:$("#pic_name_client").val(),
-						phone:$("#pic_contact_client").val(),
-						email:$("#pic_email_client").val(),
-						address:$("#adress_client").val(),
-					},
-					success: function(result){
-						Swal.showLoading()
-						Swal.fire(
-							'Published!',
-							'Client has been Added.',
-							'success'
-						).then((result) => {
-							if (result.value) {
-								$("#exampleModalCenter").modal('toggle')
-							}
+		if($("#name_client").val() == ""){
+			$("#name_client").addClass("is-invalid")
+		}else if($("#inputJobRegion").val() == ""){
+			$("#inputJobRegion").addClass("is-invalid")
+		}else if($("#inputJobArea").val() == ""){
+			$("#inputJobArea").addClass("is-invalid")
+		}else if($("#inputJobLocation").val() == ""){
+			$("#inputJobLocation").addClass("is-invalid")
+		}else if($("#adress_client").val() == ""){
+			$("#adress_client").addClass("is-invalid")
+		}else if($("#pic_name_client").val() == ""){
+			$("#pic_name_client").addClass("is-invalid")
+		}else if($("#pic_contact_client").val() == ""){
+			$("#pic_contact_client").addClass("is-invalid")
+		}else if($("#pic_email_client").val() == ""){
+			$("#pic_email_client").addClass("is-invalid")
+		}else{
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "to publish new Client",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+					$.ajax({
+						// headers: {
+						//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						// },
+						url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/client/postNewClient",
+						type:"POST",
+						data:{
+							_token: "{{ csrf_token() }}",
+							customer_name:$("#name_client").val(),
+							id_location:$("#inputJobLocation").select2("data")[0].id,
+							pic_name:$("#pic_name_client").val(),
+							phone:$("#pic_contact_client").val(),
+							email:$("#pic_email_client").val(),
+							address:$("#adress_client").val(),
+						},
+						success: function(result){
+							Swal.showLoading()
+							Swal.fire(
+								'Published!',
+								'Client has been Added.',
+								'success'
+							).then((result) => {
+								if (result.value) {
+									$("#exampleModalCenter").modal('toggle')
+								}
+							})
+						}
+					})
+				}
+			});
+		}
+	}
+
+
+	function btnDetail(id){
+		$("#detailModalClient").modal('show')
+		// $("#name_client_detail").prop("readonly",true)
+		// $("#adress_client_detail").prop("readonly",true)
+		$.ajax({
+			type:'GET',
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/" + "client/getClientList",
+			success: function (result) {
+				$.each(result['data'], function(key, value){
+					if (value.id == id) {
+						$("#updateBtn").attr('onclick','updateBtn('+id+')')
+						$("#name_client_detail").val(value.customer_name)
+						$("#adress_client_detail").val(value.address)
+						console.log(value.pic[0])
+						var append = ""
+						append = append + '<div class="row">'
+						append = append + '<div class="col-md-4 mb-3">'
+						append = append + '<label for="jobTitle">PIC Name</label>'
+						append = append + '</div>'
+						append = append + '<div class="col-md-4 mb-3">'
+						append = append + '<label for="jobTitle">Contact Number</label>'
+						append = append + '</div>'
+						append = append + '<div class="col-md-4 mb-3">'
+						append = append + '<label for="jobTitle">Email</label>'
+						append = append + '</div>'
+						append = append + '</div>'
+						$.each(value.pic,function(key, value2){
+							append = append + ''
+
+							append = append + '<div class="row">'
+							append = append + '<div class="col-md-4 mb-3">'
+							
+							append = append + '<input type="text" class="form-control" value="'+value2.pic_name+'"  readonly>'
+							append = append + '</div>'
+							append = append + '<div class="col-md-4 mb-3">'
+							
+							append = append + '<input type="text" class="form-control" value="'+value2.pic_phone+'" readonly>'
+							append = append + '</div>'
+							append = append + '<div class="col-md-4 mb-3">'
+							
+							append = append + '<input type="text" class="form-control" value="'+value2.pic_mail+'" readonly>'
+							append = append + '</div>'
+							append = append + '</div>'
+							
 						})
+						$("#tbPIC").html(append)
+						
 					}
 				})
-			}
-		});
+			},
+		})
+
+		
+	}
+
+	function updateBtn(id){
+		Swal.fire({
+				title: 'Are you sure?',
+				text: "to Update Client Data",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
+						}
+					})
+					$.ajax({
+						// headers: {
+						//     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						// },
+						url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/client/updateClient",
+						type:"POST",
+						data:{
+							_token: "{{ csrf_token() }}",
+							id:id,
+							customer_name:$("#name_client_detail").val(),
+							pic_name:$("#pic_name_client_detail").val(),
+							phone:$("#pic_contact_client_detail").val(),
+							email:$("#pic_email_client_detail").val(),
+							address:$("#adress_client_detail").val(),
+						},
+						success: function(result){
+							Swal.showLoading()
+							Swal.fire(
+								'Published!',
+								'Client has been Update.',
+								'success'
+							).then((result) => {
+								if (result.value) {
+									$("#detailModalClient").modal('toggle')
+									$("#addPIC").hide()
+									$("#pic_name_client_detail").val("")
+									$("#pic_contact_client_detail").val("")
+									$("#pic_email_client_detail").val("")
+								}
+							})
+						}
+					})
+				}
+			});
 	}
 
 
