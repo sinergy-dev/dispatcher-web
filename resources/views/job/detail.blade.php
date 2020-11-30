@@ -552,7 +552,7 @@
 									}else if (value.request_item.status_item == "Done") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_item.status_item == "Rejected") {
-										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Reject)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
 									}
 								}else{
 									if (value.request_support.status == "Open") {
@@ -595,7 +595,7 @@
 									}else if (value.request_support.status == "Done") {
 										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_support.status == "Reject") {
-										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
+										append = append + '<li class="list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestSupport(' + value.request_support['id'] + ')">Rejected <i class="fa fa-times"></i></button></li>'
 									}
 								}
 							}
@@ -1506,7 +1506,8 @@
 							url:"{{env('WEB_LINK_CUSTOM_PUBLIC')}}/job/detail/createLetterAndQR",
 							data:{
 								id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
-								moderator:"{{Auth::user()->name}}"
+								moderator:"{{Auth::user()->name}}",
+								moderator_phone:"{{Auth::user()->phone}}"
 							},
 							success:function(){
 								Swal.showLoading()
