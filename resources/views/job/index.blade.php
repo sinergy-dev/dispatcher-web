@@ -211,15 +211,16 @@
 
 						<div class="mb-3">
 							<label for="country">Person In Charge</label>
-							<select class="custom-select d-block w-100" id="inputJobPic" required="">
+							<select class="custom-select d-block w-100" id="inputJobPic" required="" disabled>
 								<option value="">Choose...</option>
 							</select>
+							<!-- <input type="" class="form-control" name="inputPIC" id="inputPIC" readonly> -->
 							<div class="invalid-feedback">
 								Please select a valid PIC.
 							</div>
-							<small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPIC()">
+							<!-- <small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPIC()">
 								+ Add here if PIC Not Exist
-							</small>
+							</small> -->
 						</div>
 						<div class="row" id="addPICField" style="display: none;">
 							<div class="col-md-4 mb-3">
@@ -544,9 +545,9 @@
 						<div class="invalid-feedback">
 							Please select a valid PIC.
 						</div>
-						<small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPICEdit()">
+						<!-- <small class="text-primary" id="pic" style="cursor: pointer;" onclick="showAddPICEdit()">
 							+ Add here if PIC Not Exist
-						</small>
+						</small> -->
 					</div>
 					<div class="row" id="addPICFieldEdit" style="display: none;">
 							<div class="col-md-4 mb-3">
@@ -614,6 +615,49 @@
 			}
 		});
 
+		$("#inputJobClient").on('select2:select', function (e) {
+			var id_customer = e.params.data.id
+			$("#inputJobPic").prop("disabled", false)
+			$("#inputJobPic").select2({
+				theme: 'bootstrap4',
+				ajax: {
+					url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll?id_customer=" + id_customer,
+					dataType: 'json',
+				}
+			})
+
+			// $.ajax({
+			// 	type:'GET',
+			// 	url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getPICbyClient" ,
+			// 	data:{
+			// 		pic:this.value,
+			// 	},
+			// 	success: function (result) {
+			// 		console.log(result.pic_name)
+			// 		// $("#inputPIC").val(result.pic_name)
+			// 		var picSelect 	= $('#inputJobPic');
+
+			// 		var option = new Option(result.pic_name + ' ('+ result.pic_phone +')', result.id, true, true);
+			// 			picSelect.append(option).trigger('change');
+			// 	},
+			// })
+		});
+
+
+		// $("#inputJobClient").change(function(){
+		// 	$.ajax({
+		// 		type:'GET',
+		// 		url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getPICbyClient" ,
+		// 		data:{
+		// 			pic:this.value,
+		// 		},
+		// 		success: function (result) {
+		// 			console.log(result.pic_name)
+		// 			$("#inputPIC").val(result.pic_name)
+		// 		},
+		// 	})
+		// })
+
 		$("#inputJobRegion").select2({
 			theme: 'bootstrap4',
 			ajax: {
@@ -646,13 +690,13 @@
 			});
 		})
 
-		$("#inputJobPic").select2({
-			theme: 'bootstrap4',
-			ajax: {
-				url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
-				dataType: 'json',
-			}
-		})
+		// $("#inputJobPic").select2({
+		// 	theme: 'bootstrap4',
+		// 	ajax: {
+		// 		url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
+		// 		dataType: 'json',
+		// 	}
+		// })
 
 		$("#inputJobLevel").select2({
 			theme: 'bootstrap4',
@@ -1428,12 +1472,11 @@
 		});
 	}
 
-	$("#inputJobPicEdit").select2({
-		theme: 'bootstrap4',
-		ajax: {
-			url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll",
-			dataType: 'json',
-		}
+	$("#inputJobPic").change(function(){
+		$("#addPICField").hide()
+		$("#jobPicName").val("")
+		$("#jobPicContact").val("")
+		$("#jobPicEmail").val("")
 	})
 
 	$("#inputJobPicEdit").change(function(){
@@ -1460,6 +1503,13 @@
 				id_job:id
 			},
 			success: function(result){
+				$("#inputJobPicEdit").select2({
+					theme: 'bootstrap4',
+					ajax: {
+						url: "{{env('API_LINK_CUSTOM_PUBLIC')}}/job/createJob/getParameterPicAll?id_customer="+result.job.id_customer,
+						dataType: 'json',
+					}
+				})
 				$("#editJobLongTitle").html('- <span class="text-primary">'+ result.job.job_name +'</span>')
 				$("#inputJobAddressEdit").val(result.job.job_location)
 				var picSelect 	= $('#inputJobPicEdit');
@@ -1543,7 +1593,10 @@
 	function showAddPIC(){
 		$("#pic").attr("disabled","true")
 		$("#addPICField").show()
+		var picSelect 	= $('#inputJobPic');
 
+		var option = new Option('', '', true, true);
+			picSelect.append(option).trigger('change');
 	}
 
 	function finalize(){
