@@ -20,14 +20,14 @@
 	.text-warning2 {
 		color: #ffc94a;
 	}
-	.btn-outline-warning:hover span {display:none}
-	.btn-outline-warning:hover:before {
+	.btn-outline-warning-custom:hover span {display:none}
+	.btn-outline-warning-custom:hover:before {
 		content:"Accept";
 		color:#212529;
 		background-color:#38c172;
 		border-color:#38c172;
 	}
-	.btn-outline-warning:hover {
+	.btn-outline-warning-custom:hover {
 		color: #212529;
 		background-color: #38c172;
 		border-color: #38c172;
@@ -44,7 +44,7 @@
 	.scrolly{
 	  /*background-color: #eaeaea;*/
 	  /*display: block;*/
-	  height: 300px;
+	  height: 500px;
 	  overflow-y: scroll;
 	  scroll-behavior: smooth;
 	  /*text-align: center;*/
@@ -147,6 +147,62 @@
 	right: 4px;
 	top: 4px;
 	bottom: 4px;z-index:9;
+	}
+
+	.boxChat{
+		width:100%;
+		height:500px;
+		max-height:100%;
+	}
+
+	.dot-flashing {
+	  position: relative;
+	  width: 6px;
+      height: 6px;
+	  border-radius: 5px;
+	  background-color: #9880ff;
+	  color: #9880ff;
+	  animation: dotFlashing 1s infinite linear alternate;
+	  animation-delay: .5s;
+	}
+
+	.dot-flashing::before, .dot-flashing::after {
+	  content: '';
+	  display: inline-block;
+	  position: absolute;
+	  top: 0;
+	}
+
+	.dot-flashing::before {
+	  left: -11px;
+	  width: 6px;
+	  height: 6px;
+	  border-radius: 5px;
+	  background-color: #9880ff;
+	  color: #9880ff;
+	  animation: dotFlashing 1s infinite alternate;
+	  animation-delay: 0s;
+	}
+
+	.dot-flashing::after {
+	  left: 11px;
+	  width: 6px;
+      height: 6px;
+	  border-radius: 5px;
+	  background-color: #9880ff;
+	  color: #9880ff;
+	  animation: dotFlashing 1s infinite alternate;
+	  animation-delay: 1s;
+	}
+
+	@keyframes dotFlashing {
+	  0% {
+	    background-color: #9880ff;
+	  }
+	  50%,
+	  100% {
+	    background-color: #ebe6ff;
+	  }
 	}
 
 	/*input{
@@ -268,9 +324,10 @@
 								</div>
 								<div class="col-md-4">
 									<h5>Controll Jobs</h5>
-									<button href="#" class="btn btn-secondary flex-row-reverse ml-auto" id="jobSumaryDetailReview" onclick="reviewJob()" disabled>Review Job</button>
-									<button href="#" class="btn btn-primary flex-row-reverse ml-auto" id="jobSumaryDetailFinish" onclick="finishJob()" disabled>Finish Jobs</button>
-									<button href="#" class="btn btn-success flex-row-reverse ml-auto" id="jobSumaryDetailPay" onclick="payJob()" disabled>Pay Jobs</button>
+									<button href="#" class="btn btn-secondary flex-row-reverse ml-auto mt-1" id="jobSumaryDetailReview" onclick="reviewJob()" disabled>Review Job</button>
+									<button href="#" class="btn btn-primary flex-row-reverse ml-auto mt-1" id="jobSumaryDetailFinish" onclick="finishJob()" disabled>Finish Jobs</button>
+									<button href="#" class="btn btn-success flex-row-reverse ml-auto mt-1" id="jobSumaryDetailPay" onclick="payJob()" disabled>Pay Jobs</button>
+									<button href="#" class="btn btn-danger flex-row-reverse ml-auto mt-1" id="jobChatEngineer" onclick="showChatEngineer()">Chat with Engineer</button>
 								</div>
 							</div>
 							<div class="row" id="jobSumaryDetailProgressHolder">
@@ -350,6 +407,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<button class="btn btn-secondary mr-auto" onclick="reviewJobBast()">Show BAST</button>
 				<button class="btn btn-primary" onclick="finishJob('done')">Mark As Finish</button>
 			</div>
 		</div>
@@ -456,6 +514,43 @@
 	</div>
 </div>
 
+<div class="modal fade" id="chatWithEngineer" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					<div class="form-inline">
+						<span class="mr-3">Chat to Engineer</span>
+						<!-- <span class="mr-3">Typing</span> -->
+						<!-- <div class="dot-flashing mt-2"></div> -->
+					</div>
+				</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12" id="chatBoxEngineer">
+					</div>
+
+					<div class="col-md-12" id="updateChatEngineer">
+						<div class="input-group">
+						 	<input id="textChatEngineer" type="text" class="form-control" placeholder="Update Message" aria-label="Update Message" aria-describedby="basic-addon2">
+						    <div class="input-group-append">
+							    <button class="btn btn-outline-secondary" onclick="updateChatEngineer()" id="submitChat" type="button">
+							    	<i class="fas fa-paper-plane"></i>
+							    </button>
+						    </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" id="chatWithEngineerFooter">
+				<button class="btn btn-danger" onclick="closeChatEngineer()" id="closeChatModerator">Close</button>
+				<button class="btn btn-default" onclick="cancelChatModerator()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content"> 
@@ -495,6 +590,15 @@
 				// alert("You've entered: " + inputVal);
 			}
 		});
+
+		$(document).on("keypress", "#textChatEngineer", function(e){
+		if(e.which == 13){
+				var inputVal = $(this).val();
+				if ($("#textChatEngineer").val() != "") {
+					updateChatEngineer()
+				}
+			}
+		});
 		// var first = true
 		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
 		console.log(id_job)
@@ -532,6 +636,9 @@
 				$("#jobSumaryDetailRequirement").html(result.job.job_requrment.replace(/(?:\r\n|\r|\n)/g, '<br>'))
 				var append = ""
 				$("#jobSumaryDetailProgress").html("")
+				if (result.job.latest_history.history.history_activity.id >= 3) {
+					$("#jobChatEngineer").prop("disabled",false)
+				}
 				$.each(result.progress,function(index,value){
 					if(index == 0){
 						if(value['id_activity'] == "6"){
@@ -542,7 +649,6 @@
 							$("#jobSumaryDetailPay").attr("disabled", false);
 						}
 						if (value['id_activity'] == "5") {
-							
 							if (value.request_item == null && value.request_support == null) {
 								append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 							}else{
@@ -550,6 +656,8 @@
 									if (value.request_item.status_item == "Requested") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'								
 									}else if (value.request_item.status_item == "Done") {
+										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-warning ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Process <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_item.status_item == "success") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_item.status_item == "Rejected") {
 										append = append + '<li class="active list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Reject <i class="fa fa-times"></i></button></li>'
@@ -567,13 +675,11 @@
 								}
 								
 
-							}
-
-							
-						}else{
+							}							
+						
+						} else{
 							append = append + '<li class="active list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 						}
-						// append = append + '<li class="active list-group-item d-inline-flex btn-review" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
 					} else {
 						if (value['id_activity'] == "5" ) {
 							if (value.request_item == null && value.request_support == null) {
@@ -583,6 +689,8 @@
 									if (value.request_item.status_item == "Requested") {
 										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + '<button class="btn btn-secondary ml-auto btn-sm" onclick="reviewRequestItem(' + value['id'] + ')">Review</button></li>'
 									}else if (value.request_item.status_item == "Done") {
+										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Process)" + '<button class="btn btn-outline-warning ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Process <i class="fa fa-check"></i></button></li>'
+									}else if (value.request_item.status_item == "Success") {
 										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Done)" + '<button class="btn btn-outline-success ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Done <i class="fa fa-check"></i></button></li>'
 									}else if (value.request_item.status_item == "Rejected") {
 										append = append + '<li class=" list-group-item d-inline-flex" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + " (Rejected)" + '<button class="btn btn-outline-danger ml-auto btn-sm disabled" onclick="reviewRequestItem(' + value['id'] + ')">Rejected <i class="fa fa-times"></i></button></li>'
@@ -603,7 +711,6 @@
 						}else{
 							append = append + '<li class="list-group-item" id="history' + value['id'] + '">' + moment(value['date_time']).format('DD MMMM - HH:mm') + " [" + value['user']['name'] + "] - " + value['detail_activity'] + "</li>"
 						}
-						
 					}
 				});
 
@@ -644,7 +751,7 @@
 							var statusDisable = 'disabled'
 						} else {
 							var statusText = '<span>' + value['status'] + '</span>'
-							var statusButton = 'btn-outline-warning'
+							var statusButton = 'btn-outline-warning-custom'
 							var tmp = "'" + value['user']['name'] + "'"
 							var onclick = 'updateApplyer(' + value['user']['id'] + ',' + tmp + ')'
 							var statusDisable = ''
@@ -713,6 +820,8 @@
 
 					$("#headerTitle").append(append8);
 
+					var append5 = ""
+
 					if (value.status_item == "Requested") {
 						$("#status_item").html("<span class='badge badge-warning' style='color: blue;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
 
@@ -725,9 +834,23 @@
 						$("#modal-footer-request").html("<button class='btn btn-default' id='btnRequestApproval1' "+onclickCancel+">Cancel</button><button class='btn btn-primary' id='btnRequestApproval1' "+onclickApprove+">Approve</button><button class='btn btn-danger' id='btnRequestApproval2' "+onclickReject+">Reject</button>");
 					}else if (value.status_item == "Done") {
 
-						$("#status_item").html("<span class='badge badge-success' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
+						$("#status_item").html("<span class='badge badge-warning' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>Process</span>");
 
 						$("#modal-footer-request").html("");
+					}else if (value.status_item == "Success") {
+
+						$("#status_item").html("<span class='badge badge-success' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>Success</span>");
+
+						$("#modal-footer-request").html("");
+
+						append5 = append5 + '<label><b>Documentation Success</b></label><br>'
+						append5 = append5 + '<img style="width:323px;height:204px;object-fit: cover;" id="img_req_success" class="img_req">'
+						append5 = append5 + '<hr>'
+						append5 = append5 + '<label><b>Note</b></label>'
+						append5 = append5 + '<h6 id="note_success_req"></h6>'
+						append5 = append5 + '<hr>'
+
+						// $("#img_req_success").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_success);
 					}else{
 
 						$("#status_item").html("<span class='badge badge-danger' style='color: white;float: right;margin-top: -5px;margin-right:-5px'>"+value.status_item+"</span>");
@@ -768,6 +891,9 @@
 
 					$("#priceTitle").empty("")
 
+					$("#dateTitle").html("")
+
+
 					var append3 = ""
 					append3 = append3 + '<label><b>Price Item</b></label>'
 					append3 = append3 + '<h6 id="price_req">Rp. 7.500.000,00</h6>'
@@ -781,11 +907,17 @@
 					append4 = append4 + '<hr>'
 
 					$("#dateTitle").append(append4)
+					$("#dateTitle").append(append5)
 
 					$("#name_eng_req").html("<label><b>Engineer Name Request</b></label><h6>"+ value.engineer.name  +"</h6>");
 					$("#item_req").html(value.name_item);
 					$("#item_function").html(value.function_item);
 					$("#img_req").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_item);
+					if (value.documentation_success !== '-') {
+						$("#img_req_success").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+value.documentation_success);
+						$("#note_success_req").text(value.note_success)
+						// your code here
+					}
 					$("#alamat_req").html(value.invoice_item);
 					var number_string = value.price_item.toString(),
                     split   = number_string.split(','),
@@ -1467,6 +1599,10 @@
 		$('#reviewRequestModal').modal('hide');
 	}
 
+	function cancelChatModerator(){
+		$('#chatWithEngineer').modal('hide');
+	}
+
 	function updateApplyer(id_engineer,name_engineer){
 		Swal.fire({
 			title: 'Are you sure?',
@@ -1636,26 +1772,63 @@
 
 	function reviewJob(status = "not yet"){
 		if(status == "done"){
-			$.ajax({
-				type:"POST",
-				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postReviewedByModerator",
-				data:{
-					id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
-					id_moderator:"{{Auth::user()->id}}"
-				}, 
-				success: function(result){
-					Swal.fire(
-						'Reviewed!',
-						'Job has been Reviewed.',
-						'success'
-					).then((result) => {
-						if (result.value) {
-							$("#reviewJobModal").modal('toggle')
-							location.reload(); 
-							
-							// $("#payJobModal").modal('toggle')
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "Submit this and you'll create BAST",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.value) {
+					Swal.fire({
+						title: 'Please Wait..!',
+						text: "It's sending..",
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						customClass: {
+							popup: 'border-radius-0',
+						},
+						onOpen: () => {
+							Swal.showLoading()
 						}
 					})
+					$.ajax({
+						type:"POST",
+						url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobBast",
+						data:{
+							id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
+							id_moderator:"{{Auth::user()->id}}"
+						}, 
+						success: function(result){
+							$.ajax({
+								type:"POST",
+								url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postReviewedByModerator",
+								data:{
+									id_job:window.location.href.split("/")[5].replace('#','').split("h")[0],
+									id_moderator:"{{Auth::user()->id}}"
+								}, 
+								success: function(result){
+									Swal.fire(
+										'Reviewed!',
+										'Job has been Reviewed.',
+										'success'
+									).then((result) => {
+										if (result.value) {
+											$("#reviewJobModal").modal('toggle')
+											location.reload(); 
+											
+											// $("#payJobModal").modal('toggle')
+										}
+									})
+								}
+							})
+						}
+					})
+					
 				}
 			})
 		} else {
@@ -1665,6 +1838,11 @@
 
 	function reviewJobReport(){
 		window.open("{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobReportPDF?id_job=" + window.location.href.split("/")[5].replace('#','').split("h")[0], '_blank');
+		// console.log('reviewJobReport');
+	}
+
+	function reviewJobBast(){
+		window.open("{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getJobBastPDF?id_job=" + window.location.href.split("/")[5].replace('#','').split("h")[0], '_blank');
 		// console.log('reviewJobReport');
 	}
 
@@ -1834,7 +2012,6 @@
 		return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 	}
 
-
 	function formatCurrency(input, blur) {
 		var input_val = input.val();
 		if (input_val === "") { return; }
@@ -1864,6 +2041,177 @@
 		var updated_len = input_val.length;
 		caret_pos = updated_len - original_len + caret_pos;
 		input[0].setSelectionRange(caret_pos, caret_pos);
+	
+	}
+
+	function showChatEngineer(){
+		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
+		var first = true
+		$("#chatBoxEngineer").empty()
+		$.ajax({
+			type:"GET",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/getChatModeratorEach",
+			data:{
+				id_job:id_job,
+			},
+			success: function(result){
+				if(result.chat_moderator === null){
+					$("#closeChatModerator").attr('disabled',true)
+				} else {
+					if (result.chat_moderator.status == "Open") {
+						$("#closeChatModerator").attr('disabled',false)
+						var append = ""
+						var checker = result.chat[0].from
+						var checkerTime = "2020-01-01"
+						var marginCustom = ""
+						$.each(result.chat,function(key,value){
+							var time = moment(value.time,"X")
+							if(checker != value.from){
+								checker = value.from
+								marginCustom = "margin-top:5px"
+							} else {
+								marginCustom = ""
+							}
+							if(checkerTime != time.format("YYYY-MM-DD")){
+								checkerTime = time.format("YYYY-MM-DD")
+								append = append + '<div class="bubleChat d-block text-center" style="' + marginCustom + '"><div class="bubleChatItem bubleChatDate d-inline-flex"><span>'
+								append = append + time.format("D MMMM")
+								append = append + '</span>'
+								append = append + '</div></div>'
+							}
+
+							if(value.from == "moderator"){
+								append = append + '<div class="bubleChat d-block text-right" style="' + marginCustom + '"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+								append = append + value.message
+								append = append + '</span><sub class="bubleSub">'
+								append = append + time.format("HH:mm")
+								append = append + '</sub></div></div>'
+							} else {
+								append = append + '<div class="bubleChat d-block" style="' + marginCustom + '"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+								append = append + value.message
+								append = append + '</span><sub class="bubleSub">'
+								append = append + time.format("HH:mm")
+								append = append + '</sub></div></div>'
+							}
+						})
+
+						$("#chatBoxEngineer").addClass("scrolly")
+						$("#chatBoxEngineer").append(append)
+
+						firebase.database().ref('chat_moderator/' + result.chat_moderator.id + '/chat').on('value', function(snapshot) {
+				            snapshot_dump = snapshot.val()
+				            console.log(Object.entries(snapshot_dump).length - 1)
+				            var value = snapshot_dump[snapshot_dump.length - 1]
+				            var value = Object.entries(snapshot_dump)
+				            value = value[value.length - 1][1]
+				            console.log("value" + value)
+							var temp = ""
+							if(value.from == "moderator"){
+								temp = temp + '<div class="bubleChat d-block text-right"><div class="bubleChatItem bubleChatModerator d-inline-flex text-left"><span>'
+							} else {
+								temp = temp + '<div class="bubleChat d-block"><div class="bubleChatItem bubleChatEngineer d-inline-flex text-left"><span>'
+							}
+							temp = temp + value.message
+							temp = temp + '</span><sub class="bubleSub">'
+							temp = temp + moment(value.time,"X").format("HH:mm")
+							temp = temp + '</sub></div></div>'
+							if(!first){
+								$("#chatBoxEngineer").append(temp)
+							} else {
+								first = false
+							}
+							document.getElementById('chatBoxEngineer').scrollTop = document.getElementById('chatBoxEngineer').scrollHeight
+							$("#textChatEngineer").val()
+							$("#textChatEngineer").val("");
+							$("#textChatEngineer").attr("placeholder","Update");
+				        });
+					} else if (result.chat_moderator.status == "Close") {
+						$("#closeChatModerator").attr('disabled',true)
+					}
+				}
+
+				$("#chatBoxEngineer").addClass("boxChat");
+				$("#chatWithEngineer").modal('toggle');
+			}
+		})
+	}
+
+	function updateChatEngineer(){
+		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
+		// console.log($("#textChatEngineer").val())
+		if($("#chatBoxEngineer .bubleChat").length == 0){
+			$.ajax({
+				type:"POST",
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postChatModerator",
+				data:{
+					id_job:id_job,
+				},
+				success: function(result){
+					firebase.database().ref('chat_moderator/' + result + '/').set({
+		                id_job:id_job,
+		                status: "Open"
+		            });
+					firebase.database().ref('chat_moderator/' + result + '/chat/').push().set({
+		                fromID: "{{Auth::user()->id}}",
+		                fromType: "moderator",
+		                from: "moderator",
+		                message: $("#textChatEngineer").val(),
+		                time: parseInt(moment().format("X"))
+		            });
+
+					showChatEngineer()
+					// if ($('#chatWithEngineer').attr('class') == "modal fade show") {
+					// 	showChatEngineer()
+					// }
+		            
+		            // var textChat = $("#textChat").val();
+				}
+			})
+		} else {
+			$.ajax({
+				type:"POST",
+				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postChatModerator",
+				data:{
+					id_job:id_job,
+				},
+				success: function(result){
+					firebase.database().ref('chat_moderator/' + result + '/chat/').push().set({
+		                fromID: "{{Auth::user()->id}}",
+		                fromType: "moderator",
+		                from: "moderator",
+		                message: $("#textChatEngineer").val(),
+		                time: parseInt(moment().format("X"))
+		            });
+
+
+				}
+			})
+		}
+	}
+
+	function closeChatEngineer(){
+		var id_job = window.location.href.split("/")[5].replace('#','').split("h")[0]
+		$.ajax({
+			type:"POST",
+			url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postChatModerator",
+			data:{
+				id_job:id_job,
+				close_chat:"Close"
+			},
+			success: function(result){
+				firebase.database().ref('chat_moderator/' + result + '/').update({
+	                id_job:id_job,
+	                status: "Close"
+	            });
+				firebase.database().ref('chat_moderator/' + result + '/chat/').push().set({
+	                fromID: "{{Auth::user()->id}}",
+	                fromType: "moderator",
+	                from: "moderator",
+	                message: "Chat Close",
+	                time: parseInt(moment().format("X"))
+	            });
+			}
+		})
 	}
 
 </script>
