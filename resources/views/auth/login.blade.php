@@ -6,6 +6,7 @@
       border-color: green
     }
 </style>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 @endsection
 
 @section('content')
@@ -17,8 +18,8 @@
                 <!-- <div class="card-header"></div> -->
 
                 <div class="card-body" style="align-items: center;justify-content: center;padding: 100px">
-                    <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\freelance-profile-2.png" width="150px" height="150px" style="display: block;margin: auto;position: relative;">
-                    <div style="display: block;margin: auto;position: relative;text-align: center;color: #b3a7db">Sinergy Freelance</div>
+                    <img src="{{env('API_LINK_CUSTOM_PUBLIC')}}\image\eod_logo_2.png" width="150px" height="150px" style="display: block;margin: auto;position: relative;">
+                    <div style="display: block;margin: auto;position: relative;text-align: center;color: #373435; font-family: montserrat"><b>EOD</b></div>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
