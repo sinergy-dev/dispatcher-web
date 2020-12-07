@@ -69,7 +69,8 @@ class JobController extends Controller
     		"engineer_addres" => $source['engineer']['address'],
     		"engineer_place_of_birth" => $source['engineer']['pleace_of_birth'],
     		"engineer_date_of_birth" => Carbon::parse($source['engineer']['date_of_birth'])->format("j F Y"),
-    		"engineer_photo" => $source['engineer']['photo_image_url'],
+            "engineer_photo" => env("API_LINK_CUSTOM_PUBLIC"). "/image/person.png",
+    		"engineer_phone" => $source['engineer']['phone'],
     		
     		"job_title" => $source['job']['job_name'],
     		"job_category" => $source['job']['category']['category_name'],
@@ -83,9 +84,12 @@ class JobController extends Controller
     		"job_customer_address" => $source['job']['customer']['address'],
     		"job_pic" => $source['job']['pic']['pic_name'],
     		"job_pic_phone" => $source['job']['pic']['pic_phone'],
+
     		"job_pic_email" => $source['job']['pic']['pic_mail'],
 
-    		"moderator" => $req->moderator
+    		"moderator" => $req->moderator,
+            "job_moderator_phone"=> Auth::user()->phone,
+            "job_moderator_email"=> Auth::user()->email,
     	];
 
     	$parameter = Crypt::encrypt([
@@ -144,6 +148,15 @@ class JobController extends Controller
 
 		return $pdf->stream($name_pdf);
         // return view('pdf.letter_of_assignment',compact('data'));
+    }
+
+    public function createLetterAndQRTesting(){
+        $req = new Request();
+        $req->moderator = 'Navaa';
+        $req->id_job    = 1;
+
+        // return $req;
+        return $this->createLetterAndQR($req);
     }
 
     public function testLiveNotification(){
