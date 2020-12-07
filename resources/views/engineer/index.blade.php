@@ -2,7 +2,7 @@
 
 @section('content')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css"> -->
 <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -17,6 +17,14 @@
 	.step.finish {
 		background-color: #4CAF50;
 	}.
+	.modal{
+		overflow: auto !important;
+		/*overflow: scroll;*/
+	}
+/*	.modal-open {
+	    overflow: scroll;
+	}*/
+
 </style>
 <main role="main">
 	<div class="container">
@@ -73,7 +81,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<div class="d-inline-flex align-items-center">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i> Add Engineer</button>
+					<button type="button" class="btn btn-secondary" onclick="addEngineer()"><i class="fas fa-plus"></i> Add Engineer</button>
 					<h3 class="ml-3" style="margin-bottom: 0px !important">Engineer List</h3>
 				</div>
 			</div>
@@ -234,6 +242,13 @@
 								Please Fill an Account Number.
 							</div>
 						</div>
+
+						<div class="mb-3">
+							<label for="client">Scan File</label>
+							<div>
+								<img id="account_book" alt="your image" style="width: 300px;height: 300px;object-fit: cover;align-content: center;margin: auto;display: block;cursor: zoom-in;"  />
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -245,7 +260,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="DetailModal" tabindex="-1" role="dialog" aria-labelledby="DetailModalTitle" aria-hidden="true">
+<div class="modal fade" id="DetailModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered " role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -387,6 +402,22 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"> 
+      <div class="modal-header">
+      	<h5 class="modal-title">Account Bank Image</h5>
+      	<button type="button" class="close" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+      </div>             
+      <div class="modal-body">
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+    </div>
+  </div>
 </div>
 <!--datatable-->
 
@@ -540,6 +571,9 @@
 			}
 		})
 
+	})
+
+	function addEngineer(){
 		$("#candidateEngineerList").change(function(){
 		  $.ajax({
             type:"GET",
@@ -550,7 +584,6 @@
             success: function (result){
             	console.log(result)
             	if (result.partner != null) {
-
             		$("#name_eng").val(result.partner.name);
 	            	$("#number_eng").val(result.partner.phone);
 	            	$("#email_eng").val(result.partner.email);
@@ -558,6 +591,11 @@
 	            	$("#account_name").val(result.partner.candidate_account_name);
 	            	$("#account_number").val(result.partner.candidate_account_number);
 	            	$("#account_alias").val(result.partner.candidate_account_alias);
+	            	$("#account_book").attr("src", "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+result.partner.book_account_files);
+	            	$("#account_book" ).click(function() {
+						$('.imagepreview').attr('src', "{{env('API_LINK_CUSTOM_PUBLIC')}}/"+result.partner.book_account_files);
+						$('#imagemodal').modal('toggle');  
+					})
 	            	// console.log(result.partner.location[0].id_area)
 	            	$("#inputJobLocation").prop("disabled", false)
 	            	$("#inputJobArea").prop("disabled", false)
@@ -581,8 +619,12 @@
             }
           })
 		})
-
-	})
+		$("#exampleModalCenter").modal('toggle')
+		$(".close").click(function(){
+			$("#exampleModalCenter").modal('hide')
+			$("#imagemodal").modal('hide')
+		})
+	}
 
 	function fillDataEng(url,method){
 		$.ajax({
@@ -948,9 +990,13 @@
     	$("#adress_eng").val("");
     	$("#account_name").val("");
     	$("#account_number").val("");
+    	$("#account_alias").val("");
+    	$("#account_book").val("");
+    	$("#account_book").attr("src","");
     	$("#inputJobLocation").prop('disabled',true);
     	$("#inputJobArea").prop('disabled', true);
     	$("#saveBtn").attr("onclick","saveBtn()")
+    	
 
 	}
 
