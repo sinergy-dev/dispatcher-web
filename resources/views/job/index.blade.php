@@ -824,7 +824,7 @@
 					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
 					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm"  border-radius:.25rem;">'
-					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;object-fit:cover">'
+					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#e6e7e8;object-fit:cover">'
 					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
 					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
 					prepend = prepend + '			</div>'
@@ -1008,7 +1008,7 @@
 					jobName = value['job_name'].length > n ? value['job_name'].slice(0,n) + "..." : value['job_name']
 					prepend = prepend + '<div class="col-md-6">'
 					prepend = prepend + '	<div class="card flex-md-row mb-4 shadow-sm"  border-radius:.25rem;">'
-					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#f6f6f6;">'
+					prepend = prepend + '		<div class="flex-md-row card" style="width:165px;background: url(' + value['category']['category_image_url'] + ');background-repeat: no-repeat;background-size: 100% 100%;background-color:#e6e7e8;">'
 					prepend = prepend + '			<div style="position: absolute;bottom: 0px;left: 0px;font-size: medium;">'
 					prepend = prepend + '				<span class="badge badge-' + badgeJob + '">' + value['job_status'] + '</span>'
 					prepend = prepend + '			</div>'
