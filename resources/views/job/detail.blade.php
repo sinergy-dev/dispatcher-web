@@ -205,6 +205,36 @@
 	  }
 	}
 
+	.button {
+	    border: none;
+	    margin-top: 40px;
+	    margin-left: 40px;
+	    position: relative;
+	    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+	}
+
+	.button:before {
+	    content: attr(data-count);
+	    width: 18px;
+	    height: 18px;
+	    line-height: 18px;
+	    text-align: center;
+	    display: block;
+	    border-radius: 50%;
+	    background: rgb(67, 151, 232);
+	    border: 1px solid #FFF;
+	    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	    color: #FFF;
+	    position: absolute;
+	    top: -7px;
+	    left: -7px;
+	}
+
+	.button.badge-top-right:before {
+	    left: auto;
+	    right: -7px;
+	}
+
 	/*input{
 		font-family: 'FontAwesome';
 	}*/
@@ -327,7 +357,7 @@
 									<button href="#" class="btn btn-secondary flex-row-reverse ml-auto mt-1" id="jobSumaryDetailReview" onclick="reviewJob()" disabled>Review Job</button>
 									<button href="#" class="btn btn-primary flex-row-reverse ml-auto mt-1" id="jobSumaryDetailFinish" onclick="finishJob()" disabled>Finish Jobs</button>
 									<button href="#" class="btn btn-success flex-row-reverse ml-auto mt-1" id="jobSumaryDetailPay" onclick="payJob()" disabled>Pay Jobs</button>
-									<button href="#" class="btn btn-danger flex-row-reverse ml-auto mt-1" id="jobChatEngineer" onclick="showChatEngineer()">Chat with Engineer</button>
+									<button href="#" data-count="1" class="btn btn-danger flex-row-reverse ml-auto mt-1" id="jobChatEngineer" onclick="showChatEngineer()">Chat with Engineer</button>
 								</div>
 							</div>
 							<div class="row" id="jobSumaryDetailProgressHolder">
@@ -388,7 +418,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-primary mr-auto" onclick="reviewJobReport()">Show report</button>
-				<button class="btn btn-secondary" onclick="reviewJob('done')">Mark As Review</button>
+				<button class="btn btn-secondary" onclick="reviewJob('done')">Mark As Reviewed</button>
 			</div>
 		</div>
 	</div>
@@ -931,7 +961,7 @@
                     }
                     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 					$("#price_req").html("Rp. " + rupiah);
-					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY"));
+					$("#date_req").html(moment(value.date_add).format("DD MMMM YYYY - HH:mm"));
 					$("#historyChat").css("display","none")
 					$("#updateChat").css("display","none")
 
@@ -2131,7 +2161,7 @@
 				}
 
 				$("#chatBoxEngineer").addClass("boxChat");
-				$("#chatWithEngineer").modal('toggle');
+				$("#chatWithEngineer").modal('show');
 			}
 		})
 	}
@@ -2149,7 +2179,8 @@
 				success: function(result){
 					firebase.database().ref('chat_moderator/' + result + '/').set({
 		                id_job:id_job,
-		                status: "Open"
+		                status: "Open",
+		                message:$("#textChatEngineer").val(),
 		            });
 					firebase.database().ref('chat_moderator/' + result + '/chat/').push().set({
 		                fromID: "{{Auth::user()->id}}",
@@ -2173,6 +2204,7 @@
 				url:"{{env('API_LINK_CUSTOM_PUBLIC')}}/job/postChatModerator",
 				data:{
 					id_job:id_job,
+					message:$("#textChatEngineer").val(),
 				},
 				success: function(result){
 					firebase.database().ref('chat_moderator/' + result + '/chat/').push().set({
